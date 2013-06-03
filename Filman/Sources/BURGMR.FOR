@@ -1,0 +1,374 @@
+C BURGMR.FOR- ROUTINE TO COMPUTE BURG SPECTRUM FOR SPECTR USING MARPLE'S
+
+C ALGORITHM FOR COEFFICIENTS, AND FFT TO COMPUTE SPECTRUM. GENERATES
+
+C SPECTRA FOR ALL ORDERS BETWEEN M1 AND M2 WITH FPE/AIC AND COEFFICIENTS
+
+C LISTED. IF VIRTUAL ARRAYS BECOME AVAILABLE, PLOTS COULD BE GENERATED
+
+C WITHOUT CLOBBERING "WORK", SO LOWER-ORDER MODELS AREN'T REPEATEDLY 
+
+C REGENERATED. NO BIG DEAL FOR SPECTR, THOUGH.
+
+	SUBROUTINE BURGMR(X,N,IC)
+
+	COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(64),ICLABS(6,64)
+
+	COMMON/FLDES/ID(8),IBUF(1)
+
+c	COMMON/FLDESO/IDO(8),WORK(1)
+	COMMON/FLDESO/IDO(8),WORK       !  Maciek
+
+	COMMON/DEV/ITI,ILP
+
+	COMMON/PTLST/NLIST,LIST(2,72),NP1,NP2,NPTOT,P1,PT,DT,DF
+
+	DIMENSION WK1(2050),WK2(2050),COF(99)
+
+	DIMENSION X(N,IC),SPECTRA[ALLOCATABLE](:,:)
+
+	CHARACTER*24 PTITLE
+
+	EQUIVALENCE (WK1(1),WORK(1)),(WK2(1),WORK(2051))
+	
+	dimension work(2051)    !  Maciek
+
+1000    CALL PTSEL
+
+1       WRITE(ITI,100)
+
+100     FORMAT('$  BURGMR: FIRST, LAST ORDER(<100), & STEPSIZE? >'\)
+
+	IKP=1
+
+	READ(ITI,*)M1,M2,M3
+
+	IF(M3.EQ.0)M3=1
+
+	WRITE(PTITLE,800)M1,M2,M3
+
+800     FORMAT('BURG(MARPLE):',3I3)
+
+C PLOT PARAMETERS
+
+	FNYQ=FLOAT(ID(8))/2.
+
+	DT=1.0/FLOAT(ID(8))
+
+2       WRITE(ITI,300)FNYQ
+
+300     FORMAT('$  FREQUENCY CUTOFF(.LE.',F5.1,') >'\)
+
+	READ(ITI,301)FMAX
+
+301     FORMAT(F8.0)
+
+	IF(FMAX.EQ.0.)FMAX=FNYQ
+
+3       WRITE(ITI,200)
+
+200     FORMAT('$  BURG FFT SIZE:1=256/2=512/3=1024/4=2048/5=4096 >'\)
+
+	READ(ITI,201)K
+
+201     FORMAT(I1)
+
+	IF(K.LT.1 .OR. K.GT.5)GO TO 3
+
+	NXFM=2**(K+7)
+
+	AN=NXFM/2
+
+	DF=FNYQ/AN      ! PARAMETERS FOR PLOT1-
+
+	NPT0=FMAX/DF+1   ! INITIAL VALUES
+
+	NPT=NPT0
+
+	X1=0.
+
+	IKP=0
+
+	NXEQ=0
+
+	WRITE(ITI,199)
+
+199     FORMAT('$  RECALL PREVIOUS PLOT? >'\)
+
+	READ(ITI,401)IA
+
+	IF(IA.EQ.'Y')IKP=1
+
+	ISETF=0
+
+	ALLOCATE(SPECTRA(NPT0,IC),STAT=IERR)
+
+	N1=1
+
+	N2=NPT0
+
+	DO 95 L=1,IC
+
+	DO 90 M=M1,M2,M3
+
+	CALL TIMER(T1)
+
+C GET AR COEFFICIENTS USING MARPLE'S BURG ROUTINE
+
+	CALL BURG1(X(NP1,L),NPTOT,M,PM,COF,ISTAT)
+
+	IF(ISTAT.EQ.0)GO TO 15
+
+	WRITE(ITI,202)M
+
+202     FORMAT('   ! UNSTABLE AT ORDER',I3,'; SKIPPING SPECTRUM')
+
+	GO TO 90
+
+15      CALL TIMER(T2)
+
+	T2=(T2-T1)*1000.
+
+C      WRITE(ITI,102)M,T2
+
+102     FORMAT(/'   TIME FOR BURG COEFFS, ORDER ',I2,', IS',F8.1,' MS.')
+
+	AN=N
+
+	AM=M+1
+
+	FPE=PM*(AN+AM)/(AN-AM)
+
+	IF(PM.LT.1.0)PM=1.0
+
+	AIC=AN*ALOG(PM)+2.0*(AM-1.0)
+
+C FPE AND AIC ARE AKAIKE'S ORDER-SELECTION CRITERIA
+
+C      WRITE(ITI,103)PM,FPE,AIC
+
+103     FORMAT('    PM=',F10.2,'; FPE=',F8.2,'; AIC=',F8.2)
+
+C      WRITE(ITI,104)(COF(I),I=1,M)
+
+104     FORMAT('     ',10F7.3)
+
+	CALL TIMER(T1)
+
+C CALCULATE SPECTRUM VIA FFT OF COEFFICIENTS
+
+	WORK(1)=1.0
+
+	DO 20 I=1,M
+
+20      WORK(I+1)=COF(I)
+
+	DO 25 I=M+2,NXFM
+
+25      WORK(I)=0.
+
+	CALL FAST(WORK,NXFM)
+
+	J=1
+
+	FACT=PM*DT
+
+	DO 30 I=1,NPT0
+
+	SPECTRA(I,L)=FACT/(WORK(J)**2+WORK(J+1)**2)
+
+	J=J+2
+
+30      CONTINUE
+
+	CALL TIMER(T2)
+
+	T2=(T2-T1)*1000.
+
+C      WRITE(ITI,400)T2
+
+400     FORMAT('$  TIME TO SPECTRUM IS',F8.2,'MS; <CR> TO PROCEED'\)
+
+C      READ(ITI,401)
+
+401     FORMAT(A1)
+
+	  CALL SPECPLOT(SPECTRA,NPT0,IC,N1,N2,L,L,2,PTITLE,IKP,
+
+     +   NXEQ,0,ISETF,MODE)
+
+	  IF(NXEQ-1)80,80,85
+
+80      WRITE(ITI,203)
+
+203     FORMAT('$  BURGMR:<CR>=CONTINUE/1=FREQS/2=MODEL/3=POINTS >'\)
+
+	READ(ITI,204)IGO
+
+204     FORMAT(I1)
+
+	GO TO (85,2,1,1000) IGO+1
+
+85    IKP=1
+
+	NXEQ=NXEQ+1
+
+90    CONTINUE
+
+	IF(MODE.EQ.1)IKP=0
+
+95    CONTINUE
+
+99    DEALLOCATE(SPECTRA)      
+
+	RETURN
+
+	END
+
+C
+
+	SUBROUTINE BURG1 (DATA,N,IP,P,A,ISTAT)
+
+C
+
+C   MARPLE'S program to estimate the autoregressive parameters by
+
+C   the Burg algorithm. Modified for real data by EK, 12/90.
+
+C   FURTHER MODIFIED FOR USE WITH SPECTR 
+
+C   Input Parameters:
+
+C   DATA - INPUT ARRAY (REAL)
+
+C     N  - Number of data samples
+
+C     IP - Order of autoregressive process
+
+C
+
+C   Output Parameters:
+
+C
+
+C     P  - Real variable representing driving noise variance
+
+C     A  - Array of autoregressive parameters A(1) to A(IP)
+
+C     ISTAT - Integer status indicator at time of exit
+
+C             0 for normal exit
+
+C             1 for numerical ill-conditioning (P < 0)
+
+C
+
+	COMMON IFLAG1
+
+c	COMMON/FLDESO/IDO(8),WORK(1)
+	COMMON/FLDESO/IDO(8),WORK      ! Maciek
+
+	COMMON/PTLST/NLIST,LIST(2,72),NP1,NP2,NPTOT
+
+	DIMENSION A(IP),EF(2050),EB(2050),DATA(N)
+
+	EQUIVALENCE (EF(1),WORK(1)),(EB(1),WORK(2051))
+
+	REAL NUM
+	
+	dimension work(2051)   ! Maciek
+
+C
+
+C   Initialization
+
+C
+
+	ISTAT=0
+
+	P=0.
+
+	L=1
+
+	DO 20 J=1,N
+
+	X=DATA(J)
+
+	P=P+X**2
+
+	EF(L)=X
+
+	EB(L)=X
+
+20      L=L+1
+
+	DEN=P*2.
+
+	P=P/N
+
+	TEMP=1.
+
+	K=0
+
+C
+
+C   Main recursion
+
+C
+
+100   K=K+1
+
+	NUM=0.
+
+	DO 30 J=K+1,N
+
+30      NUM=NUM+EF(J)*EB(J-1)
+
+	DEN=TEMP*DEN-EF(K)**2-EB(N)**2       ! EQ. (8.10)
+
+	SAVE1=-2.*NUM/DEN                    ! Eq. (8.14)
+
+	TEMP=1.-SAVE1**2
+
+	P=P*TEMP                             ! Eq. (8.4)
+
+	IF (TEMP .GT. 0.)  GO TO 40
+
+	ISTAT=1
+
+	RETURN
+
+40    A(K)=SAVE1
+
+	IF (K .EQ. 1)  GO TO 60
+
+	KHALF=K/2
+
+	DO 50 J=1,KHALF
+
+	KJ=K-J
+
+	SAVE2=A(J)
+
+	A(J)=SAVE2+SAVE1*A(KJ)             ! Eq. (8.2)
+
+	IF (J .EQ. KJ)  GO TO 50
+
+	A(KJ)=A(KJ)+SAVE1*SAVE2            ! Eq. (8.2)
+
+50      CONTINUE
+
+60    IF (K .EQ. IP)  RETURN
+
+	DO 70 J=N,K+1,-1
+
+	SAVE2=EF(J)
+
+	EF(J)=SAVE2+SAVE1*EB(J-1)          ! Eq. (8.7)
+
+70      EB(J)=EB(J-1)+SAVE1*SAVE2
+
+	GO TO 100
+
+	END
+

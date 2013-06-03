@@ -1,0 +1,148 @@
+Comparing files PLOT.FOR and ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+***** PLOT.FOR
+        INTEGER*2 IXDIM,IYDIM
+        
+        character*255 ALINE
+        character*4 ans
+        equivalence (ans,ia)
+        
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+        INTEGER*2 IXDIM,IYDIM
+
+*****
+
+***** PLOT.FOR
+
+C       READ(*,103)IA
+      CALL GETVALU(2,IVAL,ANS,'(A)')
+      WRITE(*,'(A)')ANS
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(*,103)IA
+
+*****
+
+***** PLOT.FOR
+
+C       READ(*,103) IA
+      CALL GETVALU(2,IVAL,ANS,'(A)')
+      WRITE(*,'(A)')ANS
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(*,103) IA
+
+*****
+
+***** PLOT.FOR
+
+C       READ(*,*)MODE
+        MODE=IGETVALU('(I1)')
+        WRITE(*,'(I1)')MODE
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(*,*)MODE
+
+*****
+
+***** PLOT.FOR
+
+C       READ(*,204) IPL
+        IPL=IGETVALU('(I1)')
+        WRITE(*,'(I1)')IPL
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(*,204) IPL
+
+*****
+
+***** PLOT.FOR
+
+C45    READ(IGRAPH,'(A1)')IA
+ 45   CALL GETVALU(2,IVAL,ANS,'(A)')
+      WRITE(IGRAPH,'(A)')ANS
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+45    READ(IGRAPH,'(A1)')IA
+
+*****
+
+***** PLOT.FOR
+
+C       READ(IGRAPH,204) IGO
+        IGO=IGETVALU('(I1)')
+        WRITE(IGRAPH,'(I1)')IGO
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(IGRAPH,204) IGO
+
+*****
+
+***** PLOT.FOR
+
+C       READ(IGRAPH,204) ISCL  !  IF VARIABLE, EACH CHANNEL WILL BE SCALED
+        ISCL=IGETVALU('(I1)')
+        WRITE(IGRAPH,*)ISCL
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(IGRAPH,204) ISCL  !  IF VARIABLE, EACH CHANNEL WILL BE SCALED
+
+*****
+
+***** PLOT.FOR
+
+C       READ(IGRAPH,*)P1,PN
+      CALL GETVALU(2,IVAL,ALINE,'(A)')
+      WRITE(*,'(A)')ALINE
+      READ(ALINE,*)P1,PN
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(IGRAPH,*)P1,PN
+
+*****
+
+***** PLOT.FOR
+
+C       READ(IGRAPH,204)IT
+        IT=IGETVALU('(I1)')
+        WRITE(IGRAPH,'(I1)')IT
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(IGRAPH,204)IT
+
+*****
+
+***** PLOT.FOR
+
+C       READ(IGRAPH,*) Y2
+      CALL GETVALU(2,IVAL,ALINE,'(A)')
+      WRITE(*,'(A)')ALINE
+      READ(ALINE,*)Y2
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(IGRAPH,*) Y2
+
+*****
+
+***** PLOT.FOR
+
+C       READ(IGRAPH,*)JMP
+        JMP=IGETVALU('(I1)')
+        WRITE(IGRAPH,'(I1)')JMP
+
+***** ..\..\..\..\..\..\DOWNLOADS\INTEL\PLOT.FOR
+
+        READ(IGRAPH,*)JMP
+
+*****
+

@@ -1,0 +1,224 @@
+C FILGEN.FOR- CREATES SMALL FILMAN STANDARD FILES FROM TERMINAL
+
+
+
+	DIMENSION RDATA(200),ID(8),LAB1(12)
+
+	COMMON/FLDESO/ NG,NA,NC,ND,NF,NL,NR,IS,IBUF(500)
+
+	EQUIVALENCE (ID(1),NG),(X,IX)
+
+	DATA LAB1/'CHAN',' NUM','BER ',3*'    ',
+
+     +          'MONT','AGE ','FILE',3*'    '/
+
+      CHARACTER*1 IYES,IYES0,IA
+
+	DATA IYES,IYES0/'Y','y'/
+
+500   CALL PUTOPN
+
+2     WRITE(*,101)
+
+101   FORMAT('$# GROUP VARS, INCLUDING MANDATORY VARS 1 & 2 >'\)
+
+	READ(*,102) NG
+
+102   FORMAT(I2)
+
+      NG = MAX0(NG,2) !Assure first two are there
+
+	WRITE(*,103)
+
+103   FORMAT('$NUMBER OF ANCILLARY WORDS >'\)
+
+	READ(*,102) NA
+
+	WRITE(*,104)
+
+104   FORMAT('$NUMBER OF CHANNELS >'\)
+
+	READ(*,102) NC
+
+	IDC=0
+
+	IF(NC-1)7,7,6
+
+6     WRITE(*,1041)
+
+1041  FORMAT('$CHANNELS IDENTICAL? >'\)
+
+	READ(*,301)IANS
+
+	IF(IA.EQ.IYES .OR. IA.EQ.IYES0)IDC=1
+
+7     WRITE(*,105)
+
+105   FORMAT('$NUMBER OF DATA POINTS >'\)
+
+	READ(*,106) ND
+
+106   FORMAT(I4)
+
+	WRITE(*,107)
+
+107   FORMAT('$DATA FORMAT: INTEGERS(1) OR REALS(3)? >'\)
+
+	READ(*,108) NF
+
+108   FORMAT(I1)
+
+	IF(NF-2) 10,9,10
+
+9       NF=1
+
+10      NL=NA+NG+ND
+
+30      WRITE(*,115)
+
+115     FORMAT('$NUMBER OF RECORD-SETS >'\)
+
+	READ(*,106) NRS
+
+	NR=0
+
+	WRITE(*,116)
+
+116     FORMAT('$SAMPLING RATE >'\)
+
+	READ(*,117) IS
+
+117     FORMAT(I4)
+
+	WRITE(*,109)
+
+109     FORMAT(' INSERT ID TEXT(6 LINES)')
+
+	READ(*,111) (IBUF(I),I=1,108)              
+
+111     FORMAT(18A4) 
+
+	CALL PUTSTD(ID)
+
+	DO 4 I=1,12
+
+4       IBUF(I)=LAB1(I)
+
+	J=13
+
+	L=18
+
+	IF(NG-2) 50,50,60
+
+60      DO 40 I=3,NG
+
+	WRITE(*,112) I
+
+112     FORMAT('$ENTER LABEL FOR GROUP VAR ',I2,' >'\)
+
+	READ(*,113) (IBUF(K),K=J,L)
+
+113     FORMAT(6A4)
+
+	J=J+6
+
+40      L=L+6
+
+50      DO 70 I=1,NC
+
+	WRITE(*,114) I
+
+114   FORMAT('$ENTER LABEL FOR CHANNEL ',I2,' >'\)
+
+	READ(*,113) (IBUF(K),K=J,L)
+
+	J=J+6
+
+70    L=L+6
+
+	CALL PUTSTD(IBUF)
+
+	DO 65 I=1,NRS
+
+	WRITE(*,118) I
+
+118   FORMAT(' RECORD-SET ',I3)
+
+	K=3
+
+	IF(NG-2) 90,90,5
+
+5     DO 15 J=3,NG
+
+	WRITE(*,119) J
+
+119   FORMAT('$VALUE FOR GROUP VARIABLE ',I2,' >'\)
+
+	READ(*,*) IBUF(K)
+
+15    K=K+1
+
+90    IF(NA) 25,25,35
+
+35    DO 45 J=1,NA
+
+	WRITE(*,120) J
+
+120   FORMAT('$VALUE FOR ANCILLARY WORD (INTEGER)',I2,' >'\)
+
+	READ(*,*) IBUF(K)
+
+45    K=K+1
+
+25    DO 55 L=1,NC
+
+	IBUF(1)=L
+
+	IBUF(2)=0
+
+	IF(L*IDC-1)26,26,55
+
+26    WRITE(*,200)ND,L
+
+200   FORMAT(' ENTER',I4,' DATA POINTS FOR CHANNEL ',I2)
+
+	GO TO (11,11,16)NF
+
+11    READ(*,*)(IBUF(J),J=K,NL)
+
+	GO TO 55
+
+16    READ(*,*)(RDATA(J),J=1,ND)
+
+	K1=K
+
+	DO 17 J=1,ND
+
+	X=RDATA(J)
+
+	IBUF(K1)=IX
+
+17    K1=K1+1
+
+55    CALL PUTSTD(IBUF)
+
+65    CONTINUE
+
+	CALL PUTEND
+
+	WRITE(*,300)
+
+300   FORMAT('$ANY MORE FILGENS? >'\)
+
+	READ(*,301)IA
+
+301   FORMAT(A1)
+
+	IF(IA.EQ.IYES .OR. IA.EQ.IYES0)GO TO 500
+
+      STOP 
+
+	END
+
+C------------------------------------------------------
+

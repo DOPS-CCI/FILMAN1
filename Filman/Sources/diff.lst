@@ -1,0 +1,611 @@
+Comparing files BURGMR.FOR and BURGNR.FOR
+***** BURGMR.FOR
+C BURGMR.FOR- ROUTINE TO COMPUTE BURG SPECTRUM FOR SPECTR USING MARPLE'S
+
+C ALGORITHM FOR COEFFICIENTS, AND FFT TO COMPUTE SPECTRUM. GENERATES
+
+C SPECTRA FOR ALL ORDERS BETWEEN M1 AND M2 WITH FPE/AIC AND COEFFICIENTS
+
+C LISTED. IF VIRTUAL ARRAYS BECOME AVAILABLE, PLOTS COULD BE GENERATED
+
+C WITHOUT CLOBBERING "WORK", SO LOWER-ORDER MODELS AREN'T REPEATEDLY 
+
+C REGENERATED. NO BIG DEAL FOR SPECTR, THOUGH.
+
+        SUBROUTINE BURGMR(X,N,IC)
+
+        COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(64),ICLABS(6,64)
+
+***** BURGNR.FOR
+C BURGNR.FOR- ROUTINE TO COMPUTE ORIGINAL BURG SPECTRUM FOR SPECTR. TAKEN
+
+C FROM "NUMERICAL RECIPES" PP.433-434. THIS VERSION COMPUTES & PLOTS THE 
+
+C SPECTRA FOR ALL MODEL ORDERS BETWEEN M1 AND M2. SUBSEQUENT VERSIONS
+
+C SHOULD ADD FPE/AIC ETC FOR ALL ORDERS. IF VIRTUAL ARRAYS ARE AVAILABLE,
+
+C PLOTS CAN BE GENERATED WTITHOUT CLOBBERING 'WORK', SO THAT LOWER-ORDER
+
+C MODELS AREN'T REPEATEDLY REGENERATED. USES DIRECT METHOD TO CALCULATE
+
+C THE SPECTRUM, WHICH PERMITS HIGHER RESOLUTION BUT IS SLOW, SLOW!!!
+
+        SUBROUTINE BURGNR(DATA,N,IC)
+
+        COMMON IFLAG1
+
+*****
+
+***** BURGMR.FOR
+
+c       COMMON/FLDESO/IDO(8),WORK(1)
+        COMMON/FLDESO/IDO(8),WORK       !  Maciek
+
+***** BURGNR.FOR
+
+        COMMON/FLDESO/IDO(8),WORK          ! Maciek WORK(1) -> WORK
+
+*****
+
+***** BURGMR.FOR
+
+        DIMENSION WK1(2050),WK2(2050),COF(99)
+
+        DIMENSION X(N,IC),SPECTRA[ALLOCATABLE](:,:)
+
+***** BURGNR.FOR
+
+        DIMENSION WK1(4100),WK2(4100),WKM(99),COF(99)
+
+        DIMENSION DATA(N,IC),SPECTRA[ALLOCATABLE](:,:)
+
+*****
+
+***** BURGMR.FOR
+        CHARACTER*24 PTITLE
+
+        EQUIVALENCE (WK1(1),WORK(1)),(WK2(1),WORK(2051))
+        
+        dimension work(2051)    !  Maciek
+
+***** BURGNR.FOR
+        CHARACTER*24 PTITLE
+        
+        dimension work(4101)                ! Maciek
+
+        EQUIVALENCE (WK1(1),WORK(1)),(WK2(1),WORK(4101))
+
+*****
+
+***** BURGMR.FOR
+
+1       WRITE(ITI,100)
+***** BURGNR.FOR
+
+        NN=NPTOT
+
+1       WRITE(ITI,100)
+*****
+
+***** BURGMR.FOR
+
+100     FORMAT('$  BURGMR: FIRST, LAST ORDER(<100), & STEPSIZE? >'\)
+
+        IKP=1
+
+***** BURGNR.FOR
+
+100     FORMAT('$  BURGNR: FIRST, LAST ORDER(<100) & STEPSIZE? >'\)
+
+*****
+
+***** BURGMR.FOR
+
+800     FORMAT('BURG(MARPLE):',3I3)
+
+***** BURGNR.FOR
+
+800     FORMAT('BURG(DIRECT):',3I3)
+
+*****
+
+***** BURGMR.FOR
+
+3       WRITE(ITI,200)
+
+200     FORMAT('$  BURG FFT SIZE:1=256/2=512/3=1024/4=2048/5=4096 >'\)
+
+        READ(ITI,201)K
+
+201     FORMAT(I1)
+
+        IF(K.LT.1 .OR. K.GT.5)GO TO 3
+
+        NXFM=2**(K+7)
+
+        AN=NXFM/2
+
+        DF=FNYQ/AN      ! PARAMETERS FOR PLOT1-
+
+        NPT0=FMAX/DF+1   ! INITIAL VALUES
+
+***** BURGNR.FOR
+
+        DFMIN=FMAX/8192.   ! (DETERMINED BY LENGTH OF WORK, REALLY)
+
+C NOTE THAT THE KEY ADVANTAGE OF THIS ROUTINE IS ITS CAPACITY FOR
+
+C EXTREMELY HIGH RESOLUTION IF NARROW PEAKS ARE PRESENT; SEE 'RECIPES'
+
+        WRITE(ITI,200)DFMIN
+
+200     FORMAT('$  FREQUENCY SPACING(.GE.',F5.3,') >'\)
+
+        READ(ITI,301)DF
+
+        IF(DF.EQ.0.)DF=DFMIN
+
+        NPT0=FMAX/DF+1
+
+*****
+
+***** BURGMR.FOR
+
+        X1=0.
+
+        IKP=0
+***** BURGNR.FOR
+
+        IKP=0
+*****
+
+***** BURGMR.FOR
+
+        WRITE(ITI,199)
+
+199     FORMAT('$  RECALL PREVIOUS PLOT? >'\)
+
+***** BURGNR.FOR
+
+        X1=0.
+
+        WRITE(ITI,201)
+
+201     FORMAT('$  RECALL PREVIOUS PLOT? >'\)
+
+*****
+
+***** BURGMR.FOR
+
+C GET AR COEFFICIENTS USING MARPLE'S BURG ROUTINE
+
+        CALL BURG1(X(NP1,L),NPTOT,M,PM,COF,ISTAT)
+
+        IF(ISTAT.EQ.0)GO TO 15
+
+        WRITE(ITI,202)M
+
+202     FORMAT('   ! UNSTABLE AT ORDER',I3,'; SKIPPING SPECTRUM')
+
+        GO TO 90
+
+15      CALL TIMER(T2)
+
+***** BURGNR.FOR
+
+        P=0.
+
+        DO 11 J=NP1,NP2
+
+        P=P+DATA(J,L)**2
+
+11      CONTINUE
+
+        PM=P/NN
+
+        WK1(1)=DATA(NP1,L)
+
+        WK2(NN-1)=DATA(NP2,L)
+
+        K=NP1+1
+
+        DO 12 J=2,NN-1
+
+        X=DATA(K,L)
+
+        WK1(J)=X
+
+        WK2(J-1)=X
+
+12      K=K+1
+
+        CALL MEMCOF(NN,M,PM,COF,WKM)
+
+        CALL TIMER(T2)
+
+*****
+
+***** BURGMR.FOR
+
+102     FORMAT(/'   TIME FOR BURG COEFFS, ORDER ',I2,', IS',F8.1,' MS.')
+
+        AN=N
+
+***** BURGNR.FOR
+
+102     FORMAT(/'   TIME FOR BURGNR, ORDER ',I2,', IS',F8.2,' MS.')
+
+        AN=NN
+
+*****
+
+***** BURGMR.FOR
+
+C CALCULATE SPECTRUM VIA FFT OF COEFFICIENTS
+
+        WORK(1)=1.0
+
+        DO 20 I=1,M
+
+20      WORK(I+1)=COF(I)
+
+        DO 25 I=M+2,NXFM
+
+25      WORK(I)=0.
+
+        CALL FAST(WORK,NXFM)
+
+        J=1
+
+        FACT=PM*DT
+
+***** BURGNR.FOR
+
+        F=0.
+
+*****
+
+***** BURGMR.FOR
+
+        SPECTRA(I,L)=FACT/(WORK(J)**2+WORK(J+1)**2)
+
+        J=J+2
+
+30      CONTINUE
+
+***** BURGNR.FOR
+
+        FDT=F*DT
+
+        SPECTRA(I,L)=EVLMEM(FDT,COF,M,PM)
+
+30      F=F+DF
+
+*****
+
+***** BURGMR.FOR
+
+400     FORMAT('$  TIME TO SPECTRUM IS',F8.2,'MS; <CR> TO PROCEED'\)
+
+***** BURGNR.FOR
+
+400     FORMAT('$  TIME TO SPECTRUM IS',F8.2,' MS; <CR> TO PROCEED'\)
+
+*****
+
+***** BURGMR.FOR
+
+          CALL SPECPLOT(SPECTRA,NPT0,IC,N1,N2,L,L,2,PTITLE,IKP,
+
+     +   NXEQ,0,ISETF,MODE)
+
+          IF(NXEQ-1)80,80,85
+
+***** BURGNR.FOR
+
+        CALL SPECPLOT(SPECTRA,NPT0,IC,N1,N2,L,L,2,PTITLE,IKP,
+
+     + NXEQ,0,ISETF,MODE)
+
+        IF(NXEQ-1)80,80,85
+
+*****
+
+***** BURGMR.FOR
+
+203     FORMAT('$  BURGMR:<CR>=CONTINUE/1=FREQS/2=MODEL/3=POINTS >'\)
+
+***** BURGNR.FOR
+
+203     FORMAT('$  BURGNR:<CR>=CONTINUE/1=FREQS/2=MODEL/3=POINTS >'\)
+
+*****
+
+***** BURGMR.FOR
+
+90    CONTINUE
+
+***** BURGNR.FOR
+
+90    CONTINUE    ! ORDER LOOP
+
+*****
+
+***** BURGMR.FOR
+
+95    CONTINUE
+
+***** BURGNR.FOR
+
+95    CONTINUE    ! CHANNEL LOOP
+
+*****
+
+***** BURGMR.FOR
+
+C
+
+        SUBROUTINE BURG1 (DATA,N,IP,P,A,ISTAT)
+
+C
+
+C   MARPLE'S program to estimate the autoregressive parameters by
+
+C   the Burg algorithm. Modified for real data by EK, 12/90.
+
+C   FURTHER MODIFIED FOR USE WITH SPECTR 
+
+C   Input Parameters:
+
+C   DATA - INPUT ARRAY (REAL)
+
+C     N  - Number of data samples
+
+C     IP - Order of autoregressive process
+
+C
+
+C   Output Parameters:
+
+C
+
+C     P  - Real variable representing driving noise variance
+
+C     A  - Array of autoregressive parameters A(1) to A(IP)
+
+C     ISTAT - Integer status indicator at time of exit
+
+C             0 for normal exit
+
+C             1 for numerical ill-conditioning (P < 0)
+
+C
+
+***** BURGNR.FOR
+
+C-----------------------------------------
+
+C ROUTINE TO GET THE AR COEFFICIENTS
+
+        SUBROUTINE MEMCOF(N,M,PM,COF,WKM)
+
+*****
+
+***** BURGMR.FOR
+
+c       COMMON/FLDESO/IDO(8),WORK(1)
+        COMMON/FLDESO/IDO(8),WORK      ! Maciek
+
+        COMMON/PTLST/NLIST,LIST(2,72),NP1,NP2,NPTOT
+
+        DIMENSION A(IP),EF(2050),EB(2050),DATA(N)
+
+        EQUIVALENCE (EF(1),WORK(1)),(EB(1),WORK(2051))
+
+        REAL NUM
+        
+        dimension work(2051)   ! Maciek
+
+C
+
+C   Initialization
+
+C
+
+        ISTAT=0
+
+        P=0.
+
+        L=1
+
+        DO 20 J=1,N
+
+        X=DATA(J)
+
+        P=P+X**2
+
+        EF(L)=X
+
+        EB(L)=X
+
+20      L=L+1
+
+        DEN=P*2.
+
+        P=P/N
+
+        TEMP=1.
+
+        K=0
+
+C
+
+C   Main recursion
+
+C
+
+100   K=K+1
+
+        NUM=0.
+
+        DO 30 J=K+1,N
+
+30      NUM=NUM+EF(J)*EB(J-1)
+
+        DEN=TEMP*DEN-EF(K)**2-EB(N)**2       ! EQ. (8.10)
+
+        SAVE1=-2.*NUM/DEN                    ! Eq. (8.14)
+
+        TEMP=1.-SAVE1**2
+
+        P=P*TEMP                             ! Eq. (8.4)
+
+        IF (TEMP .GT. 0.)  GO TO 40
+
+        ISTAT=1
+
+***** BURGNR.FOR
+
+        COMMON/FLDESO/IDO(8),WK1(4100),WK2(4100)
+
+        DIMENSION WKM(M),COF(M)
+
+        DO 17 K=1,M
+
+        PNEUM=0.
+
+        DENOM=0.
+
+        DO 13 J=1,N-K
+
+        PNEUM=PNEUM+WK1(J)*WK2(J)
+
+        DENOM=DENOM+WK1(J)**2+WK2(J)**2
+
+13      CONTINUE
+
+        COF(K)=2.*PNEUM/DENOM
+
+        PM=PM*(1.-COF(K)**2)
+
+        IF(K-1)131,132,131
+
+131     DO 14 I=1,K-1
+
+        COF(I)=WKM(I)-COF(K)*WKM(K-I)
+
+14      CONTINUE
+
+132     IF(K.EQ.M)RETURN
+
+        DO 15 I=1,K
+
+        WKM(I)=COF(I)
+
+15      CONTINUE
+
+        DO 16 J=1,N-K-1
+
+        WK1(J)=WK1(J)-WKM(K)*WK2(J)
+
+        WK2(J)=WK2(J+1)-WKM(K)*WK1(J+1)
+
+16      CONTINUE
+
+17      CONTINUE
+
+        END
+
+C -------------------------------------------
+
+C ROUTINE TO EVALUATE THE SPECTRUM AMPLITUDE AT FREQUENCY FDT
+
+        FUNCTION EVLMEM(FDT,COF,M,PM)
+
+        DIMENSION COF(M)
+
+        REAL*8 WR,WI,WPR,WPI,WTEMP,THETA
+
+        THETA=6.28318530717959D0*FDT
+
+        WPR=DCOS(THETA)
+
+        WPI=DSIN(THETA)
+
+        WR=1.D0
+
+        WI=0.D0
+
+        SUMR=1.
+
+        SUMI=0.
+
+        DO 11 I=1,M
+
+        WTEMP=WR
+
+        WR=WR*WPR-WI*WPI
+
+        WI=WI*WPR+WTEMP*WPI
+
+        SUMR=SUMR-COF(I)*SNGL(WR)
+
+        SUMI=SUMI-COF(I)*SNGL(WI)
+
+11      CONTINUE
+
+        EVLMEM=PM/(SUMR**2+SUMI**2)
+
+*****
+
+***** BURGMR.FOR
+
+40    A(K)=SAVE1
+
+***** BURGNR.FOR
+
+        END
+
+
+
+
+
+*****
+
+***** BURGMR.FOR
+        IF (K .EQ. 1)  GO TO 60
+
+        KHALF=K/2
+
+        DO 50 J=1,KHALF
+
+        KJ=K-J
+
+        SAVE2=A(J)
+
+        A(J)=SAVE2+SAVE1*A(KJ)             ! Eq. (8.2)
+
+        IF (J .EQ. KJ)  GO TO 50
+
+        A(KJ)=A(KJ)+SAVE1*SAVE2            ! Eq. (8.2)
+
+50      CONTINUE
+
+60    IF (K .EQ. IP)  RETURN
+
+        DO 70 J=N,K+1,-1
+
+        SAVE2=EF(J)
+
+        EF(J)=SAVE2+SAVE1*EB(J-1)          ! Eq. (8.7)
+
+70      EB(J)=EB(J-1)+SAVE1*SAVE2
+
+        GO TO 100
+
+        END
+
+***** BURGNR.FOR
+*****
+

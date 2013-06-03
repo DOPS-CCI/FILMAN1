@@ -1,0 +1,188 @@
+C*************************************************************************
+
+	SUBROUTINE DO_FAD(Q,WYN,IC,IORD,LEN)
+	IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+	INCLUDE 'MULTAR.INC'
+C      PARAMETER (MAXAR=20,MCHANS=64,MNPTS=33,MKN=6,IFADNR=4)
+C MAXAR  - MAXIMAL AR MODEL ORDER
+C MCHANS - MAXIMAL NUMBER OF CHANNELS (SOME SUBROUTINES
+C          REQUIRE WORKARRAY)
+C MNPTS  - NUMBER OF CALCULATION POINTS IN FREQUENCY DOMAIN (POWER SP)
+C MKN    - NUMBER OF FUNCTIONS CALCULATED IN AR_SPECT
+C IFADNR - NUMBER OF FAD PARAMETERS (B,BETA,OMEGA,FI)
+C      PARAMETER (INTBMX=10)
+C INTBMX - MAXIMAL NUMBER OF BORDERS OF DTF INTEGRATION RANGES
+	DIMENSION Q(MAXAR+1)
+	DIMENSION DN(MAXAR+1)
+	DIMENSION BE(MAXAR),BETA(MAXAR),OMEGA(MAXAR),FI(MAXAR)
+	DOUBLE PRECISION RR(MAXAR+1),RC(MAXAR+1)
+C	DOUBLE PRECISION B(MAXAR+1),POL(MAXAR+1)
+	DIMENSION WYN(0:MAXAR/2+1,IFADNR+1,MCHANS)
+	REAL WYN,FP
+	dimension vss(mchans)
+	logical usevss
+	common /vss/ usevss,vss
+	COMMON /ARERR/ IERR
+	COMMON /FLDES/ NG,NA,NC,ND,NF,NL,NR,IS,IBUF(1)
+	COMMON /DEV/ ITI
+
+	IF(IERR.NE.0)THEN
+	 WYN(0,3,IC)=1.   ! AN AR ERROR OCCURRED
+	 RETURN
+	ENDIF
+	WYN(0,4,IC)=IORD  ! SET MODEL ORDER FOR ERROR TRACING
+	
+C	RR(1)=1D0
+C	DO 11 I=2,IORD+1
+C   11 RR(I)=Q(I-1)      ! RR=(0,COF1,....,COFIORD)
+C	CALL DPRQD(B,IORD+1,RR,RC,POL,IR,IERR)  ! ROOTS RR POLYNOMIAL
+	
+      do 1,i=1,iord
+    1 RR(i)=q(iord-i+1)
+      RR(iord+1)=1d0
+      call proots(RR,IORD,rr,rc,ierr) ! ROOTS RR POLYNOMIAL
+	IF(IERR.NE.0)THEN
+	 WRITE(ITI,*)'FAD ERROR'
+	 Call ShowInfoText('Error','FAD ERROR')
+	 WYN(0,3,IC)=2.
+	 RETURN 
+	ENDIF
+	CALL RES(Q,DN,RR,RC,IORD) ! FORMS Cjreal AND Cjimag FROM ROOTS
+	CALL MODREZ(Q,DN,RR,RC,BE,BETA,OMEGA,FI,IORD,LEN) ! FORMS FAD PARMS
+
+	FP=REAL(IS)
+	WYN(0,1,IC)=LEN
+	WYN(0,2,IC)=FP*0.5
+	DO 2,I=1,LEN
+	if(usevss)then
+	 WYN(I,1,IC)=BE(I)*vss(1) ! B parameter rescaled by sqrt(V)
+	else
+	 WYN(I,1,IC)=BE(I)
+	endif
+	WYN(I,2,IC)=-BETA(I)
+	WYN(I,3,IC)=FI(I)
+    2 WYN(I,4,IC)=OMEGA(I)*FP
+    
+	END
+
+	SUBROUTINE RES(A,B,X,Y,N)
+	IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+	DIMENSION X(N),Y(N),A(N),B(N)
+	COMPLEX*16 Z,ZJ
+	N1=1-N
+	DO 10 J=1,N
+	ZJ=CMPLX(X(J),Y(J))
+	Z=ZJ**N1
+	DO 20 I=1,N
+	IF(I-J) 1,20,1
+   1  Z=Z*(ZJ-CMPLX(X(I),Y(I)))
+   20 CONTINUE
+	Z=1D0/Z
+	A(J)=DBLE(Z)
+	B(J)=DIMAG(Z)
+	IF(Y(J).EQ.0D0)B(J)=0D0
+   10 CONTINUE
+	END
+
+	SUBROUTINE MODREZ(CR,CI,ZR,ZI,B,BETA,OMEGA,FI,N,M)
+	IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+	DIMENSION CR(N),CI(N),ZR(N),ZI(N)
+	double precision zr,zi
+	DIMENSION B(N),BETA(N),FI(N),OMEGA(N)
+	COMPLEX*16 ALFA
+	DATA PI /3.14159265358979323846264338328D0/
+	M=0
+	DO 10 I=1,N
+	IF(CI(I))10,20,5
+    5 M=M+1
+	B(M)=2D0*CABS(CMPLX(CR(I),CI(I)))
+	FI(M)=ATAN2(CI(I),CR(I))/PI+.5D0-SIGN(.5D0,CR(I))
+	ALFA=CLOG(CMPLX(ZR(I),ZI(I)))
+	BETA(M)=REAL(ALFA)
+	OMEGA(M)=.5D0*ABS(AIMAG(ALFA))/PI
+	FI(M)=SIGN(FI(M),AIMAG(ALFA))
+	GOTO 10
+   20 CONTINUE
+	M=M+1
+	B(M)=ABS(CR(I))
+	FI(M)=.5D0-SIGN(.5D0,CR(I))
+C	BETA(M)=ALOG(ABS(ZR(I)))
+	BETA(M)=LOG(ABS(ZR(I)))
+	OMEGA(M)=.25D0-SIGN(.25D0,ZR(I))
+   10 CONTINUE
+	M1=M-1
+	DO 50 I=1,M1
+	MI=M-I
+	DO 50 J=1,MI
+	IF(OMEGA(J).LE.OMEGA(J+1))GOTO 50
+	X=OMEGA(J)
+	OMEGA(J)=OMEGA(J+1)
+	OMEGA(J+1)=X
+	X=B(J)
+	B(J)=B(J+1)
+	B(J+1)=X
+	X=BETA(J)
+	BETA(J)=BETA(J+1)
+	BETA(J+1)=X
+	X=FI(J)
+	FI(J)=FI(J+1)
+	FI(J+1)=X
+   50 CONTINUE
+	RETURN
+	END
+C *****************
+
+      SUBROUTINE proots(a,m,rtr,rti,info)
+      implicit double precision (a-h,o-z)
+      include 'multar.inc'
+C       PARAMETER (MAXAR=20,MCHANS=64,MNPTS=33,MKN=6,IFADNR=4)
+C MAXAR  - MAXIMAL AR MODEL ORDER
+C MCHANS - MAXIMAL NUMBER OF CHANNELS (SOME SUBROUTINES
+C          REQUIRE WORKARRAY)
+C MNPTS  - NUMBER OF CALCULATION POINTS IN FREQUENCY DOMAIN (POWER SP)
+C MKN    - NUMBER OF FUNCTIONS CALCULATED IN AR_SPECT
+C IFADNR - NUMBER OF FAD PARAMETERS (B,BETA,OMEGA,FI)
+C      PARAMETER (INTBMX=10)
+C INTBMX - MAXIMAL NUMBER OF BORDERS OF DTF INTEGRATION RANGES
+      DIMENSION a(m+1),rtr(m),rti(m)
+      double precision hess(MAXAR,MAXAR)
+      double precision work(3*maxar)
+      double precision dum
+      if (m.gt.MAXar.or.a(m+1).eq.0.)then
+c       write(iti,*)'Bad arguments in PROOTS'
+       info=1
+       return
+      endif
+      do 12 k=1,m
+        hess(1,k)=-a(m+1-k)/a(m+1)
+        do 11 j=2,m
+          hess(j,k)=0d0
+11      continue
+        if (k.ne.m) hess(k+1,k)=1d0
+12    continue
+      call dgeev('N','N',m,hess,maxar,rtr,rti,dum,1,dum,2,work,3*m,
+     $           info)
+      return
+      END
+      
+      SUBROUTINE CheckIfFADOutput(IBUF)
+      DIMENSION IBUF(5)
+      INTEGER*4 IBUF
+      LOGICAL IsOutput
+      CHARACTER*4 C4
+      INTEGER*4 I4
+      EQUIVALENCE (C4,I4)
+	COMMON /FIMU/IMUID,IsOutput,OUTPFOR
+      INTEGER*4 IMUID(4)
+      CHARACTER*52 OUTPFOR
+      
+      IsOutput=.TRUE.
+      Do 1,I=1,4
+      IsOutput=IsOutput.AND.(IBUF(I).eq.IMUID(I))
+      IF(.NOT.IsOutput)RETURN
+1     CONTINUE
+      Do 2,I=5,18
+      I4=IBUF(I)
+2     OUTPFOR((I-5)*4+1:(I-4)*4)=C4
+      RETURN
+      END      

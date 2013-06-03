@@ -1,0 +1,19 @@
+Record set selection routines
+
+1 = USE ALL RECSETS
+2 = ODDEVE
+3 = SPLTHF
+4 = RECLST
+5 = SKPLST
+6 = MANSEL
+7 = KEYSEL
+8 = KEYSKP
+
+1 - go ahead
+2 - Evens or Odds
+3 - Half 1 or 2
+4 - Record list (max 240)
+5 - Record list
+6 - Manual selection ON
+7 - Group/value selection
+8 - Group/value selection

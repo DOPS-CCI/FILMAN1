@@ -1,0 +1,28 @@
+C TSTFMT.FOR - CHECK ON ALTERNATE WAYS OF TERMINAL INPUT
+
+      DIMENSION IANS(5)
+
+      DATA ILP,IRP/'(',')'/
+
+      WRITE(*,200)(ILP,IRP,I=1,5)
+
+200   FORMAT(1H$,10(A1,2XA1,:))     !   /'+',\)
+
+C      WRITE(*,201)
+
+201   FORMAT('+',\)
+
+C      BACKSPACE 5      !NOT LEGAL ON TERMINAL
+
+      READ(*,100)(IANS(I),I=1,5)
+
+100   FORMAT(1XI2,10(2XI2,:))
+
+      WRITE(*,300)(IANS(I),I=1,5)
+
+300   FORMAT(1X,5I5)
+
+      STOP
+
+      END
+

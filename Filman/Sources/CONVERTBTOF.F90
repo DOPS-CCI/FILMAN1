@@ -1,0 +1,397 @@
+	INCLUDE 'MAX.INC'
+
+	COMMON/FLDESO/ NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
+
+	COMMON/CNTR2/ COUNT      
+
+	INTEGER*4 COUNT
+
+	CHARACTER*64 INPUTFILENAME
+
+	CHARACTER*24 LABELS(IOMAX/24)
+
+	CHARACTER*8 C8
+
+    CHARACTER*16, ALLOCATABLE, DIMENSION(:) :: CLABELS
+
+    CHARACTER*80, ALLOCATABLE, DIMENSION(:) :: TTYPE,PREFILT
+
+    CHARACTER*8, ALLOCATABLE, DIMENSION(:) :: PDIM
+
+    CHARACTER*32, ALLOCATABLE, DIMENSION(:) :: RES
+
+    INTEGER*4, ALLOCATABLE, DIMENSION(:) :: PMIN,PMAX,DMIN,DMAX,NSAMP,GVAR
+
+    REAL*4, ALLOCATABLE, DIMENSION(:) :: GAIN,OFFSET
+
+    INTEGER*2, ALLOCATABLE, DIMENSION(:) :: IGCH
+
+    INTEGER*1, ALLOCATABLE, DIMENSION(:) :: BIGBUF
+
+    INTEGER*4 RECSIZE
+
+    CHARACTER*432 CBUF
+
+    DIMENSION IBUF(116)
+
+    TYPE head1
+
+      SEQUENCE
+
+      INTEGER*1 MAGIC
+
+      CHARACTER*7 IDCODE
+
+      CHARACTER*80 LOCALSUBJECT
+
+      CHARACTER*80 LOCALRECORDING
+
+      CHARACTER*8 STARTDATE
+
+      CHARACTER*8 STARTTIME
+
+      CHARACTER*8 NUMBERBYTES
+
+      CHARACTER*44 VERSION
+
+      CHARACTER*8 NUMRECS
+
+      CHARACTER*8 DURATION
+
+      CHARACTER*4 NCHANS
+
+    END TYPE head1
+
+    TYPE(head1) :: REC
+
+    EQUIVALENCE (IBUF(1),NGO),(CBUF,IBUFO),(VALUE,IVALUE),(LABELS,IBUFO)
+
+!************************************************************************
+
+    COUNT=1
+
+    IOX=12
+
+1	WRITE(*,100)
+
+100 FORMAT('Input BioSemi filename or ''Q'' to quit>'\)
+
+    READ(*,102) INPUTFILENAME
+
+102 FORMAT(A)
+
+	IF(LEN_TRIM(INPUTFILENAME)-1) 1,2,3
+
+2   IF(INPUTFILENAME.EQ.'Q' .OR. INPUTFILENAME.EQ.'q') STOP
+
+3   OPEN(UNIT=IOX,FILE='C:\EEGDATA\'//INPUTFILENAME,ACTION='READ', &
+
+    ACCESS='SEQUENTIAL',STATUS='OLD',FORM='BINARY',ERR=4)
+
+    GO TO 5
+
+4   WRITE(*,103) TRIM(INPUTFILENAME)
+
+103 FORMAT('ERROR: Unable to open file ',A,'; try again.'/)
+
+    GO TO 1
+
+!   READ FIRST PART OF HEADER RECORD
+
+5   READ(IOX) REC
+
+!   Check magic number and code to assure correct file type
+
+    IF(REC%MAGIC.EQ.-1 .AND. REC%IDCODE.EQ.'BIOSEMI') GO TO 6
+
+    WRITE(*,104)
+
+104 FORMAT('ERROR: Incorrect file type; try again.'/)
+
+    CLOSE(IOX)
+
+    GO TO 1
+
+!   CONVERT LENGTHS TO INTEGERS
+
+6   READ (REC%NCHANS,'(I4)') N
+
+    READ (REC%DURATION,'(I8)') ISEC
+
+!
+
+    ALLOCATE(CLABELS(N),TTYPE(N),PREFILT(N),PDIM(N),PMIN(N),PMAX(N), &
+
+    DMIN(N),DMAX(N),NSAMP(N),RES(N),GAIN(N),OFFSET(N),GVAR(N),IGCH(N))
+
+!   NOW READ IN REST OF HEADER RECORD
+
+    DO 10 I=1,N
+
+10  READ(IOX) CLABELS(I)
+
+    DO 20 I=1,N
+
+20  READ(IOX) TTYPE(I)
+
+    DO 30 I=1,N
+
+30  READ(IOX) PDIM(I)
+
+    DO 40 I=1,N
+
+    READ(IOX) C8
+
+40  READ(C8,'(I8)') PMIN(I)
+
+    DO 50 I=1,N
+
+    READ(IOX) C8
+
+50  READ(C8,'(I8)') PMAX(I)
+
+    DO 60 I=1,N
+
+    READ(IOX) C8
+
+60  READ(C8,'(I8)') DMIN(I)
+
+    DO 70 I=1,N
+
+    READ(IOX) C8
+
+70  READ(C8,'(I8)') DMAX(I)
+
+    DO 80 I=1,N
+
+80  READ(IOX) PREFILT(I)
+
+    DO 90 I=1,N
+
+    READ(IOX) C8
+
+90  READ(C8,'(I8)') NSAMP(I)
+
+    DO 95 I=1,N
+
+95  READ(IOX) RES(I)
+
+
+
+!   GENERATE FILMAN FIRST HEADER RECORD
+
+    CBUF(1:72)=REC%LOCALSUBJECT(1:72)
+
+    CBUF(73:144)=REC%LOCALRECORDING(1:72)
+
+    CBUF(145:216)=REC%STARTDATE//' '//REC%STARTTIME
+
+    CBUF(217:288)=TTYPE(1)(1:72)
+
+    CBUF(289:360)=PREFILT(1)(1:72)
+
+    CBUF(361:432)=' '
+
+    
+
+!   Now find the channels which will be converted to group variables:
+
+!   channels with single value become group variables
+
+    NG=0
+
+    RECSIZE=0
+
+    NDO=0
+
+    DO 200 I=1,N
+
+    NS=NSAMP(I)
+
+    IF(NS.EQ.1) GO TO 202 ! Convert to group variable
+
+    IF(NDO.EQ.0) NDO=NS !First channel with length > 1
+
+    IF(NS.EQ.NDO) GO TO 200 !Regular channel
+
+    WRITE(*,105)
+
+105 FORMAT('*****ERROR: All channel sizes >1 not equal'/)
+
+    CLOSE(IOX)
+
+    DEALLOCATE (CLABELS,TTYPE,PREFILT,PDIM,RES,PMIN,PMAX,DMIN, &
+
+    DMAX,NSAMP,GVAR,GAIN,OFFSET,IGCH)
+
+    GO TO 1
+
+202 NG=NG+1
+
+    IGCH(NG)=I !Remember which channel
+
+    GVAR(NG)=RECSIZE+1 !And location of group variable in buffer
+
+200 RECSIZE=RECSIZE+3*NS !Keep track of where we are in record
+
+    NGO=NG+2
+
+    NAO=0
+
+    NCO=N-NG
+
+    NFO=3
+
+    NPO=NDO+NGO
+
+    NRO=0
+
+    ISO=NSAMP(1)/ISEC
+
+    CALL PUTOPN
+
+    CALL PUTSTD(IBUF)
+
+    
+
+!   NOW SET UP LABEL RECORD: GROUPS, THEN CHANNELS
+
+    LABELS(1)='CHANNEL'
+
+    LABELS(2)=' '
+
+    J=3
+
+    DO 220 I=1,NG
+
+    LABELS(J)=CLABELS(IGCH(I))
+
+220 J=J+1
+
+    DO 210 I=1,N
+
+    IF(NSAMP(I).EQ.1) GO TO 210
+
+    LABELS(J)=CLABELS(I)
+
+    J=J+1
+
+210 CONTINUE
+
+    CALL PUTSTD(IBUFO)
+
+    
+
+    ALLOCATE (BIGBUF(RECSIZE))
+
+    
+
+    DO 300 ICH=1,N !Calculate ALL channel gains and offsets
+
+    R=REAL(DMAX(ICH)-DMIN(ICH))
+
+    OFFSET(ICH)=REAL(DMAX(ICH)*PMIN(ICH)-DMIN(ICH)*PMAX(ICH))/R
+
+300 GAIN(ICH)=REAL(PMAX(ICH)-PMIN(ICH))/R
+
+
+
+400 READ(IOX,END=500) BIGBUF
+
+
+
+    DO 403 IG=1,NG !Fill in group variables from record
+
+    I=GVAR(IG)
+
+403 IBUFO(IG+2)=INT4(GETVALUE(BIGBUF(I),BIGBUF(I+1),BIGBUF(I+2)) &
+
+    *GAIN(IGCH(IG))+OFFSET(IGCH(IG))+0.5)
+
+
+
+!   Now create one FILMAN record for each channel in buffer
+
+    IC=1
+
+    IOFF=0
+
+    DO 401 ICH=1,N
+
+    NS=NSAMP(ICH)*3
+
+    IF(NS.LE.3) GO TO 401 !Skip group variable channels
+
+    IBUFO(1)=IC
+
+    IBUFO(2)=0
+
+    IC=IC+1
+
+    J=NGO+1
+
+    G=GAIN(ICH)
+
+    O=OFFSET(ICH)
+
+    DO 402 I=IOFF+1,IOFF+NS,3 !Three bytes per point
+
+    VALUE=GETVALUE(BIGBUF(I),BIGBUF(I+1),BIGBUF(I+2))*G+O
+
+    IBUFO(J)=IVALUE
+
+402 J=J+1
+
+    CALL PUTSTD(IBUFO)
+
+401 IOFF=IOFF+NS
+
+    GO TO 400
+
+    
+
+500 CALL PUTEND
+
+    CLOSE(IOX)
+
+    DEALLOCATE (CLABELS,TTYPE,PREFILT,PDIM,RES,PMIN,PMAX,DMIN, &
+
+    DMAX,NSAMP,GVAR,GAIN,OFFSET,IGCH,BIGBUF)
+
+    WRITE(*,101) TRIM(INPUTFILENAME),NRO
+
+101 FORMAT('Finished conversion of ',A,', writing a total of ', &
+
+    I6,' records.'/)
+
+    GO TO 1
+
+    END
+
+!*******************************************************************	
+
+	REAL FUNCTION GETVALUE(I1,I2,I3)
+
+	INTEGER*1 I1,I2,I3,I(4)
+
+	INTEGER*4 II
+
+	EQUIVALENCE (I(1),II)
+
+!   We HATE little endian!!!!!
+
+	I(4)=0
+
+	IF(I3.LT.0) I(4)=-1 !Extend sign
+
+	I(1)=I1
+
+	I(2)=I2
+
+	I(3)=I3
+
+    GETVALUE=REAL(II)
+
+    RETURN
+
+    END

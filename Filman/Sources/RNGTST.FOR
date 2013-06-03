@@ -1,0 +1,32 @@
+C RANTST.FOR- ROUTINE TO CHECK SOFTWARE RNG
+
+      REAL*4 YFL
+
+      CALL GETTIM(IHR,IMIN,ISEC,I100)
+
+      ISEED=ISEC*I100 + IHR*IMIN
+
+      CALL SEED(ISEED)
+
+      CALL TIMER(T1)
+
+      DO 10 I=1,10000
+
+      CALL RANDOM(YFL)
+
+C      YFL=UNI(K) !IEEE GENERATOR TAKES 879 MS
+
+10    CONTINUE
+
+      CALL TIMER(T2)
+
+      T=(T2-T1)*1000.
+
+      WRITE(*,*)T
+
+      STOP
+
+      END
+
+
+

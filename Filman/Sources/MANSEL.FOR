@@ -1,0 +1,57 @@
+C MANSEL.FOR- MANUALLY SELECT RECORD-SETS
+
+	SUBROUTINE MANSEL
+
+      INCLUDE 'MAX.INC'
+
+	COMMON IFLAG1,IFLAG2,IFLAG3,KNT
+
+	COMMON/FLDES/ID(8),IBUF(IOMAX)
+
+	COMMON/DEV/ITI
+
+	IF(IFLAG1) 10,20,60
+
+10    CONTINUE 
+!      WRITE(*,99)
+!
+!99    FORMAT('   MANSEL will prompt you during execution')
+      Call ShowInfoText('Info',
+     +'MANSEL will prompt you during execution')
+
+	GO TO 60
+
+20    CONTINUE
+!      WRITE(*,100) KNT
+!
+!100   FORMAT('ENTER NEXT RECSET TO PROCESSS(CURRENT=',
+!
+!     1 I3,';0=>SKIP/-1=>END)>'\)
+!
+!      KNT2=0
+!
+!	READ(*,*) KNT2
+
+      CALL DoMANSELDialog(KNT,KNT2)
+
+
+	IF(KNT2)70,60,30
+
+30    KNT=KNT2
+
+C OVERRIDE NORMAL FILMAN SEQUENTIAL READ
+
+40    CALL GETREC(KNT)
+
+	CALL GETSTD(IBUF)
+
+60    RETURN
+
+70    KNT=-1      
+
+	IFLAG2=0
+
+	RETURN
+
+	END
+

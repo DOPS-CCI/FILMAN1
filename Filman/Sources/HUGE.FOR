@@ -1,0 +1,36 @@
+C HUGE.FOR- CHECK ARRAY SIZE LIMITS
+
+      integer*1 IY[HUGE] (200000)
+
+      INTEGER*1 IX[HUGE,ALLOCATABLE] (:)
+
+      INTEGER*4 N
+
+1     WRITE(*,'(A\)')' ENTER DIMENSION FOR IX >'      
+
+      READ(*,*)N
+
+      WRITE(*,'(3H N=,I8)')N
+
+      ALLOCATE(IX(N),STAT=IERR)
+
+      IF(IERR.EQ.0)GO TO 2
+
+      PAUSE ' ALLOCATION FAILED; TRY AGAIN'
+
+      GO TO 1
+
+2     DEALLOCATE(IX,STAT=IDERR)      
+
+      IF(IDERR.EQ.0)GO TO 1
+
+      WRITE(*,*)IDERR
+
+      PAUSE ' DEALLOCATION ERROR'
+
+      STOP
+
+      END
+
+
+

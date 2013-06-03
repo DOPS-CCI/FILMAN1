@@ -1,0 +1,165 @@
+      include 'fgraph.fi'
+
+
+
+      INTEGER FUNCTION RYSAIC(CR,LEN,IARES)
+
+      include 'fgraph.fd'
+      use ifqwin                  ! Maciek
+
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+
+      DIMENSION CR(LEN)
+
+      CHARACTER*2 ORDER
+
+      CHARACTER*4 FMT
+
+      CHARACTER*7 VALU,DLT
+
+      RECORD /XYCOORD/ XY
+      record /rccoord/ rc    ! Maciek
+
+ 	COMMON/DEV/ITI,ILP,IGRAPH
+
+      COMMON/ARERR/IERR
+
+      DATA FMT /'(I1)'/
+	INTEGER*2 MMAXX,MMAXY
+
+      
+
+      RMXAIC=CR(2)
+
+      RMNAIC=CR(2)
+
+      DO 9,INDX=3,LEN
+
+      IF(CR(INDX).GT.RMXAIC)RMXAIC=CR(INDX)
+
+      IF(CR(INDX).LT.RMNAIC)RMNAIC=CR(INDX)
+
+    9 CONTINUE
+
+      IF(RMNAIC.EQ.RMXAIC)THEN
+
+       RMNAIC=RMNAIC-1
+
+       RMXAIC=RMXAIC+1
+
+      ENDIF
+
+
+
+      CALL GRAPHMODE_ON(MMAXX,MMAXY,NTR,NTC,NBPP,NCOLOR,1)
+
+      IF(IERR.NE.0)RETURN
+
+C      ISTAT = SETFONT("t'tms rmn'h10w5")
+      ISTAT = SETFONT("t'Arial'h12w6")
+
+      MAXY=16
+
+      MINY=MMAXY-33
+
+      A=FLOAT(MAXY-MINY)/(RMXAIC-RMNAIC)
+
+      B=(RMXAIC*MINY-RMNAIC*MAXY)/(RMXAIC-RMNAIC)
+
+      WRITE(FMT(3:3),'(A1)')'1'
+
+!      step = float(MMAXX-1)/(LEN-1)
+      step = float(MMAXX-30)/(LEN-1)
+
+      IPOSLAST=0 
+
+       
+
+      do 10,i=1,LEN-1
+
+      ipos = i*step
+
+      call moveto(INT2(ipos),INT2(MINY),xy)
+
+      istat = lineto(ipos,MAXY)
+
+      IF(I.GT.1)THEN
+
+       CALL MOVETO(INT2(IPOSLAST),INT2(CR(I)*A+B),XY)
+
+       ISTAT = LINETO(INT2(IPOS),INT2(CR(I+1)*A+B))
+
+      ENDIF
+
+      IF(I.GE.10)WRITE(FMT(3:3),'(A1)')'2'
+
+      WRITE(ORDER,FMT)I
+
+      CALL MOVETO(IPOS-GETGTEXTEXTENT(ORDER)/2,MMAXY-32,XY)
+
+      CALL OUTGTEXT(ORDER)
+
+      WRITE(VALU,'(F7.3)')CR(I+1)
+
+      CALL MOVETO(IPOS-GETGTEXTEXTENT(VALU)/2,MMAXY-21,XY)
+
+      CALL OUTGTEXT(VALU)
+
+      IF(I.EQ.LEN-1)GOTO 10
+
+      WRITE(DLT,'(F7.3)')CR(I+2)-CR(I+1)
+
+      CALL MOVETO(IPOS-GETGTEXTEXTENT(DLT)/2,MMAXY-10,XY)
+
+      CALL OUTGTEXT(DLT)
+
+   10 IPOSLAST=IPOS   
+
+      CALL MOVETO(0,MMAXY-32,XY)
+
+      CALL OUTGTEXT('ORD')
+
+      CALL MOVETO(0,MMAXY-21,XY)
+
+      CALL OUTGTEXT('AIC')
+
+      CALL MOVETO(0,MMAXY-10,XY)
+
+      CALL OUTGTEXT('CHG')
+
+      
+
+      CALL SETTEXTWINDOW(1,1,2,80)
+
+c      CALL SETTEXTPOSITION(0,1,XY)
+      CALL SETTEXTPOSITION(0,1,rc)    !  Maciek
+
+C     CALL OUTTEXT('CHOOSE BEST MODEL ORDER >')
+
+C     CALL SETTEXTPOSITION(1,26,XY)
+
+C      WRITE(MGTXT,100)
+
+C100   FORMAT(\'+CHOOSE BEST MODEL ORDER >'\)      
+c100   FORMAT('+CHOOSE BEST MODEL ORDER >')
+
+c	CALL SETTEXTPOSITION(1,1,S)
+      CALL OUTTEXT('CHOOSE BEST MODEL ORDER >')
+
+!      read(IGRAPH,*)IORD
+!      IORD=IGETVALU('(I3)')
+      CALL DoOPTORDDialog(IARES,IORD)
+      write(IGRAPH,'(I3)')IORD
+
+      CALL GRAPHMODE_OFF
+      
+      RYSAIC=IORD
+
+      RETURN
+
+      END
+
+
+
+
+

@@ -1,0 +1,34 @@
+C GTEST.FOR- TEST GRAPHMODE_ON/OFF
+
+        INCLUDE 'FGRAPH.FI'
+
+        PROGRAM GTEST
+
+        INCLUDE 'FGRAPH.FD'
+
+        CALL GRAPHMODE_ON(I1,I2,I3,I4,I5,I6)
+
+        IMSIZE=IMAGESIZE(0,0,I1-1,I2-1)
+
+        WRITE(*,200)I1,I2,I3,I4,I5,I6,IMSIZE
+
+200     FORMAT(' SELECTED CONFIGURATION:'/
+
+     1   ' MAXX=',I6,' MAXY=',I6/
+
+     2   ' TEXTROWS=',I6,' TEXTCOLS=',I6/
+
+     3   ' BITSPERPIXEL=',I6/
+
+     4   ' NUMBER COLORS=',I6/
+
+     5   ' CALCULATED IMAGE SIZE=',I8)
+
+        PAUSE
+
+        CALL GRAPHMODE_OFF
+
+        STOP
+
+        END
+

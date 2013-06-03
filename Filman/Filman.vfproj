@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="QuickWin" Version="11.0" ProjectIdGuid="{B0BCC962-B5B7-44ED-BC9A-58E42B400F6E}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Traceback="true" NullPointerCheck="true" UninitializedVariablesCheck="true" ArgTempCreatedCheck="true" RuntimeLibrary="rtQuickWinDebug" UseWindowsLibs="true" UseMkl="mklSequential" Interfaces="true"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemWindows"/>
+				<Tool Name="VFResourceCompilerTool" AdditionalIncludeDirectories="C:\Program Files (x86)\Intel\Composer XE 2013\mkl\include"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" RuntimeLibrary="rtQuickWin"/>
+				<Tool Name="VFLinkerTool" SuppressStartupBanner="true" SubSystem="subSystemWindows"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd">
+		<File RelativePath=".\Sources\KOHINF.INC"/>
+		<File RelativePath=".\Sources\MAX.INC"/>
+		<File RelativePath=".\Sources\MULTAR.INC"/></Filter>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+		<File RelativePath="..\VNI\imsl.lib"/>
+		<File RelativePath="..\VNI\imslblas.lib"/>
+		<File RelativePath="..\VNI\imslhpc_l.lib"/>
+		<File RelativePath="..\VNI\imslhpc_s.lib"/>
+		<File RelativePath="..\VNI\imslmpistub.lib"/>
+		<File RelativePath="..\VNI\imslp_err.lib"/>
+		<File RelativePath="..\VNI\imslscalar.lib"/>
+		<File RelativePath="..\VNI\imslsparsestub.lib"/>
+		<File RelativePath="..\VNI\imslsuperlu.lib"/>
+		<File RelativePath="..\VNI\libguide40.lib"/>
+		<File RelativePath="..\VNI\mkl_blacs_mpich2.lib"/>
+		<File RelativePath=".\Includes\mkl_dfti.f90"/>
+		<File RelativePath="..\VNI\mkl_scalapack.lib"/>
+		<File RelativePath=".\resource.fd"/>
+		<File RelativePath=".\Resource1.rc"/></Filter>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath=".\Sources\ADVSAVE.FOR"/>
+		<File RelativePath=".\Sources\ADVSAVF.FOR"/>
+		<File RelativePath=".\Sources\ARPLOT.FOR"/>
+		<File RelativePath=".\Sources\ARSPECTT.FOR"/>
+		<File RelativePath=".\Sources\AVRALL.FOR"/>
+		<File RelativePath=".\Sources\AVRGRP.FOR"/>
+		<File RelativePath=".\Sources\BANDS.FOR"/>
+		<File RelativePath=".\Sources\BLPRO.FOR"/>
+		<File RelativePath=".\Sources\BOTFILE.FOR"/>
+		<File RelativePath=".\Sources\BURG.FOR"/>
+		<File RelativePath=".\Sources\CHDIFF.FOR"/>
+		<File RelativePath=".\Sources\CLEAR.FOR"/>
+		<File RelativePath=".\Sources\CMLIN.FOR"/>
+		<File RelativePath=".\Sources\CMMPLOT.FOR"/>
+		<File RelativePath=".\Sources\countCorr.f"/>
+		<File RelativePath=".\Sources\countCov.f"/>
+		<File RelativePath=".\Sources\COVFILE.FOR"/>
+		<File RelativePath=".\Sources\DATACOND.FOR"/>
+		<File RelativePath=".\Sources\DATE.FOR"/>
+		<File RelativePath=".\Sources\DAXPYMat.f"/>
+		<File RelativePath=".\Sources\DCOPYMat.f"/>
+		<File RelativePath=".\Sources\dialogs.f90"/>
+		<File RelativePath=".\Sources\Dialogs2.for"/>
+		<File RelativePath=".\Sources\Dialogs3.f90"/>
+		<File RelativePath=".\Sources\Dialogs4.for"/>
+		<File RelativePath=".\Sources\Dialogs5.for"/>
+		<File RelativePath=".\Sources\DO_AR.FOR"/>
+		<File RelativePath=".\Sources\DPOKEMat.f"/>
+		<File RelativePath=".\Sources\DPOKEMatPack.f"/>
+		<File RelativePath=".\Sources\DPRQD.FOR"/>
+		<File RelativePath=".\Sources\DTFFILE.FOR"/>
+		<File RelativePath=".\Sources\EIGEN.FOR"/>
+		<File RelativePath=".\Sources\EXPORT.FOR"/>
+		<File RelativePath=".\Sources\FAD.FOR"/>
+		<File RelativePath=".\Sources\FADPLOT.FOR"/>
+		<File RelativePath=".\Sources\FADPROCS.FOR"/>
+		<File RelativePath=".\Sources\FAST.FOR"/>
+		<File RelativePath=".\Sources\FFTPS2.FOR"/>
+		<File RelativePath=".\Sources\FFTPSP.FOR"/>
+		<File RelativePath=".\Sources\FILMAN.f90"/>
+		<File RelativePath=".\Sources\FILMEN.FOR"/>
+		<File RelativePath=".\Sources\FILTER.FOR"/>
+		<File RelativePath=".\Sources\FILTSUBS.FOR"/>
+		<File RelativePath=".\Sources\FNDCONJGS.FOR"/>
+		<File RelativePath=".\Sources\GDTSTR.FOR"/>
+		<File RelativePath=".\Sources\GETVALU.FOR"/>
+		<File RelativePath=".\Sources\GPASS.FOR"/>
+		<File RelativePath=".\Sources\GPAST.FOR"/>
+		<File RelativePath=".\Sources\grmode.for"/>
+		<File RelativePath=".\Sources\GRPLOT.FOR"/>
+		<File RelativePath=".\Sources\GRPNS.FOR"/>
+		<File RelativePath=".\Sources\GRPRNT.FOR"/>
+		<File RelativePath=".\Sources\GSTRNG.FOR"/>
+		<File RelativePath=".\Sources\HIST.FOR"/>
+		<File RelativePath=".\Sources\KEYSEL.FOR"/>
+		<File RelativePath=".\Sources\KEYSKP.FOR"/>
+		<File RelativePath=".\Sources\LUINV.FOR"/>
+		<File RelativePath=".\Sources\MACHINE.FOR"/>
+		<File RelativePath=".\Sources\MAGPH.FOR"/>
+		<File RelativePath=".\Sources\MANSEL.FOR"/>
+		<File RelativePath=".\Xeffort\MFTPrint.f90"/>
+		<File RelativePath=".\Xeffort\mkl_dfti.f90"/>
+		<File RelativePath=".\Sources\MODCOV.FOR"/>
+		<File RelativePath=".\Sources\MODPO2.FOR"/>
+		<File RelativePath=".\Sources\MODPOW.FOR"/>
+		<File RelativePath=".\Sources\MODPS2.FOR"/>
+		<File RelativePath=".\Sources\MODPSP.FOR"/>
+		<File RelativePath=".\Sources\MULTAIC.FOR"/>
+		<File RelativePath=".\Sources\MULTAIC2.FOR"/>
+		<File RelativePath=".\Sources\MULTAR2.FOR"/>
+		<File RelativePath=".\Xeffort\MWINPOS.F90"/>
+		<File RelativePath=".\Sources\ODDEVE.FOR"/>
+		<File RelativePath=".\Sources\OUTFNM.FOR"/>
+		<File RelativePath=".\Sources\PEAKEX.FOR"/>
+		<File RelativePath=".\Sources\PEAKM.FOR"/>
+		<File RelativePath=".\Sources\PLOT.FOR"/>
+		<File RelativePath=".\Sources\POWSP.FOR"/>
+		<File RelativePath=".\Sources\POWSP2.FOR"/>
+		<File RelativePath=".\Sources\PRINT.FOR"/>
+		<File RelativePath=".\Sources\PTPASS.FOR"/>
+		<File RelativePath=".\Sources\ptsel.for"/>
+		<File RelativePath=".\Sources\RECLST.FOR"/>
+		<File RelativePath=".\resource.h">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFCustomBuildTool" CommandLine="deftofd resource.h resource.fd" Description="Generating Fortran include file" Outputs="resource.fd"/></FileConfiguration></File>
+		<File RelativePath=".\Sources\RYSAIC.FOR"/>
+		<File RelativePath=".\Sources\SETUP.FOR"/>
+		<File RelativePath=".\Sources\SKPLST.FOR"/>
+		<File RelativePath=".\Sources\solveArYwCov.f"/>
+		<File RelativePath=".\Sources\SPECPLOT.FOR"/>
+		<File RelativePath=".\Sources\SPLTHF.FOR"/>
+		<File RelativePath=".\Sources\STDIO.FOR"/>
+		<File RelativePath=".\Sources\SVASFMN.FOR"/>
+		<File RelativePath=".\Sources\TESTDATA.FOR"/>
+		<File RelativePath=".\Sources\TIMER.FOR"/>
+		<File RelativePath=".\Sources\UNI.FOR"/>
+		<File RelativePath=".\Sources\vectorFad.f"/>
+		<File RelativePath=".\Sources\VFAD.FOR"/>
+		<File RelativePath=".\Sources\WinPrint_Direct.f90"/>
+		<File RelativePath=".\Sources\Xdialogs.for"/>
+		<File RelativePath=".\Xeffort\XFLOGM.F90"/>
+		<File RelativePath=".\Sources\XFORM.FOR"/>
+		<File RelativePath=".\Xeffort\XFTFile.f90"/>
+		<File RelativePath=".\Xeffort\XftGDI.f90"/>
+		<File RelativePath=".\Xeffort\XFTStrings.f90"/>
+		<File RelativePath=".\Sources\XHIST.FOR"/>
+		<File RelativePath=".\Sources\XSPEC.FOR"/>
+		<File RelativePath=".\Sources\XTAB.FOR"/>
+		<File RelativePath=".\Sources\ZERLVB.FOR"/></Filter></Files>
+	<Globals/></VisualStudioProject>

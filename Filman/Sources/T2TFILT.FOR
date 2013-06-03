@@ -1,0 +1,56 @@
+
+
+      SUBROUTINE T2TFILT(B,A,LB,LA,X,N,Z,IERROR)
+
+C
+
+C FILTERS N-POINT ARRAY IN PLACE USING TYPE II TRANSPOSED
+
+C 
+
+C B = ARRAY OF NUM COEFFICIENTS
+
+C LA = ARRAY OF DENOM COEFFICIENTS
+
+C LB = LENGTH OF B, LA = LENGTH OF A
+
+C X = DATA TO BE FILTERED
+
+C N = LENGTH OF X
+
+C Z = INITIAL CONDITIONS OF DELAYS
+
+C
+
+      DOUBLE PRECISION XD,YD,B(LB),A(LA),Z(20)
+
+      DIMENSION X(N)
+
+      IERROR=1
+
+      NF=MAX(LA,LB)
+
+      DO 10 K=1,N
+
+       XD=DBLE(X(K))
+
+       YD=B(1)*XD+Z(1)
+
+       DO 5 I=1,NF-1
+
+        Z(I)=(B(I+1)*XD+Z(I+1))-A(I+1)*YD
+
+5      CONTINUE
+
+       X(K)=SNGL(YD)
+
+       IF(ABS(X(K)).GT.1.E10) return 
+
+10    CONTINUE                     
+
+      IERROR=0
+
+      RETURN
+
+      END                      
+
