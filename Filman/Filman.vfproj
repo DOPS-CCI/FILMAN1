@@ -120,8 +120,8 @@
 		<File RelativePath=".\Sources\PEAKEX.FOR"/>
 		<File RelativePath=".\Sources\PEAKM.FOR"/>
 		<File RelativePath=".\Sources\PLOT.FOR"/>
-		<File RelativePath=".\Sources\POWSP.FOR"/>
-		<File RelativePath=".\Sources\POWSP2.FOR"/>
+		<File RelativePath=".\Sources\POWSP2new.f90"/>
+		<File RelativePath=".\Sources\POWSPnew.f90"/>
 		<File RelativePath=".\Sources\PRINT.FOR"/>
 		<File RelativePath=".\Sources\PTPASS.FOR"/>
 		<File RelativePath=".\Sources\ptsel.for"/>
@@ -145,12 +145,13 @@
 		<File RelativePath=".\Sources\WinPrint_Direct.f90"/>
 		<File RelativePath=".\Sources\Xdialogs.for"/>
 		<File RelativePath=".\Xeffort\XFLOGM.F90"/>
-		<File RelativePath=".\Sources\XFORM.FOR"/>
+		<File RelativePath=".\Sources\XFORMnew.f90"/>
 		<File RelativePath=".\Xeffort\XFTFile.f90"/>
 		<File RelativePath=".\Xeffort\XftGDI.f90"/>
 		<File RelativePath=".\Xeffort\XFTStrings.f90"/>
 		<File RelativePath=".\Sources\XHIST.FOR"/>
 		<File RelativePath=".\Sources\XSPEC.FOR"/>
+		<File RelativePath=".\Sources\XSPECnew.f90"/>
 		<File RelativePath=".\Sources\XTAB.FOR"/>
 		<File RelativePath=".\Sources\ZERLVB.FOR"/></Filter></Files>
 	<Globals/></VisualStudioProject>

@@ -2,11 +2,13 @@
 ! resource.fd generated from resource.h
 !
       integer, parameter :: IDC_CHECK7 = 1006
+      integer, parameter :: NBlocks = 1128
       integer, parameter :: IDC_CHECK8 = 1008
       integer, parameter :: IDC_CHECK9 = 1009
       integer, parameter :: AVRALL_DIALOG = 125
       integer, parameter :: DONE_BUTTON_DIALOG = 115
       integer, parameter :: GRPLOT_DIALOG = 163
+      integer, parameter :: TotalPoints = 1131
       integer, parameter :: GSTRNG_DIALOG = 139
       integer, parameter :: PLOT_SCALING_DIALOG = 123
       integer, parameter :: IDC_STATIC10 = 1127
@@ -42,6 +44,7 @@
       integer, parameter :: GPAST_DIALOG = 120
       integer, parameter :: IDC_STATIC9 = 1058
       integer, parameter :: IDC_STATIC33 = 1113
+      integer, parameter :: block = 1127
       integer, parameter :: IDCANCEL2 = 3
       integer, parameter :: IDC_STATIC81 = 1061
       integer, parameter :: IDC_STATIC14 = 1033
@@ -95,6 +98,7 @@
       integer, parameter :: IDC_EDIT5 = 1024
       integer, parameter :: IDC_STATIC29 = 1109
       integer, parameter :: IDC_EDIT117 = 1152
+      integer, parameter :: NPoints = 1130
       integer, parameter :: IDC_EDIT6 = 1025
       integer, parameter :: IDC_EDIT109 = 1144
       integer, parameter :: IDC_EDIT118 = 1153
@@ -126,6 +130,7 @@
       integer, parameter :: IDC_CHECK12 = 1017
       integer, parameter :: IDC_CHECK21 = 1016
       integer, parameter :: MULTAR_OUTPUT_DIALOG = 114
+      integer, parameter :: NLevels = 1126
       integer, parameter :: IDC_CHECK30 = 1027
       integer, parameter :: IDC_RADIO9 = 1042
       integer, parameter :: IDC_CHECK13 = 1020
@@ -134,6 +139,7 @@
       integer, parameter :: IDC_CHECK40 = 1037
       integer, parameter :: IDC_CHECK14 = 1040
       integer, parameter :: IDC_CHECK23 = 1019
+      integer, parameter :: NPtsPerBlock = 1129
       integer, parameter :: IDC_CHECK32 = 1029
       integer, parameter :: IDC_CHECK41 = 1038
       integer, parameter :: IDC_CHECK15 = 1053

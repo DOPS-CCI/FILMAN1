@@ -485,6 +485,5 @@ C ADJUST THIS INDEX TO REFLECT STORAGE OF COMPLEX, NOT REAL, #'S
 
 80	RETURN
 
-	END
-
-                                                                                                 
+      END
+      

@@ -406,13 +406,19 @@
 #define IDC_STATIC4                     1125
 #define IDC_EDIT91                      1126
 #define IDC_STATIC8                     1126
+#define NLevels                         1126
 #define IDC_EDIT92                      1127
 #define IDC_STATIC10                    1127
+#define block                           1127
 #define IDC_EDIT93                      1128
 #define IDC_STATIC20                    1128
+#define NBlocks                         1128
 #define IDC_EDIT94                      1129
+#define NPtsPerBlock                    1129
 #define IDC_EDIT95                      1130
+#define NPoints                         1130
 #define IDC_EDIT96                      1131
+#define TotalPoints                     1131
 #define IDC_EDIT97                      1132
 #define IDC_EDIT98                      1133
 #define IDC_EDIT99                      1134
@@ -443,7 +449,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        167
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1126
+#define _APS_NEXT_CONTROL_VALUE         1132
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -93,7 +93,7 @@
         IDC_EDIT26,IDC_EDIT15,IDC_EDIT11,IDC_EDIT13, &
         IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25, &
         IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31/
-    external ChkWantBlockAvrgrp,CheckNumRegroupAvrgrp,ChckTruncAvrgrp
+    external ChkWantBlockAvrgrp,CheckNumRegroupAvrgrp,ChckTruncAvrgrp,CheckBlockValues
 
 ! Create dialog
     IF ( .not. DlgInit( AVRGRP_DIALOG, dlg ) ) THEN
@@ -123,8 +123,8 @@
     LINE4=''
     LINE5=''
     retlog=DlgSetChar(dlg,IDC_EDIT1,LINE1)
-    retlog=DlgSetChar(dlg,IDC_EDIT32,LINE2)
-    retlog=DlgSetChar(dlg,IDC_EDIT33,LINE3)
+    retlog=DlgSetChar(dlg,NBlocks,LINE2)
+    retlog=DlgSetChar(dlg,NPtsPerBlock,LINE3)
     retlog=DlgSetChar(dlg,IDC_EDIT9,LINE4)
     retlog=DlgSetChar(dlg,IDC_EDIT34,LINE5)
     WRITE(LINE6,*)NDO
@@ -132,7 +132,7 @@
     do 20, while(line6(isp1:isp1).eq.' ')
 20      isp1=isp1+1
     line6=line6(isp1:len_trim(line6))  
-    retlog=DlgSetChar(dlg,IDC_EDIT10,LINE6)
+    retlog=DlgSetChar(dlg,NPoints,LINE6)
   
     GOUT=''
     DO 2,ignr=2,NG
@@ -149,23 +149,23 @@
       
     WRITE(GOUT,1002)NDO
 1002    FORMAT('Want to block the ',I5,' selected input points?')
-    retlog=DlgSet(dlg,IDC_CHECK1,GOUT,DLG_TITLE)
+    retlog=DlgSet(dlg,block,GOUT,DLG_TITLE)
 
-    retlog=DlgSetLog(dlg,IDC_CHECK1,.FALSE.)  
+    retlog=DlgSetLog(dlg,block,.FALSE.)  
     retlog=DlgSet(dlg,IDC_STATIC51,.FALSE.,DLG_ENABLE)
     retlog=DlgSet(dlg,IDC_STATIC71,.FALSE.,DLG_ENABLE)
     retlog=DlgSet(dlg,IDC_STATIC81,.FALSE.,DLG_ENABLE)
-    retlog=DlgSet(dlg,IDC_EDIT32,.FALSE.,DLG_ENABLE)
-    retlog=DlgSet(dlg,IDC_EDIT33,.FALSE.,DLG_ENABLE)
+    retlog=DlgSet(dlg,NBlocks,.FALSE.,DLG_ENABLE)
+    retlog=DlgSet(dlg,NPtsPerBlock,.FALSE.,DLG_ENABLE)
     retlog=DlgSetLog(dlg,IDC_CHECK2,.FALSE.)  
     retlog=DlgSetLog(dlg,IDC_CHECK3,.FALSE.)  
-    retlog=DlgSet(dlg,IDC_EDIT10,.FALSE.,DLG_ENABLE)
+    retlog=DlgSet(dlg,NPoints,.FALSE.,DLG_ENABLE)
 
-    retlog=DlgSetSub(dlg,IDC_CHECK1,ChkWantBlockAvrgrp)  
-    retlog=DlgSetSub(dlg,IDC_EDIT32,ChkWantBlockAvrgrp)  
-    retlog=DlgSetSub(dlg,IDC_EDIT33,ChkWantBlockAvrgrp)  
+    retlog=DlgSetSub(dlg,block,ChkWantBlockAvrgrp)  
     retlog=DlgSetSub(dlg,IDC_CHECK3,ChckTruncAvrgrp)  
-    retlog=DlgSetSub(dlg,IDC_EDIT34,CheckNumRegroupAvrgrp)
+    retlog=DlgSetSub(dlg,NLevels,CheckNumRegroupAvrgrp)
+    retlog=DlgSetSub(dlg,NBlocks,CheckBlockValues)
+    retlog=DlgSetSub(dlg,NPtsPerBlock,CheckBlockValues)
                   
 ! Show dialog box
     retint = DlgModal( dlg )
@@ -182,21 +182,21 @@
 30      retlog=DlgGetChar(dlg,EQV_EDTN(I),LINESEL(I))
       
     IGO=1
-    NDO1=1
+    NDO1=NDO
     NPB=1
-    retlog=DlgGetLog(dlg,IDC_CHECK1,LBLOCK)
+    retlog=DlgGetLog(dlg,block,LBLOCK)
     if(LBLOCK)THEN
-        retlog=DlgGetChar(dlg,IDC_EDIT32,LINE1)
+        retlog=DlgGetChar(dlg,NBlocks,LINE1)
         read(line1,*,err=34,end=34)NDO1
-34      retlog=DlgGetChar(dlg,IDC_EDIT33,LINE1)
+34      retlog=DlgGetChar(dlg,NPtsPerBlock,LINE1)
         read(line1,*,err=35,end=35)NPB
 35      IGO=3
         retlog=DlgGetLog(dlg,IDC_RADIO1,Ltemp)
-        if(Ltemp)then
+        if(Ltemp)then !time series
             IGO=1
         else
             retlog=DlgGetLog(dlg,IDC_RADIO2,Ltemp)
-            if(Ltemp) IGO=2
+            if(Ltemp) IGO=2 !frequency series
         endif
     endif
       
@@ -223,7 +223,7 @@
     retlog=DlgGetLog(dlg,IDC_CHECK3,LTPF)
     NDP=NDO
     IF(LTPF)THEN
-        retlog=DlgGetChar(dlg,IDC_EDIT10,LINE1)
+        retlog=DlgGetChar(dlg,NPoints,LINE1)
         read(line1,*,err=36,end=36)NDP
 36      CONTINUE
     ENDIF
@@ -245,23 +245,39 @@
     character*255 LINE
     logical LogVal
       
-    retlog=DlgGetLog(dlg,IDC_CHECK1,LogVal)
-    if(.NOT.LogVal)THEN
-        retlog=DlgSet(dlg,IDC_STATIC51,.FALSE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_STATIC71,.FALSE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_STATIC81,.FALSE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_EDIT32,.FALSE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_EDIT33,.FALSE.,DLG_ENABLE)
-    ELSE
-        retlog=DlgSet(dlg,IDC_STATIC51,.TRUE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_STATIC71,.TRUE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_STATIC81,.TRUE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_EDIT32,.TRUE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_EDIT33,.TRUE.,DLG_ENABLE)
-    ENDIF
+    retlog=DlgGetLog(dlg,block,LogVal)
+    retlog=DlgSet(dlg,IDC_STATIC51,LogVal,DLG_ENABLE)
+    retlog=DlgSet(dlg,IDC_STATIC71,LogVal,DLG_ENABLE)
+    retlog=DlgSet(dlg,IDC_STATIC81,LogVal,DLG_ENABLE)
+    retlog=DlgSet(dlg,NBlocks,LogVal,DLG_ENABLE)
+    retlog=DlgSet(dlg,NPtsPerBlock,LogVal,DLG_ENABLE)
     return
     end
 
+    SUBROUTINE CheckBlockValues(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    logical retlog
+    integer callbacktype,NB,NP,T
+    character*255 LINE
+    
+    retlog=DlgGetChar(dlg,NBlocks,LINE)
+    read(LINE,*,err=1,end=1)NB
+    goto 2
+1   NB=0
+2   retlog=DlgGetChar(dlg,NPtsPerBlock,LINE)
+    read(LINE,*,err=3,end=3)NP
+    goto 4
+3   NP=0
+4   T=NB*NP
+    WRITE(LINE,100)T
+100 FORMAT(I5)
+    retlog=DlgSetChar(dlg,TotalPoints,LINE)
+    return
+    end
+    
     SUBROUTINE CheckNumRegroupAvrgrp(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
@@ -277,7 +293,7 @@
         IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25, &
         IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31/
       
-    retlog=DlgGetChar(dlg,IDC_EDIT34,LINE)
+    retlog=DlgGetChar(dlg,NLevels,LINE)
     IN=0
     read(LINE,*,end=31,err=31)IN
     IN=MAX0(MIN0(IN,20),0)
@@ -299,13 +315,8 @@
     logical LogVal
       
     retlog=DlgGetLog(dlg,IDC_CHECK3,LogVal)
-    if(.NOT.LogVal)THEN
-        retlog=DlgSet(dlg,IDC_EDIT10,.FALSE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_STATIC9,.FALSE.,DLG_ENABLE)
-    ELSE
-        retlog=DlgSet(dlg,IDC_EDIT10,.TRUE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_STATIC9,.TRUE.,DLG_ENABLE)
-    ENDIF
+    retlog=DlgSet(dlg,NPoints,LogVal,DLG_ENABLE)
+    retlog=DlgSet(dlg,IDC_STATIC9,LogVal,DLG_ENABLE)
     return
     end
 
