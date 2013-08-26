@@ -1,54 +1,55 @@
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C     GDTSTR Dialog
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      Subroutine DoGDTSTRDialog(NGRP,ITMIN,ITMAX,IVMAX,IVP)
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-	INCLUDE 'MULTAR.INC'
-      INCLUDE 'MAX.INC'
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
-	COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(120)
-	COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
-	CHARACTER*64 INFIL,INBUF,OUTFIL
-	CHARACTER*24 LINE
-	CHARACTER*24  GNMS(5),GTMP
-	EQUIVALENCE (IBUF,GNMS)
-	CHARACTER*1024 GOUT
-	LOGICAL Ltemp,LWSO,LTPF,LBLOCK
-      INTEGER SELGRPS(20)
-	CHARACTER*24 LINESEL(20)
-      COMMON /SELGVS/ SELGRPS,LINESEL
-      INTEGER EGN_EDTN(20),EMI_EDTN(20),EMX_EDTN(20),EMO_EDTN(20)
-      INTEGER ETL_EDTN(20)
-      DATA EGN_EDTN /IDC_EDIT1,IDC_EDIT9,IDC_EDIT11,IDC_EDIT13,
-     +               IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25,
-     +               IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31,
-     +               IDC_EDIT32,IDC_EDIT33,IDC_EDIT34,IDC_EDIT35,
-     +               IDC_EDIT36,IDC_EDIT37,IDC_EDIT38,IDC_EDIT39/
-      DATA EMI_EDTN /IDC_EDIT40,IDC_EDIT41,IDC_EDIT42,IDC_EDIT43,
-     +               IDC_EDIT44,IDC_EDIT45,IDC_EDIT46,IDC_EDIT47,
-     +               IDC_EDIT48,IDC_EDIT49,IDC_EDIT50,IDC_EDIT51,
-     +               IDC_EDIT52,IDC_EDIT53,IDC_EDIT54,IDC_EDIT55,
-     +               IDC_EDIT56,IDC_EDIT57,IDC_EDIT58,IDC_EDIT59/
-      DATA EMX_EDTN /IDC_EDIT60,IDC_EDIT61,IDC_EDIT62,IDC_EDIT63,
-     +               IDC_EDIT64,IDC_EDIT65,IDC_EDIT66,IDC_EDIT67,
-     +               IDC_EDIT68,IDC_EDIT69,IDC_EDIT70,IDC_EDIT71,
-     +               IDC_EDIT72,IDC_EDIT73,IDC_EDIT74,IDC_EDIT75,
-     +               IDC_EDIT76,IDC_EDIT77,IDC_EDIT78,IDC_EDIT79/
-      DATA EMO_EDTN /IDC_EDIT80,IDC_EDIT81,IDC_EDIT82,IDC_EDIT83,
-     +               IDC_EDIT84,IDC_EDIT85,IDC_EDIT86,IDC_EDIT87,
-     +               IDC_EDIT88,IDC_EDIT89,IDC_EDIT90,IDC_EDIT91,
-     +               IDC_EDIT92,IDC_EDIT93,IDC_EDIT94,IDC_EDIT95,
-     +               IDC_EDIT96,IDC_EDIT97,IDC_EDIT98,IDC_EDIT99/
-      DATA ETL_EDTN /IDC_EDIT100,IDC_EDIT101,IDC_EDIT102,IDC_EDIT103,
-     +               IDC_EDIT104,IDC_EDIT105,IDC_EDIT106,IDC_EDIT107,
-     +               IDC_EDIT108,IDC_EDIT109,IDC_EDIT110,IDC_EDIT111,
-     +               IDC_EDIT112,IDC_EDIT113,IDC_EDIT114,IDC_EDIT115,
-     +               IDC_EDIT116,IDC_EDIT117,IDC_EDIT118,IDC_EDIT119/
-	DIMENSION NGRP(*),ITMIN(*),ITMAX(*),IVMAX(*),IVP(*)
+!DEC$ FREEFORM 
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     GDTSTR Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+Subroutine DoGDTSTRDialog(NGRP,ITMIN,ITMAX,IVMAX,IVP)
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INCLUDE 'MULTAR.INC'
+    INCLUDE 'MAX.INC'
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
+    COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(120)
+    COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
+    CHARACTER*64 INFIL,INBUF,OUTFIL
+    CHARACTER*24 LINE
+    CHARACTER*24  GNMS(5),GTMP
+    EQUIVALENCE (IBUF,GNMS)
+    CHARACTER*1024 GOUT
+    LOGICAL Ltemp,LWSO,LTPF,LBLOCK
+    INTEGER SELGRPS(20)
+    CHARACTER*24 LINESEL(20)
+    COMMON /SELGVS/ SELGRPS,LINESEL
+    INTEGER EGN_EDTN(20),EMI_EDTN(20),EMX_EDTN(20),EMO_EDTN(20)
+    INTEGER ETL_EDTN(20)
+    DATA EGN_EDTN /IDC_EDIT1,IDC_EDIT9,IDC_EDIT11,IDC_EDIT13, &
+                IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25, &
+                IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31, &
+                IDC_EDIT32,IDC_EDIT33,IDC_EDIT34,IDC_EDIT35, &
+                IDC_EDIT36,IDC_EDIT37,IDC_EDIT38,IDC_EDIT39/
+    DATA EMI_EDTN /IDC_EDIT40,IDC_EDIT41,IDC_EDIT42,IDC_EDIT43, &
+                IDC_EDIT44,IDC_EDIT45,IDC_EDIT46,IDC_EDIT47, &
+                IDC_EDIT48,IDC_EDIT49,IDC_EDIT50,IDC_EDIT51, &
+                IDC_EDIT52,IDC_EDIT53,IDC_EDIT54,IDC_EDIT55, &
+                IDC_EDIT56,IDC_EDIT57,IDC_EDIT58,IDC_EDIT59/
+    DATA EMX_EDTN /IDC_EDIT60,IDC_EDIT61,IDC_EDIT62,IDC_EDIT63, &
+                IDC_EDIT64,IDC_EDIT65,IDC_EDIT66,IDC_EDIT67, &
+                IDC_EDIT68,IDC_EDIT69,IDC_EDIT70,IDC_EDIT71, &
+                IDC_EDIT72,IDC_EDIT73,IDC_EDIT74,IDC_EDIT75, &
+                IDC_EDIT76,IDC_EDIT77,IDC_EDIT78,IDC_EDIT79/
+    DATA EMO_EDTN /IDC_EDIT80,IDC_EDIT81,IDC_EDIT82,IDC_EDIT83, &
+                IDC_EDIT84,IDC_EDIT85,IDC_EDIT86,IDC_EDIT87, &
+                IDC_EDIT88,IDC_EDIT89,IDC_EDIT90,IDC_EDIT91, &
+                IDC_EDIT92,IDC_EDIT93,IDC_EDIT94,IDC_EDIT95, &
+                IDC_EDIT96,IDC_EDIT97,IDC_EDIT98,IDC_EDIT99/
+    DATA ETL_EDTN /IDC_EDIT100,IDC_EDIT101,IDC_EDIT102,IDC_EDIT103, &
+                IDC_EDIT104,IDC_EDIT105,IDC_EDIT106,IDC_EDIT107, &
+                IDC_EDIT108,IDC_EDIT109,IDC_EDIT110,IDC_EDIT111, &
+                IDC_EDIT112,IDC_EDIT113,IDC_EDIT114,IDC_EDIT115, &
+                IDC_EDIT116,IDC_EDIT117,IDC_EDIT118,IDC_EDIT119/
+    DIMENSION NGRP(*),ITMIN(*),ITMAX(*),IVMAX(*),IVP(*)
 
 ! Create dialog
       IF ( .not. DlgInit( GDTSTR_DIALOG, dlg ) ) THEN
@@ -108,9 +109,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       RETURN
       end
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C     GRPNS Dialog
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     GRPNS Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       Subroutine DoGRPNSDialog(NGRP)
       USE IFLOGM
       use ifport
@@ -132,11 +133,11 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 	CHARACTER*24 LINESEL(20)
       COMMON /SELGVS/ SELGRPS,LINESEL
       INTEGER EGN_EDTN(20)
-      DATA EGN_EDTN /IDC_EDIT1,IDC_EDIT9,IDC_EDIT11,IDC_EDIT13,
-     +               IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25,
-     +               IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31,
-     +               IDC_EDIT32,IDC_EDIT33,IDC_EDIT34,IDC_EDIT35,
-     +               IDC_EDIT36,IDC_EDIT37,IDC_EDIT38,IDC_EDIT39/
+      DATA EGN_EDTN /IDC_EDIT1,IDC_EDIT9,IDC_EDIT11,IDC_EDIT13, &
+                    IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25, &
+                    IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31, &
+                    IDC_EDIT32,IDC_EDIT33,IDC_EDIT34,IDC_EDIT35, &
+                    IDC_EDIT36,IDC_EDIT37,IDC_EDIT38,IDC_EDIT39/
 	DIMENSION NGRP(*)
 
 ! Create dialog
@@ -178,9 +179,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       RETURN
       end
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C     GSTRNG Dialog
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     GSTRNG Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       Subroutine DoGSTRNGDialog(NGRP,TITLE,IR,NL,LDIV)
       USE IFLOGM
       use ifport
@@ -203,11 +204,11 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 	CHARACTER*24 LINESEL(20)
       COMMON /SELGVS/ SELGRPS,LINESEL
       INTEGER EQV_EDTN(20)
-      DATA EQV_EDTN /IDC_EDIT2,IDC_EDIT3,IDC_EDIT4,IDC_EDIT5,
-     +               IDC_EDIT6,IDC_EDIT7,IDC_EDIT14,IDC_EDIT24,
-     +               IDC_EDIT26,IDC_EDIT15,IDC_EDIT11,IDC_EDIT13,
-     +               IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25,
-     +               IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31/
+      DATA EQV_EDTN /IDC_EDIT2,IDC_EDIT3,IDC_EDIT4,IDC_EDIT5, &
+                    IDC_EDIT6,IDC_EDIT7,IDC_EDIT14,IDC_EDIT24, &
+                    IDC_EDIT26,IDC_EDIT15,IDC_EDIT11,IDC_EDIT13, &
+                    IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25, &
+                    IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31/
 	external CheckSubdivdGstrng
 	DIMENSION NGRP(*)
 
@@ -293,9 +294,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       end
 
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C     XTAB Dialog
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     XTAB Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       Subroutine DoXTABDialog(IGL,ITAB,NTBL)
       USE IFLOGM
       use ifport
@@ -317,17 +318,17 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 	CHARACTER*24 LINESEL(20)
       COMMON /SELGVS/ SELGRPS,LINESEL
       INTEGER EGN_EDTN(20),ERW_EDTN(10),ECL_EDTN(10)
-      DATA EGN_EDTN /IDC_EDIT1,IDC_EDIT9,IDC_EDIT11,IDC_EDIT13,
-     +               IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25,
-     +               IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31,
-     +               IDC_EDIT32,IDC_EDIT33,IDC_EDIT34,IDC_EDIT35,
-     +               IDC_EDIT36,IDC_EDIT37,IDC_EDIT38,IDC_EDIT39/
-      DATA ERW_EDTN /IDC_EDIT10,IDC_EDIT40,IDC_EDIT41,IDC_EDIT42,
-     +               IDC_EDIT43,IDC_EDIT44,IDC_EDIT45,IDC_EDIT46,
-     +               IDC_EDIT47,IDC_EDIT48/
-      DATA ECL_EDTN /IDC_EDIT59,IDC_EDIT60,IDC_EDIT61,IDC_EDIT62,
-     +               IDC_EDIT63,IDC_EDIT64,IDC_EDIT65,IDC_EDIT66,
-     +               IDC_EDIT67,IDC_EDIT68/
+      DATA EGN_EDTN /IDC_EDIT1,IDC_EDIT9,IDC_EDIT11,IDC_EDIT13, &
+                    IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25, &
+                    IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31, &
+                    IDC_EDIT32,IDC_EDIT33,IDC_EDIT34,IDC_EDIT35, &
+                    IDC_EDIT36,IDC_EDIT37,IDC_EDIT38,IDC_EDIT39/
+      DATA ERW_EDTN /IDC_EDIT10,IDC_EDIT40,IDC_EDIT41,IDC_EDIT42, &
+                    IDC_EDIT43,IDC_EDIT44,IDC_EDIT45,IDC_EDIT46, &
+                    IDC_EDIT47,IDC_EDIT48/
+      DATA ECL_EDTN /IDC_EDIT59,IDC_EDIT60,IDC_EDIT61,IDC_EDIT62, &
+                    IDC_EDIT63,IDC_EDIT64,IDC_EDIT65,IDC_EDIT66, &
+                    IDC_EDIT67,IDC_EDIT68/
 	DIMENSION IGL(*),ITAB(10,2)
 
 ! Create dialog
@@ -386,9 +387,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       RETURN
       end
 
-!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-!C     POWSP Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     POWSP Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       Subroutine DoPOWSPDialog(IT,FMAX,FNYQ)
       USE IFLOGM
       use ifport
@@ -444,9 +445,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       end
 
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C     DIALOG2 Dialog
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     DIALOG2 Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       Subroutine DoDIALOG2Dialog()
       USE IFLOGM
       use ifport
@@ -737,9 +738,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       end
       
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C     DIALOG3 Dialog
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     DIALOG3 Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       Subroutine DoDIALOG3Dialog()
       USE IFLOGM
       use ifport
@@ -773,612 +774,576 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       RETURN
       end
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C     XSPEC Dialog
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      Subroutine DoXSPECDialog(IJGO,NCO1,NPC1,JR,NBLK,NPB,ICOMP,LBLS)
-      USE DFWIN
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-	INCLUDE 'MULTAR.INC'
-      INCLUDE 'MAX.INC'
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
-	COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(120)
-	COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
-	COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(ICHMAX)
-	LOGICAL Ltemp
-	CHARACTER*128 GOUT
-	CHARACTER*1024 LINE
-      INTEGER*1 IJGO(ICHMAX,ICHMAX),ICOMP
-      EXTERNAL ChgXSPEC2refsButtonPress
-	integer ixpairs(ichmax,ichmax)
-	common /cmixp/ ixpsiz,ixpairs
-	EXTERNAL XSPECLablUpdt
-	External OnXSPECInit
-	COMMON /CCFNT/ ICFNT
-	DIMENSION ICOMP(4)
-	DIMENSION LBLS(2,ICHMAX)
-	EXTERNAL CheckXSPEC2EmptyLines
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     XSPEC Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+Subroutine DoXSPECDialog(IJGO,NCO1,NPC1,JR,NBLK,NPB,ICOMP,LBLS)
+    USE DFWIN
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INCLUDE 'MULTAR.INC'
+    INCLUDE 'MAX.INC'
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
+    COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(120)
+    COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
+    COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(ICHMAX)
+    LOGICAL Ltemp
+    CHARACTER*128 GOUT
+    CHARACTER*1024 LINE
+    INTEGER*1 IJGO(ICHMAX,ICHMAX),ICOMP(4)
+    EXTERNAL ChgXSPEC2refsButtonPress
+    integer ixpairs(ichmax,ichmax)
+    common /cmixp/ ixpsiz,ixpairs
+    EXTERNAL XSPECLablUpdt
+    External OnXSPECInit
+    COMMON /CCFNT/ ICFNT
+    DIMENSION LBLS(2,ICHMAX)
+    EXTERNAL CheckXSPEC2EmptyLines
 
 ! Create dialog
-      IF ( .not. DlgInit( XSPEC_DIALOG, dlg ) ) THEN
-          WRITE (*,*) "Error: XSPEC_DIALOG not found"
-          return
-      ENDif
+    IF ( .not. DlgInit( XSPEC_DIALOG, dlg ) ) THEN
+        WRITE (*,*) "Error: XSPEC_DIALOG not found"
+        return
+    ENDif
 
-      retlog = DlgSetSub(dlg,XSPEC_DIALOG,OnXSPECInit)
+    retlog = DlgSetSub(dlg,XSPEC_DIALOG,OnXSPECInit)
 
 ! Set defaults
-      ixpsiz=NCO1
-C      retlog=DlgSet(dlg,IDC_LIST1,NCO,DLG_NUMITEMS)
-      retlog = DlgSet(dlg,IDC_LIST3,NCO1,DLG_NUMITEMS )
-      do 10,i=1,NCO1
-	J1=6*(NG+ICHAN(I))-5
-!	J2=J1+5
-	J2=J1+3
-      WRITE(GOUT,101)ICHAN(I),(IBUF(J),J=J1,J2)
-!101   FORMAT('CHANNEL ',I3,' ID=',6A4)
-101   FORMAT('CHANNEL ',I3,' ID=',4A4)
-C  10  retlog=DlgSet(dlg,IDC_LIST1,GOUT,i)
-      retlog=DlgSetChar(dlg,IDC_LIST1,GOUT,DLG_ADDSTRING)
-      WRITE(LINE,102)(LBLS(J,ICHAN(I)),J=1,2)
-      WRITE(GOUT,103)ICHAN(I),LINE(1:8)
-103   FORMAT('(',I3,') ',A8)
-102   FORMAT(2A4)
-      retlog = DlgSet(dlg,IDC_LIST3,GOUT,I)
- 10   CONTINUE
+    ixpsiz=NCO1
+    retlog = DlgSet(dlg,IDC_LIST3,NCO1,DLG_NUMITEMS )
+    do 10,i=1,NCO1
+        J1=6*(NG+ICHAN(I))-5
+        J2=J1+3
+        WRITE(GOUT,101)ICHAN(I),(IBUF(J),J=J1,J2)
+101     FORMAT('CHANNEL ',I3,' ID=',4A4)
+        retlog=DlgSetChar(dlg,IDC_LIST1,GOUT,DLG_ADDSTRING)
+        WRITE(LINE,102)(LBLS(J,ICHAN(I)),J=1,2)
+        WRITE(GOUT,103)ICHAN(I),LINE(1:8)
+103     FORMAT('(',I3,') ',A8)
+102     FORMAT(2A4)
+        retlog = DlgSet(dlg,IDC_LIST3,GOUT,I)
+10      CONTINUE
  
-!      DO 15,I=1,NCO1
-!      DO 15,J=I+1,NCO1
-!15    IJGO(I,J)=1
-!      Do 16,i=1,NCO1
-!      Do 16,j=1,NCO1
-!      IF(J.GT.I)THEN
-!        ixpairs(i,j)=1
-!      ELSE
-!        ixpairs(i,j)=0
-!      ENDIF
-!16    CONTINUE      
- 
-      ixpairs=IJGO
-      CALL UpdateXSPSelection(dlg,.TRUE.)
+    ixpairs=IJGO
+    CALL UpdateXSPSelection(dlg,.TRUE.)
                 
-      retlog=DlgSetSub(dlg,IDC_BUTTON1,ChgXSPEC2refsButtonPress)
-	retlog=DlgSetSub(dlg,IDC_BUTTON3,XSPECLablUpdt)
-	
-      retlog=DlgSetLog(dlg,IDC_CHECK1,ICOMP(1).NE.0)   
-      retlog=DlgSetLog(dlg,IDC_CHECK2,ICOMP(2).NE.0)   
-      retlog=DlgSetLog(dlg,IDC_CHECK3,ICOMP(3).NE.0)   
-      retlog=DlgSetLog(dlg,IDC_CHECK9,ICOMP(4).NE.0)   
-
-      retlog=DlgSet(dlg,IDC_EDIT1,24,DLG_TEXTLENGTH)
-      retlog=DlgSet(dlg,IDC_EDIT9,24,DLG_TEXTLENGTH)
-      retlog=DlgSet(dlg,IDC_EDIT10,24,DLG_TEXTLENGTH)
-      WRITE(LINE,*)JR
-      isp1=1
-      do 11, while(line(isp1:isp1).eq.' ')
-11    isp1=isp1+1
-      line=line(isp1:len_trim(line))  
-      retlog=DlgSetChar(dlg,IDC_EDIT1,LINE)
-      WRITE(LINE,*)NBLK
-      isp1=1
-      do 12, while(line(isp1:isp1).eq.' ')
-12    isp1=isp1+1
-      line=line(isp1:len_trim(line))  
-      retlog=DlgSetChar(dlg,IDC_EDIT9,LINE)
-      WRITE(LINE,*)NPB
-      isp1=1
-      do 13, while(line(isp1:isp1).eq.' ')
-13    isp1=isp1+1
-      line=line(isp1:len_trim(line))  
-      retlog=DlgSetChar(dlg,IDC_EDIT10,LINE)
+    retlog=DlgSetSub(dlg,IDC_BUTTON1,ChgXSPEC2refsButtonPress)
+    retlog=DlgSetSub(dlg,IDC_BUTTON3,XSPECLablUpdt)
+    retlog=DlgSetLog(dlg,IDC_CHECK1,ICOMP(1).NE.0)   
+    retlog=DlgSetLog(dlg,IDC_CHECK2,ICOMP(2).NE.0)   
+    retlog=DlgSetLog(dlg,IDC_CHECK3,ICOMP(3).NE.0)   
+    retlog=DlgSetLog(dlg,IDC_CHECK9,ICOMP(4).NE.0)   
+    retlog=DlgSet(dlg,IDC_EDIT1,24,DLG_TEXTLENGTH)
+    retlog=DlgSet(dlg,IDC_EDIT9,24,DLG_TEXTLENGTH)
+    retlog=DlgSet(dlg,IDC_EDIT10,24,DLG_TEXTLENGTH)
+    WRITE(LINE,*)JR
+    isp1=1
+    do 11, while(line(isp1:isp1).eq.' ')
+11      isp1=isp1+1
+        line=line(isp1:len_trim(line))  
+        retlog=DlgSetChar(dlg,IDC_EDIT1,LINE)
+        WRITE(LINE,*)NBLK
+        isp1=1
+        do 12, while(line(isp1:isp1).eq.' ')
+12          isp1=isp1+1
+        line=line(isp1:len_trim(line))  
+        retlog=DlgSetChar(dlg,IDC_EDIT9,LINE)
+          WRITE(LINE,*)NPB
+        isp1=1
+        do 13, while(line(isp1:isp1).eq.' ')
+13          isp1=isp1+1
+        line=line(isp1:len_trim(line))  
+        retlog=DlgSetChar(dlg,IDC_EDIT10,LINE)
       
-      WRITE(GOUT,200)NPC1
-200   FORMAT('# BLOCKS(<=',I5,') >')
-      retlog=DlgSet(dlg,IDC_STATIC7,GOUT,DLG_TITLE)
+        WRITE(GOUT,200)NPC1
+200     FORMAT('# BLOCKS(<=',I5,') >')
+        retlog=DlgSet(dlg,IDC_STATIC7,GOUT,DLG_TITLE)
       
-      retlog=DlgSetSub(dlg,IDC_EDIT1,CheckXSPEC2EmptyLines)  
-      retlog=DlgSetSub(dlg,IDC_EDIT9,CheckXSPEC2EmptyLines)  
-      retlog=DlgSetSub(dlg,IDC_EDIT10,CheckXSPEC2EmptyLines)  
+        retlog=DlgSetSub(dlg,IDC_EDIT1,CheckXSPEC2EmptyLines)  
+        retlog=DlgSetSub(dlg,IDC_EDIT9,CheckXSPEC2EmptyLines)  
+        retlog=DlgSetSub(dlg,IDC_EDIT10,CheckXSPEC2EmptyLines)  
                                           
 ! Show dialog box
-      retint = DlgModal( dlg )
+        retint = DlgModal( dlg )
 
 ! Read entered values
-      retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
-      READ(LINE,*,end=31,err=31)JR
-31    retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
-      READ(LINE,*,end=32,err=32)NBLK
-32    retlog=DlgGetChar(dlg,IDC_EDIT10,LINE)
-      READ(LINE,*,end=33,err=33)NPB
+        retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
+        READ(LINE,*,end=31,err=31)JR
+31      retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
+        READ(LINE,*,end=32,err=32)NBLK
+32      retlog=DlgGetChar(dlg,IDC_EDIT10,LINE)
+        READ(LINE,*,end=33,err=33)NPB
       
-33    ICOMP=0
-      retlog=DlgGetLog(dlg,IDC_CHECK1,Ltemp)
-      IF(Ltemp)ICOMP(1)=1
-      retlog=DlgGetLog(dlg,IDC_CHECK2,Ltemp)
-      IF(Ltemp)ICOMP(2)=1
-      retlog=DlgGetLog(dlg,IDC_CHECK3,Ltemp)
-      IF(Ltemp)ICOMP(3)=1
-      retlog=DlgGetLog(dlg,IDC_CHECK9,Ltemp)
-      IF(Ltemp)ICOMP(4)=1
+33      ICOMP=0
+        retlog=DlgGetLog(dlg,IDC_CHECK1,Ltemp)
+        IF(Ltemp)ICOMP(1)=1
+        retlog=DlgGetLog(dlg,IDC_CHECK2,Ltemp)
+        IF(Ltemp)ICOMP(2)=1
+        retlog=DlgGetLog(dlg,IDC_CHECK3,Ltemp)
+        IF(Ltemp)ICOMP(3)=1
+        retlog=DlgGetLog(dlg,IDC_CHECK9,Ltemp)
+        IF(Ltemp)ICOMP(4)=1
       
-      DO 20,I=1,NCO
-      retlog=DlgGet(dlg,IDC_LIST3,GOUT,I)
-20    READ(GOUT(7:14),'(2A4)')(LBLS(J,ICHAN(I)),J=1,2)
+        DO 20,I=1,NCO
+            retlog=DlgGet(dlg,IDC_LIST3,GOUT,I)
+20          READ(GOUT(7:14),'(2A4)')(LBLS(J,ICHAN(I)),J=1,2)
       
-      IJGO=IXPAIRS
+    IJGO=IXPAIRS
             
 ! Dispose                  
-      retlog = DeleteObject(ICFNT)
-      CALL DlgUninit( dlg )
+    retlog = DeleteObject(ICFNT)
+    CALL DlgUninit( dlg )
       
-      RETURN
-      end
+    RETURN
+END
       
-      SUBROUTINE CheckXSPEC2EmptyLines(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-      character*80 LINE
-      logical LogVal
+SUBROUTINE CheckXSPEC2EmptyLines(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    character*80 LINE
+    logical LogVal
       
-      retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
-      read(LINE,*,end=31,err=31)N
-      retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
-      read(LINE,*,end=31,err=31)N
-      retlog=DlgGetChar(dlg,IDC_EDIT10,LINE)
-      read(LINE,*,end=31,err=31)N
-      retlog=DlgSet(dlg,IDOK,.TRUE.,DLG_ENABLE)
-      return
+    retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
+    read(LINE,*,end=31,err=31)N
+    retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
+    read(LINE,*,end=31,err=31)N
+    retlog=DlgGetChar(dlg,IDC_EDIT10,LINE)
+    read(LINE,*,end=31,err=31)N
+    retlog=DlgSet(dlg,IDOK,.TRUE.,DLG_ENABLE)
+    return
 
-31    retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
-      return
-      end
+31  retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
+    return
+END
       
-      SUBROUTINE OnXSPECInit(dlg, ID, iEvent)
-      USE DFWIN
-      USE IFLOGM
-      TYPE(dialog) dlg
-      TYPE(T_Logfont) LF
-      INTEGER ID, iEvent, i
-      INCLUDE 'resource.fd'
-	COMMON /CCFNT/ ICFNT
+SUBROUTINE OnXSPECInit(dlg, ID, iEvent)
+    USE DFWIN
+    USE IFLOGM
+    TYPE(dialog) dlg
+    TYPE(T_Logfont) LF
+    INTEGER ID, iEvent, i
+    INCLUDE 'resource.fd'
+    COMMON /CCFNT/ ICFNT
 
-      LF = T_Logfont(-10, 0,0,0,0,0_1,0_1,0_1,
-     + 0_1,0_1,0_1,0_1,0_1, "Courier New"C)
+    LF = T_Logfont(-10, 0,0,0,0,0_1,0_1,0_1, &
+        0_1,0_1,0_1,0_1,0_1, "Courier New")
 
-      ICFNT=CreateFontIndirect(LF)
-      i=SendMessage(GetDlgItem(Dlg%hWnd,IDC_LIST2),WM_SETFONT,ICFNT,0)
-      RETURN
-      END      
+    ICFNT=CreateFontIndirect(LF)
+    i=SendMessage(GetDlgItem(Dlg%hWnd,IDC_LIST2),WM_SETFONT,ICFNT,0)
+    RETURN
+END      
 
-	SUBROUTINE XSPECLablUpdt(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-      character*80 LINE
-      logical LogVal
+SUBROUTINE XSPECLablUpdt(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    character*80 LINE
+    logical LogVal
       
-      retlog = DLGGET (dlg,IDC_LIST3,num,1)
-      IF(NUM.NE.0)THEN
-        retlog =DlgGetChar(dlg, IDC_LIST3, LINE)
-        CALL DoEditShortLabelXSPECDialog(num,LINE)
-        retlog =DlgSet(dlg, IDC_LIST3, LINE,num)
-      ENDIF  
-      return
-      end
+    retlog = DLGGET (dlg,IDC_LIST3,num,1)
+    IF(NUM.NE.0)THEN
+    retlog =DlgGetChar(dlg, IDC_LIST3, LINE)
+    CALL DoEditShortLabelXSPECDialog(num,LINE)
+    retlog =DlgSet(dlg, IDC_LIST3, LINE,num)
+    ENDIF  
+    return
+END
 	
-      Subroutine DoXSPEC2Dialog()
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-	INCLUDE 'MULTAR.INC'
-      INCLUDE 'MAX.INC'
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
-	COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(120)
-	COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
-	LOGICAL Ltemp
-	CHARACTER*24 GOUT
-	integer ixpairs(ichmax,ichmax)
-	common /cmixp/ ixpsiz,ixpairs
-	common /IUJL/ IU,JL
-	EXTERNAL XSPEC2GoRight,XSPEC2GoLeft,XSPEC2GoUp,XSPEC2GoDown
-	EXTERNAL XSPEC2ClearAll,XSPEC2SetAll
+Subroutine DoXSPEC2Dialog()
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INCLUDE 'MULTAR.INC'
+    INCLUDE 'MAX.INC'
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
+    COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(120)
+    COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
+    LOGICAL Ltemp
+    CHARACTER*24 GOUT
+    integer ixpairs(ichmax,ichmax)
+    common /cmixp/ ixpsiz,ixpairs
+    common /IUJL/ IU,JL
+    EXTERNAL XSPEC2GoRight,XSPEC2GoLeft,XSPEC2GoUp,XSPEC2GoDown
+    EXTERNAL XSPEC2ClearAll,XSPEC2SetAll
 
 ! Create dialog
-      IF ( .not. DlgInit( XSPEC2_DIALOG, dlg ) ) THEN
-          WRITE (*,*) "Error: XSPEC2_DIALOG not found"
-          return
-      ENDif
+    IF ( .not. DlgInit( XSPEC2_DIALOG, dlg ) ) THEN
+        WRITE (*,*) "Error: XSPEC2_DIALOG not found"
+        return
+    ENDif
 
 ! Set defaults
-      NCO1=ixpsiz
-      IU=1
-      JL=1
-!      Do 1,i=1,NCO1
-!      Do 1,j=1,NCO1
-!      IF(J.GT.I)THEN
-!        ixpairs(i,j)=1
-!      ELSE
-!        ixpairs(i,j)=0
-!      ENDIF
-!1     CONTINUE      
-      CALL UpdateXSPEC2Dialog(dlg)
+    NCO1=ixpsiz
+    IU=1
+    JL=1
+    CALL UpdateXSPEC2Dialog(dlg)
       
-      retlog=DlgSetSub(dlg,IDC_BUTTON46,XSPEC2GoRight)
-      retlog=DlgSetSub(dlg,IDC_BUTTON47,XSPEC2GoLeft)
-      retlog=DlgSetSub(dlg,IDC_BUTTON48,XSPEC2GoUp)
-      retlog=DlgSetSub(dlg,IDC_BUTTON49,XSPEC2GoDown)
-      retlog=DlgSetSub(dlg,IDC_BUTTON50,XSPEC2ClearAll)
-      retlog=DlgSetSub(dlg,IDC_BUTTON51,XSPEC2SetAll)
+    retlog=DlgSetSub(dlg,IDC_BUTTON46,XSPEC2GoRight)
+    retlog=DlgSetSub(dlg,IDC_BUTTON47,XSPEC2GoLeft)
+    retlog=DlgSetSub(dlg,IDC_BUTTON48,XSPEC2GoUp)
+    retlog=DlgSetSub(dlg,IDC_BUTTON49,XSPEC2GoDown)
+    retlog=DlgSetSub(dlg,IDC_BUTTON50,XSPEC2ClearAll)
+    retlog=DlgSetSub(dlg,IDC_BUTTON51,XSPEC2SetAll)
 
 ! Show dialog box
-      retint = DlgModal( dlg )
+    retint = DlgModal( dlg )
 
-      CALL XSPEC2GetVals(dlg)
-      CALL UpdateXSPEC2Dialog(dlg)
+    CALL XSPEC2GetVals(dlg)
+    CALL UpdateXSPEC2Dialog(dlg)
     
 ! Dispose                  
-      CALL DlgUninit( dlg )
+    CALL DlgUninit( dlg )
       
-      RETURN
-      end
+    RETURN
+END
 
-      SUBROUTINE ChgXSPEC2refsButtonPress(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
+SUBROUTINE ChgXSPEC2refsButtonPress(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
 
-      CALL DoXSPEC2Dialog
-      CALL UpdateXSPSelection(dlg,.FALSE.)
+    CALL DoXSPEC2Dialog
+    CALL UpdateXSPSelection(dlg,.FALSE.)
 
-      RETURN
-      END
+    RETURN
+END
       
-      SUBROUTINE UpdateXSPEC2Dialog(dlg)
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-	INCLUDE 'MULTAR.INC'
-      INCLUDE 'MAX.INC'
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
-	COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(120)
-	COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
-	COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(ICHMAX)
-	LOGICAL Ltemp
-	CHARACTER*24 GOUT
-      COMMON /CKBMTC/ CheckMatrix(10,10)
-      INTEGER CheckMatrix,UpCap(10),LfCap(10)
-      DATA CheckMatrix 
-     *  /IDC_CHECK1,IDC_CHECK2,IDC_CHECK3,IDC_CHECK4,IDC_CHECK5,
-     *   IDC_CHECK6,IDC_CHECK7,IDC_CHECK8,IDC_CHECK9,IDC_CHECK10,     
-     *   IDC_CHECK11,IDC_CHECK16,IDC_CHECK17,IDC_CHECK18,IDC_CHECK19,
-     *   IDC_CHECK20,IDC_CHECK21,IDC_CHECK22,IDC_CHECK23,IDC_CHECK12,
-     *   IDC_CHECK13,IDC_CHECK24,IDC_CHECK25,IDC_CHECK26,IDC_CHECK27,
-     *   IDC_CHECK28,IDC_CHECK29,IDC_CHECK31,IDC_CHECK32,IDC_CHECK30,
-     *   IDC_CHECK33,IDC_CHECK34,IDC_CHECK35,IDC_CHECK36,IDC_CHECK37,
-     *   IDC_CHECK38,IDC_CHECK39,IDC_CHECK41,IDC_CHECK42,IDC_CHECK40,
-     *   IDC_CHECK14,IDC_CHECK43,IDC_CHECK44,IDC_CHECK45,IDC_CHECK46,
-     *   IDC_CHECK47,IDC_CHECK48,IDC_CHECK50,IDC_CHECK51,IDC_CHECK49,
-     *   IDC_CHECK52,IDC_CHECK53,IDC_CHECK54,IDC_CHECK55,IDC_CHECK56,
-     *   IDC_CHECK57,IDC_CHECK58,IDC_CHECK60,IDC_CHECK61,IDC_CHECK59,
-     *   IDC_CHECK62,IDC_CHECK63,IDC_CHECK64,IDC_CHECK65,IDC_CHECK66,
-     *   IDC_CHECK67,IDC_CHECK68,IDC_CHECK70,IDC_CHECK71,IDC_CHECK69,
-     *   IDC_CHECK72,IDC_CHECK73,IDC_CHECK74,IDC_CHECK75,IDC_CHECK76,
-     *   IDC_CHECK77,IDC_CHECK78,IDC_CHECK80,IDC_CHECK81,IDC_CHECK79,
-     *   IDC_CHECK82,IDC_CHECK83,IDC_CHECK84,IDC_CHECK85,IDC_CHECK86,
-     *   IDC_CHECK87,IDC_CHECK88,IDC_CHECK90,IDC_CHECK91,IDC_CHECK89,
-     *   IDC_CHECK92,IDC_CHECK93,IDC_CHECK94,IDC_CHECK95,IDC_CHECK96,
-     *   IDC_CHECK97,IDC_CHECK98,IDC_CHECK100,IDC_CHECK101,IDC_CHECK99/
-      DATA UpCap 
-     */IDC_STATIC21,IDC_STATIC25,IDC_STATIC26,IDC_STATIC27,IDC_STATIC28,
-     * IDC_STATIC29,IDC_STATIC30,IDC_STATIC31,IDC_STATIC32,IDC_STATIC33/
-      DATA LfCap
-     */IDC_STATIC41,IDC_STATIC42,IDC_STATIC43,IDC_STATIC44,IDC_STATIC45,
-     * IDC_STATIC46,IDC_STATIC47,IDC_STATIC48,IDC_STATIC49,IDC_STATIC50/
-	integer ixpairs(ichmax,ichmax)
-	common /cmixp/ ixpsiz,ixpairs
-	common /IUJL/ IU,JL
+SUBROUTINE UpdateXSPEC2Dialog(dlg)
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INCLUDE 'MULTAR.INC'
+    INCLUDE 'MAX.INC'
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
+    COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(120)
+    COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
+    COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(ICHMAX)
+    LOGICAL Ltemp
+    CHARACTER*24 GOUT
+    COMMON /CKBMTC/ CheckMatrix(10,10)
+    INTEGER CheckMatrix,UpCap(10),LfCap(10)
+    DATA CheckMatrix &
+          /IDC_CHECK1,IDC_CHECK2,IDC_CHECK3,IDC_CHECK4,IDC_CHECK5, &
+        IDC_CHECK6,IDC_CHECK7,IDC_CHECK8,IDC_CHECK9,IDC_CHECK10, &    
+        IDC_CHECK11,IDC_CHECK16,IDC_CHECK17,IDC_CHECK18,IDC_CHECK19, &
+        IDC_CHECK20,IDC_CHECK21,IDC_CHECK22,IDC_CHECK23,IDC_CHECK12, &
+        IDC_CHECK13,IDC_CHECK24,IDC_CHECK25,IDC_CHECK26,IDC_CHECK27, &
+        IDC_CHECK28,IDC_CHECK29,IDC_CHECK31,IDC_CHECK32,IDC_CHECK30, &
+        IDC_CHECK33,IDC_CHECK34,IDC_CHECK35,IDC_CHECK36,IDC_CHECK37, &
+        IDC_CHECK38,IDC_CHECK39,IDC_CHECK41,IDC_CHECK42,IDC_CHECK40, &
+        IDC_CHECK14,IDC_CHECK43,IDC_CHECK44,IDC_CHECK45,IDC_CHECK46, &
+        IDC_CHECK47,IDC_CHECK48,IDC_CHECK50,IDC_CHECK51,IDC_CHECK49, &
+        IDC_CHECK52,IDC_CHECK53,IDC_CHECK54,IDC_CHECK55,IDC_CHECK56, &
+        IDC_CHECK57,IDC_CHECK58,IDC_CHECK60,IDC_CHECK61,IDC_CHECK59, &
+        IDC_CHECK62,IDC_CHECK63,IDC_CHECK64,IDC_CHECK65,IDC_CHECK66, &
+        IDC_CHECK67,IDC_CHECK68,IDC_CHECK70,IDC_CHECK71,IDC_CHECK69, &
+        IDC_CHECK72,IDC_CHECK73,IDC_CHECK74,IDC_CHECK75,IDC_CHECK76, &
+        IDC_CHECK77,IDC_CHECK78,IDC_CHECK80,IDC_CHECK81,IDC_CHECK79, &
+        IDC_CHECK82,IDC_CHECK83,IDC_CHECK84,IDC_CHECK85,IDC_CHECK86, &
+        IDC_CHECK87,IDC_CHECK88,IDC_CHECK90,IDC_CHECK91,IDC_CHECK89, &
+        IDC_CHECK92,IDC_CHECK93,IDC_CHECK94,IDC_CHECK95,IDC_CHECK96, &
+        IDC_CHECK97,IDC_CHECK98,IDC_CHECK100,IDC_CHECK101,IDC_CHECK99/
+    DATA UpCap &
+          /IDC_STATIC21,IDC_STATIC25,IDC_STATIC26,IDC_STATIC27,IDC_STATIC28, &
+          IDC_STATIC29,IDC_STATIC30,IDC_STATIC31,IDC_STATIC32,IDC_STATIC33/
+    DATA LfCap &
+          /IDC_STATIC41,IDC_STATIC42,IDC_STATIC43,IDC_STATIC44,IDC_STATIC45, &
+      IDC_STATIC46,IDC_STATIC47,IDC_STATIC48,IDC_STATIC49,IDC_STATIC50/
+    integer ixpairs(ichmax,ichmax)
+    common /cmixp/ ixpsiz,ixpairs
+    common /IUJL/ IU,JL
       
-      NCO1=ixpsiz
-      DO 1,I=IU,IU+10-1
-      IF(I.LE.NCO1)THEN
-        WRITE(GOUT,'(I3)')ICHAN(I)
-      ELSE
+    NCO1=ixpsiz
+    DO 1,I=IU,IU+10-1
+    IF(I.LE.NCO1)THEN
+    WRITE(GOUT,'(I3)')ICHAN(I)
+    ELSE
+    GOUT=' '
+    ENDIF
+    retlog=DlgSet(dlg,LfCap(I-IU+1),GOUT,DLG_TITLE)
+    DO 1,J=JL,JL+10-1
+    IF(I.EQ.IU)THEN
+    IF(J.LE.NCO1)THEN
+        WRITE(GOUT,'(I3)')ICHAN(J)
+    ELSE
         GOUT=' '
-      ENDIF
-      retlog=DlgSet(dlg,LfCap(I-IU+1),GOUT,DLG_TITLE)
-      DO 1,J=JL,JL+10-1
-      IF(I.EQ.IU)THEN
-        IF(J.LE.NCO1)THEN
-            WRITE(GOUT,'(I3)')ICHAN(J)
-        ELSE
-            GOUT=' '
-        ENDIF
-        retlog=DlgSet(dlg,UpCap(J-JL+1),GOUT,DLG_TITLE)
-      ENDIF
-      IF(I.GT.NCO1.OR.J.GT.NCO1)GOTO 10
-      IF(J.LE.I)GOTO 10
-      retlog=DlgSet(dlg,CheckMatrix(I-IU+1,J-JL+1),.TRUE.,DLG_ENABLE)
-      retlog=DlgSetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),ixpairs(I,J).NE.0)
-      GOTO 1
-10    retlog=DlgSet(dlg,CheckMatrix(I-IU+1,J-JL+1),.FALSE.,DLG_ENABLE)
-      retlog=DlgSetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),.FALSE.)
-1     continue
+    ENDIF
+    retlog=DlgSet(dlg,UpCap(J-JL+1),GOUT,DLG_TITLE)
+    ENDIF
+    IF(I.GT.NCO1.OR.J.GT.NCO1)GOTO 10
+    IF(J.LE.I)GOTO 10
+    retlog=DlgSet(dlg,CheckMatrix(I-IU+1,J-JL+1),.TRUE.,DLG_ENABLE)
+    retlog=DlgSetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),ixpairs(I,J).NE.0)
+    GOTO 1
+10  retlog=DlgSet(dlg,CheckMatrix(I-IU+1,J-JL+1),.FALSE.,DLG_ENABLE)
+    retlog=DlgSetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),.FALSE.)
+1   continue
 
-      return
-      END      
+    return
+END      
       
-      SUBROUTINE XSPEC2GoRight(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-	common /cmixp/ ixpsiz
-	common /IUJL/ IU,JL
-      IF(JL+10.LE.ixpsiz)THEN
-        CALL XSPEC2GetVals(dlg)
-        JL=JL+10
-        CALL UpdateXSPEC2Dialog(dlg)
-      ENDIF  
-      return
-      END
+SUBROUTINE XSPEC2GoRight(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    common /cmixp/ ixpsiz
+    common /IUJL/ IU,JL
+    IF(JL+10.LE.ixpsiz)THEN
+    CALL XSPEC2GetVals(dlg)
+    JL=JL+10
+    CALL UpdateXSPEC2Dialog(dlg)
+    ENDIF  
+    return
+END
       
-      SUBROUTINE XSPEC2GoLeft(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-	common /cmixp/ ixpsiz
-	common /IUJL/ IU,JL
-      IF(JL-10.GE.1.AND.JL-1.GT.IU)THEN
-        CALL XSPEC2GetVals(dlg)
-        JL=JL-10
-        CALL UpdateXSPEC2Dialog(dlg)
-      ENDIF  
-      return
-      END
+SUBROUTINE XSPEC2GoLeft(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    common /cmixp/ ixpsiz
+    common /IUJL/ IU,JL
+    IF(JL-10.GE.1.AND.JL-1.GT.IU)THEN
+    CALL XSPEC2GetVals(dlg)
+    JL=JL-10
+    CALL UpdateXSPEC2Dialog(dlg)
+    ENDIF  
+    return
+END
       
-      SUBROUTINE XSPEC2GoUp(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-	common /cmixp/ ixpsiz
-	common /IUJL/ IU,JL
-      IF(IU-10.GE.1)THEN
-        CALL XSPEC2GetVals(dlg)
-        IU=IU-10
-        CALL UpdateXSPEC2Dialog(dlg)
-      ENDIF  
-      return
-      END
+SUBROUTINE XSPEC2GoUp(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    common /cmixp/ ixpsiz
+    common /IUJL/ IU,JL
+    IF(IU-10.GE.1)THEN
+    CALL XSPEC2GetVals(dlg)
+    IU=IU-10
+    CALL UpdateXSPEC2Dialog(dlg)
+    ENDIF  
+    RETURN
+END
       
-      SUBROUTINE XSPEC2GoDown(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-	common /cmixp/ ixpsiz
-	common /IUJL/ IU,JL
-      IF(IU+10.LE.ixpsiz.AND.JL+9.GT.IU+10)THEN
-        CALL XSPEC2GetVals(dlg)
-        IU=IU+10
-        CALL UpdateXSPEC2Dialog(dlg)
-      ENDIF  
-      return
-      END      
+SUBROUTINE XSPEC2GoDown(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    common /cmixp/ ixpsiz
+    common /IUJL/ IU,JL
+    IF(IU+10.LE.ixpsiz.AND.JL+9.GT.IU+10)THEN
+    CALL XSPEC2GetVals(dlg)
+    IU=IU+10
+    CALL UpdateXSPEC2Dialog(dlg)
+    ENDIF  
+    return
+END      
       
-      SUBROUTINE XSPEC2SetAll(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      INCLUDE 'MAX.INC'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-	integer ixpairs(ichmax,ichmax)
-	common /cmixp/ ixpsiz,ixpairs
+SUBROUTINE XSPEC2SetAll(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    INCLUDE 'MAX.INC'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    integer ixpairs(ichmax,ichmax)
+    common /cmixp/ ixpsiz,ixpairs
 
-      Do 1,i=1,ixpsiz
-      Do 1,j=1,ixpsiz
-      IF(J.GT.I)THEN
-        ixpairs(i,j)=1
-      ELSE
-        ixpairs(i,j)=0
-      ENDIF
-1     CONTINUE      
-      CALL UpdateXSPEC2Dialog(dlg)
-      return
-      END      
+    Do 1,i=1,ixpsiz
+    Do 1,j=1,ixpsiz
+    IF(J.GT.I)THEN
+    ixpairs(i,j)=1
+    ELSE
+    ixpairs(i,j)=0
+    ENDIF
+1   CONTINUE      
+    CALL UpdateXSPEC2Dialog(dlg)
+    return
+END      
       
-      SUBROUTINE XSPEC2ClearAll(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      INCLUDE 'MAX.INC'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-	integer ixpairs(ichmax,ichmax)
-	common /cmixp/ ixpsiz,ixpairs
+SUBROUTINE XSPEC2ClearAll(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    INCLUDE 'MAX.INC'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    integer ixpairs(ichmax,ichmax)
+    common /cmixp/ ixpsiz,ixpairs
 
-!      Do 1,i=1,ixpsiz
-!      Do 1,j=1,ixpsiz
-!      IF(J.GT.I)THEN
-!        ixpairs(i,j)=1
-!      ELSE
-!        ixpairs(i,j)=0
-!      ENDIF
-!1     CONTINUE      
-      ixpairs=0
-      CALL UpdateXSPEC2Dialog(dlg)
-      return
-      END      
+    ixpairs=0
+    CALL UpdateXSPEC2Dialog(dlg)
+    return
+END      
       
-      SUBROUTINE XSPEC2GetVals(dlg)
-      use iflogm
-      include 'resource.fd'
-      INCLUDE 'MAX.INC'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-	integer ixpairs(ichmax,ichmax)
-	common /cmixp/ ixpsiz,ixpairs
-      COMMON /CKBMTC/ CheckMatrix(10,10)
-      INTEGER CheckMatrix
-	common /IUJL/ IU,JL
-	LOGICAL Lvalue
+SUBROUTINE XSPEC2GetVals(dlg)
+    use iflogm
+    include 'resource.fd'
+    INCLUDE 'MAX.INC'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    integer ixpairs(ichmax,ichmax)
+    common /cmixp/ ixpsiz,ixpairs
+    COMMON /CKBMTC/ CheckMatrix(10,10)
+    INTEGER CheckMatrix
+    common /IUJL/ IU,JL
+    LOGICAL Lvalue
       
-      NCO1=ixpsiz
-      DO 1,I=IU,IU+10-1
-      DO 1,J=JL,JL+10-1
-      retlog=DlgGetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),LValue)
-      ixpairs(I,J)=0
-      IF(Lvalue)ixpairs(I,J)=1
-1     continue
+    NCO1=ixpsiz
+    DO 1,I=IU,IU+10-1
+    DO 1,J=JL,JL+10-1
+    retlog=DlgGetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),LValue)
+    ixpairs(I,J)=0
+    IF(Lvalue)ixpairs(I,J)=1
+1   continue
 
-      RETURN
-      END
+    RETURN
+END
       
-      SUBROUTINE UpdateXSPSelection(dlg,ISTART)
-      use iflogm
-      include 'resource.fd'
-      INCLUDE 'MAX.INC'
-      type (dialog) dlg
-	integer ixpairs(ichmax,ichmax)
-	common /cmixp/ ixpsiz,ixpairs
-	COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(ICHMAX)
-	CHARACTER*128 GOUT
-	CHARACTER*1024 LINE
-	LOGICAL ISTART,HasLn
+SUBROUTINE UpdateXSPSelection(dlg,ISTART)
+    use iflogm
+    include 'resource.fd'
+    INCLUDE 'MAX.INC'
+    type (dialog) dlg
+    integer ixpairs(ichmax,ichmax)
+    common /cmixp/ ixpsiz,ixpairs
+    COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(ICHMAX)
+    CHARACTER*128 GOUT
+    CHARACTER*1024 LINE
+    LOGICAL ISTART,HasLn
 
-      NCO1=ixpsiz
-      INUML=1
-      LINE(1:4)='    '
-      HasLn=.FALSE.
-      Do 11,I=1,NCO1
-      IF(ICHAN(I).GE.100)HasLn=.TRUE.
-11    CONTINUE
-      IF(HasLn)THEN
-        DO 12,I=1,NCO1
-        IR=ICHAN(I)/100
-        IF(IR.EQ.0)THEN
-            LINE(I+4:I+4)=' '
-        ELSE
-            WRITE(LINE(I+4:I+4),'(I1)')IR
-        ENDIF
-12      CONTINUE        
-      ENDIF      
-      IF(ISTART)THEN
-        retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
-      ELSE
-        retlog=DlgSet(dlg,IDC_LIST2,LINE,INUML)
-        INUML=INUML+1
-      ENDIF    
-      LINE(1:4)='    '
-      HasLn=.FALSE.
-      Do 21,I=1,NCO1
-      IF(ICHAN(I).GE.10)HasLn=.TRUE.
-21    CONTINUE
-      IF(HasLn)THEN
-        DO 22,I=1,NCO1
-        IF(ICHAN(I).LT.10)THEN
-            LINE(I+4:I+4)=' '
-        ELSE
-            WRITE(LINE(I+4:I+4),'(I1)')MOD(ICHAN(I)/10,10)
-        ENDIF
-22      CONTINUE        
-      ENDIF      
-      IF(ISTART)THEN
-        retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
-      ELSE
-        retlog=DlgSet(dlg,IDC_LIST2,LINE,INUML)
-        INUML=INUML+1
-      ENDIF    
-      LINE(1:4)='    '
-      DO 42,I=1,NCO1
-42    WRITE(LINE(I+4:I+4),'(I1)')MOD(ICHAN(I),10)
-      IF(ISTART)THEN
-        retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
-      ELSE
-        retlog=DlgSet(dlg,IDC_LIST2,LINE,INUML)
-        INUML=INUML+1
-      ENDIF  
-      DO 51,I=1,NCO1
-      WRITE(LINE,200)ICHAN(I)
-      DO 52,J=1,NCO1
-200   FORMAT(I3,1X)
-      LINE(J+4:J+4)=' '
-      IF(ixpairs(I,J).NE.0)LINE(J+4:J+4)='x'
-52    CONTINUE      
-      IF(ISTART)THEN
-        retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
-      ELSE
-        retlog=DlgSet(dlg,IDC_LIST2,LINE,INUML)
-        INUML=INUML+1
-      ENDIF
+    NCO1=ixpsiz
+    INUML=1
+    LINE(1:4)='    '
+    HasLn=.FALSE.
+    Do 11,I=1,NCO1
+    IF(ICHAN(I).GE.100)HasLn=.TRUE.
+11  CONTINUE
+    IF(HasLn)THEN
+    DO 12,I=1,NCO1
+    IR=ICHAN(I)/100
+    IF(IR.EQ.0)THEN
+        LINE(I+4:I+4)=' '
+    ELSE
+        WRITE(LINE(I+4:I+4),'(I1)')IR
+    ENDIF
+12  CONTINUE        
+    ENDIF      
+    IF(ISTART)THEN
+    retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
+    ELSE
+    retlog=DlgSet(dlg,IDC_LIST2,LINE,INUML)
+    INUML=INUML+1
+    ENDIF    
+    LINE(1:4)='    '
+    HasLn=.FALSE.
+    Do 21,I=1,NCO1
+    IF(ICHAN(I).GE.10)HasLn=.TRUE.
+21  CONTINUE
+    IF(HasLn)THEN
+    DO 22,I=1,NCO1
+    IF(ICHAN(I).LT.10)THEN
+        LINE(I+4:I+4)=' '
+    ELSE
+        WRITE(LINE(I+4:I+4),'(I1)')MOD(ICHAN(I)/10,10)
+    ENDIF
+22  CONTINUE        
+    ENDIF      
+    IF(ISTART)THEN
+    retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
+    ELSE
+    retlog=DlgSet(dlg,IDC_LIST2,LINE,INUML)
+    INUML=INUML+1
+    ENDIF    
+    LINE(1:4)='    '
+    DO 42,I=1,NCO1
+42  WRITE(LINE(I+4:I+4),'(I1)')MOD(ICHAN(I),10)
+    IF(ISTART)THEN
+    retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
+    ELSE
+    retlog=DlgSet(dlg,IDC_LIST2,LINE,INUML)
+    INUML=INUML+1
+    ENDIF  
+    DO 51,I=1,NCO1
+    WRITE(LINE,200)ICHAN(I)
+    DO 52,J=1,NCO1
+200 FORMAT(I3,1X)
+    LINE(J+4:J+4)=' '
+    IF(ixpairs(I,J).NE.0)LINE(J+4:J+4)='x'
+52  CONTINUE      
+    IF(ISTART)THEN
+    retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
+    ELSE
+    retlog=DlgSet(dlg,IDC_LIST2,LINE,INUML)
+    INUML=INUML+1
+    ENDIF
 51    CONTINUE
 
-      RETURN
-      END      
+    RETURN
+END      
       
-      SUBROUTINE DoEditShortLabelXSPECDialog(num,LINE)
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-	INCLUDE 'MULTAR.INC'
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
-	CHARACTER*80 GOUT
-	CHARACTER*(*) LINE
+SUBROUTINE DoEditShortLabelXSPECDialog(num,LINE)
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INCLUDE 'MULTAR.INC'
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
+    CHARACTER*80 GOUT
+    CHARACTER*(*) LINE
 
 ! Create dialog
-      IF ( .not. DlgInit( XSPEC3_DIALOG, dlg ) ) THEN
-          WRITE (*,*) "Error: XSPEC3_DIALOG not found"
-          return
-      ENDif
+    IF ( .not. DlgInit( XSPEC3_DIALOG, dlg ) ) THEN
+        WRITE (*,*) "Error: XSPEC3_DIALOG not found"
+        return
+    ENDif
 
 ! Set defaults
-      WRITE(GOUT,100)num
-100   FORMAT('Short label edit (chan ',I3,')')
-      retlog=DlgSet(dlg,IDC_STATIC1,GOUT,DLG_TITLE)
-      
-      retlog=DlgSet(dlg,IDC_EDIT1,24,DLG_TEXTLENGTH)
-      retlog=DlgSetChar(dlg,IDC_EDIT1,LINE(7:LEN_TRIM(LINE)))
+    WRITE(GOUT,100)num
+100 FORMAT('Short label edit (chan ',I3,')')
+    retlog=DlgSet(dlg,IDC_STATIC1,GOUT,DLG_TITLE)
+    retlog=DlgSet(dlg,IDC_EDIT1,24,DLG_TEXTLENGTH)
+    retlog=DlgSetChar(dlg,IDC_EDIT1,LINE(7:LEN_TRIM(LINE)))
 
 ! Show dialog box
-      retint = DlgModal( dlg )
+    retint = DlgModal( dlg )
 
-      retlog=DlgGetChar(dlg,IDC_EDIT1,GOUT)
-      WRITE(LINE,200)num,GOUT(1:8)
-200   FORMAT('(',I3,') ',A8)
+    retlog=DlgGetChar(dlg,IDC_EDIT1,GOUT)
+    WRITE(LINE,200)num,GOUT(1:8)
+200 FORMAT('(',I3,') ',A8)
     
 ! Dispose                  
-      CALL DlgUninit( dlg )
+    CALL DlgUninit( dlg )
       
-      RETURN
-      end
+    RETURN
+END
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C     BANDS/PEAKEX Dialog
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     BANDS/PEAKEX Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       Subroutine DoBANDSDialog(ITYPE,IT,NB,WPPSF)
       USE IFLOGM
       use ifport
@@ -1395,16 +1360,16 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 	CHARACTER*24 LINESEL(20)
       COMMON /SELGVS/ SELGRPS,LINESEL
       INTEGER EFB_EDTN(10),ELB_EDTN(10)
-      DATA EFB_EDTN /IDC_EDIT2,IDC_EDIT3,IDC_EDIT4,IDC_EDIT5,
-     +               IDC_EDIT6,IDC_EDIT7,IDC_EDIT14,IDC_EDIT24,
-     +               IDC_EDIT26,IDC_EDIT15/
-      DATA ELB_EDTN /IDC_EDIT11,IDC_EDIT13,
-     +               IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25,
-     +               IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31/
+      DATA EFB_EDTN /IDC_EDIT2,IDC_EDIT3,IDC_EDIT4,IDC_EDIT5, &
+                    IDC_EDIT6,IDC_EDIT7,IDC_EDIT14,IDC_EDIT24, &
+                    IDC_EDIT26,IDC_EDIT15/
+      DATA ELB_EDTN /IDC_EDIT11,IDC_EDIT13, &
+                    IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25, &
+                    IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31/
       EXTERNAL CheckBANDSInput
       INTEGER ITRB(0:4)
-      DATA ITRB /IDC_RADIO4,IDC_RADIO5,IDC_RADIO8,
-     +           IDC_RADIO6,IDC_RADIO7/
+      DATA ITRB /IDC_RADIO4,IDC_RADIO5,IDC_RADIO8, &
+                IDC_RADIO6,IDC_RADIO7/
       LOGICAL WPPSF
 
 ! Create dialog
@@ -1427,7 +1392,6 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       retlog=DlgSetLog(dlg,IDC_RADIO7,.FALSE.)
       IF(IT.GE.0.AND.IT.LE.4)retlog=DlgSetLog(dlg,ITRB(IT),.TRUE.)
 
-C      retlog=DlgSetLog(dlg,IDC_RADIO18,.TRUE.)   
       retlog=DlgSetLog(dlg,IDC_RADIO21,.TRUE.)
       IF(ITYPE.EQ.2)retlog=DlgSetLog(dlg,IDC_RADIO21,.TRUE.)
 
@@ -1514,9 +1478,9 @@ C      retlog=DlgSetLog(dlg,IDC_RADIO18,.TRUE.)
       RETURN
       END
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C     PEAKM Dialog
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     PEAKM Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       Subroutine DoPEAKMDialog(ITYPE,IT,NB,IPKTYPE,CRFREQ,WPPSF)
       USE IFLOGM
       use ifport
@@ -1536,25 +1500,24 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       DIMENSION CRFREQ(10)
       INTEGER EFB_EDTN(10),ELB_EDTN(10)
       INTEGER PK1_BTNS(10),PK2_BTNS(10),CRF_EDTN(10)
-      DATA EFB_EDTN /IDC_EDIT2,IDC_EDIT3,IDC_EDIT4,IDC_EDIT5,
-     +               IDC_EDIT6,IDC_EDIT7,IDC_EDIT14,IDC_EDIT24,
-     +               IDC_EDIT26,IDC_EDIT15/
-      DATA ELB_EDTN /IDC_EDIT11,IDC_EDIT13,
-     +               IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25,
-     +               IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31/
-      DATA CRF_EDTN /IDC_EDIT43,IDC_EDIT44,
-     +               IDC_EDIT45,IDC_EDIT46,IDC_EDIT47,IDC_EDIT48,
-     +               IDC_EDIT49,IDC_EDIT50,IDC_EDIT51,IDC_EDIT52/
-      DATA PK1_BTNS /IDC_RADIO1,IDC_RADIO3,
-     +               IDC_RADIO24,IDC_RADIO26,IDC_RADIO28,IDC_RADIO30,
-     +               IDC_RADIO32,IDC_RADIO34,IDC_RADIO36,IDC_RADIO38/
-      DATA PK2_BTNS /IDC_RADIO2,IDC_RADIO23,
-     +               IDC_RADIO25,IDC_RADIO27,IDC_RADIO29,IDC_RADIO31,
-     +               IDC_RADIO33,IDC_RADIO35,IDC_RADIO37,IDC_RADIO39/
+      DATA EFB_EDTN /IDC_EDIT2,IDC_EDIT3,IDC_EDIT4,IDC_EDIT5, &
+                    IDC_EDIT6,IDC_EDIT7,IDC_EDIT14,IDC_EDIT24, &
+                    IDC_EDIT26,IDC_EDIT15/
+      DATA ELB_EDTN /IDC_EDIT11,IDC_EDIT13, &
+                    IDC_EDIT21,IDC_EDIT22,IDC_EDIT23,IDC_EDIT25, &
+                    IDC_EDIT27,IDC_EDIT29,IDC_EDIT30,IDC_EDIT31/
+      DATA CRF_EDTN /IDC_EDIT43,IDC_EDIT44, &
+                    IDC_EDIT45,IDC_EDIT46,IDC_EDIT47,IDC_EDIT48, &
+                    IDC_EDIT49,IDC_EDIT50,IDC_EDIT51,IDC_EDIT52/
+      DATA PK1_BTNS /IDC_RADIO1,IDC_RADIO3, &
+                    IDC_RADIO24,IDC_RADIO26,IDC_RADIO28,IDC_RADIO30, &
+                    IDC_RADIO32,IDC_RADIO34,IDC_RADIO36,IDC_RADIO38/
+      DATA PK2_BTNS /IDC_RADIO2,IDC_RADIO23, &
+                    IDC_RADIO25,IDC_RADIO27,IDC_RADIO29,IDC_RADIO31, &
+                    IDC_RADIO33,IDC_RADIO35,IDC_RADIO37,IDC_RADIO39/
       EXTERNAL CheckPEAKMInput
       INTEGER ITRB(0:4)
-      DATA ITRB /IDC_RADIO4,IDC_RADIO5,IDC_RADIO8,
-     +           IDC_RADIO6,IDC_RADIO7/
+      DATA ITRB /IDC_RADIO4,IDC_RADIO5,IDC_RADIO8,IDC_RADIO6,IDC_RADIO7/
 
 ! Create dialog
       IF ( .not. DlgInit( PEAKM_DIALOG, dlg ) ) THEN
@@ -1667,12 +1630,12 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       character*255 LINE
       logical retlog,Ltemp,IPKTOK
       INTEGER PK2_BTNS(10),CRF_EDTN(10)
-      DATA CRF_EDTN /IDC_EDIT43,IDC_EDIT44,
-     +               IDC_EDIT45,IDC_EDIT46,IDC_EDIT47,IDC_EDIT48,
-     +               IDC_EDIT49,IDC_EDIT50,IDC_EDIT51,IDC_EDIT52/
-      DATA PK2_BTNS /IDC_RADIO2,IDC_RADIO23,
-     +               IDC_RADIO25,IDC_RADIO27,IDC_RADIO29,IDC_RADIO31,
-     +               IDC_RADIO33,IDC_RADIO35,IDC_RADIO37,IDC_RADIO39/
+      DATA CRF_EDTN /IDC_EDIT43,IDC_EDIT44, &
+                    IDC_EDIT45,IDC_EDIT46,IDC_EDIT47,IDC_EDIT48, &
+                    IDC_EDIT49,IDC_EDIT50,IDC_EDIT51,IDC_EDIT52/
+      DATA PK2_BTNS /IDC_RADIO2,IDC_RADIO23, &
+                    IDC_RADIO25,IDC_RADIO27,IDC_RADIO29,IDC_RADIO31, &
+                    IDC_RADIO33,IDC_RADIO35,IDC_RADIO37,IDC_RADIO39/
 
       IPKTOK=.TRUE.
       DO 10,I=1,10

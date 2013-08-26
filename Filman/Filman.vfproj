@@ -68,7 +68,7 @@
 		<File RelativePath=".\Sources\dialogs.f90"/>
 		<File RelativePath=".\Sources\Dialogs2.for"/>
 		<File RelativePath=".\Sources\Dialogs3.f90"/>
-		<File RelativePath=".\Sources\Dialogs4.for"/>
+		<File RelativePath=".\Sources\Dialogs4.f90"/>
 		<File RelativePath=".\Sources\Dialogs5.for"/>
 		<File RelativePath=".\Sources\DO_AR.FOR"/>
 		<File RelativePath=".\Sources\DPOKEMat.f"/>
@@ -150,7 +150,6 @@
 		<File RelativePath=".\Xeffort\XftGDI.f90"/>
 		<File RelativePath=".\Xeffort\XFTStrings.f90"/>
 		<File RelativePath=".\Sources\XHIST.FOR"/>
-		<File RelativePath=".\Sources\XSPEC.FOR"/>
 		<File RelativePath=".\Sources\XSPECnew.f90"/>
 		<File RelativePath=".\Sources\XTAB.FOR"/>
 		<File RelativePath=".\Sources\ZERLVB.FOR"/></Filter></Files>
