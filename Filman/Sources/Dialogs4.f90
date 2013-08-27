@@ -498,15 +498,15 @@ Subroutine DoGDTSTRDialog(NGRP,ITMIN,ITMAX,IVMAX,IVP)
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     POWSP2 Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      Subroutine DoPOWSP2Dialog(NPO,IFF,IL,IOUT,IT,FMAX,FNYQ)
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-      INTEGER*4 :: NPO,IFF,IOUT,IT
-      REAL*8 :: FNYQ,FMAX
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
+Subroutine DoPOWSP2Dialog(NPO,IFF,IL,IOUT,IT,FMAX,FNYQ)
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INTEGER*4 :: NPO,IFF,IOUT,IT
+    REAL*8 :: FNYQ,FMAX
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
 	CHARACTER*80 LINE
 	CHARACTER*255 GOUT
 	LOGICAL Ltemp
@@ -593,15 +593,14 @@ Subroutine DoGDTSTRDialog(NGRP,ITMIN,ITMAX,IVMAX,IVP)
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     XFORM Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      Subroutine DoXFORMDialog(NP2)
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
+Subroutine DoXFORMDialog(NP2)
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INTEGER retint, NP2, NF
+    LOGICAL retlog, Ltemp, For
+    TYPE (dialog) dlg
 	CHARACTER*80 LINE
-	LOGICAL Ltemp
 	EXTERNAL CheckTruncXform
 
 ! Create dialog
@@ -611,131 +610,128 @@ Subroutine DoGDTSTRDialog(NGRP,ITMIN,ITMAX,IVMAX,IVP)
       ENDif
 
 ! Set defaults
-      retlog=DlgSetLog(dlg,IDC_CHECK1,.FALSE.)
-        retlog=DlgSet(dlg,IDC_EDIT1,.FALSE.,DLG_ENABLE)
-        retlog=DlgSet(dlg,IDC_STATIC2,.FALSE.,DLG_ENABLE)
-      
-      retlog=DlgSet(dlg,IDC_EDIT1,24,DLG_TEXTLENGTH)
-      WRITE(LINE,*)NP2
-      isp1=1
-      do 11, while(line(isp1:isp1).eq.' ')
-11    isp1=isp1+1
-      line=line(isp1:len_trim(line))  
-      retlog=DlgSetChar(dlg,IDC_EDIT1,LINE)
-      
-      retlog=DlgSetSub(dlg,IDC_CHECK1,CheckTruncXform)  
+    retlog=DlgSetLog(dlg,IDC_CHECK1,.FALSE.)
+    retlog=DlgSet(dlg,IDC_EDIT1,.FALSE.,DLG_ENABLE)
+    retlog=DlgSet(dlg,IDC_STATIC2,.FALSE.,DLG_ENABLE)
+    retlog=DlgSet(dlg,IDC_EDIT1,24,DLG_TEXTLENGTH)
+    WRITE(LINE,*)NP2
+    isp1=1
+    do 11, while(line(isp1:isp1).eq.' ')
+11      isp1=isp1+1
+    line=line(isp1:len_trim(line))  
+    retlog=DlgSetChar(dlg,IDC_EDIT1,LINE)
+    retlog=DlgSetSub(dlg,IDC_CHECK1,CheckTruncXform)  
 
 ! Show dialog box
-      retint = DlgModal( dlg )
+    retint = DlgModal( dlg )
 
 ! Read entered values
-      retlog=DlgGetLog(dlg,IDC_CHECK1,Ltemp)
-      if(Ltemp)THEN
+    retlog=DlgGetLog(dlg,IDC_CHECK1,Ltemp)
+    if(Ltemp)THEN
         retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
-        read(LINE,*,end=21,err=21)NP2
-21      CONTINUE        
-      ENDIF
+        read(LINE,*,end=21,err=21) NP2
+21      CONTINUE
+    ENDIF
 
 ! Dispose                  
-      CALL DlgUninit( dlg )
+    CALL DlgUninit( dlg )
       
-100   FORMAT(I3,'–',I3,' => ',8A4)
-      RETURN
-      end
+    RETURN
+end
 
-      SUBROUTINE CheckTruncXform(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-      character*80 LINE
-      logical LogVal
+SUBROUTINE CheckTruncXform(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    character*80 LINE
+    logical LogVal
       
-      retlog=DlgGetLog(dlg,IDC_CHECK1,LogVal)
-      IF(LogVal)THEN
+    retlog=DlgGetLog(dlg,IDC_CHECK1,LogVal)
+    IF(LogVal)THEN
         retlog=DlgSet(dlg,IDC_EDIT1,.TRUE.,DLG_ENABLE)
         retlog=DlgSet(dlg,IDC_STATIC2,.TRUE.,DLG_ENABLE)
-      ELSE
+    ELSE
         retlog=DlgSet(dlg,IDC_EDIT1,.FALSE.,DLG_ENABLE)
         retlog=DlgSet(dlg,IDC_STATIC2,.FALSE.,DLG_ENABLE)
-      ENDIF
-      return
-      end
+    ENDIF
+    return
+end
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     MAGPH Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      Subroutine DoMAGPHDialog(IMAG,IPH,J1,NDO2,NPB,ITAP,NDO)
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-	INCLUDE 'MULTAR.INC'
-      INCLUDE 'MAX.INC'
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
-	CHARACTER*24 LINE1,LINE2
-	CHARACTER*128 GOUT
-	LOGICAL Ltemp
+Subroutine DoMAGPHDialog(IMAG,IPH,J1,NDO2,NPB,ITAP,NDO)
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INCLUDE 'MULTAR.INC'
+    INCLUDE 'MAX.INC'
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
+    CHARACTER*24 LINE1,LINE2
+    CHARACTER*128 GOUT
+    LOGICAL Ltemp
 
 ! Create dialog
-      IF ( .not. DlgInit( MAGPH_DIALOG, dlg ) ) THEN
-          WRITE (*,*) "Error: MAGPH_DIALOG not found"
-          return
-      ENDif
+    IF ( .not. DlgInit( MAGPH_DIALOG, dlg ) ) THEN
+        WRITE (*,*) "Error: MAGPH_DIALOG not found"
+        return
+    ENDif
 
 ! Set defaults
-      retlog=DlgSetLog(dlg,IDC_CHECK1,.TRUE.)   
-      retlog=DlgSetLog(dlg,IDC_CHECK2,.TRUE.)   
-      retlog=DlgSetLog(dlg,IDC_CHECK3,.FALSE.)   
+    retlog=DlgSetLog(dlg,IDC_CHECK1,.TRUE.)   
+    retlog=DlgSetLog(dlg,IDC_CHECK2,.TRUE.)   
+    retlog=DlgSetLog(dlg,IDC_CHECK3,.FALSE.)   
 
-      retlog=DlgSet(dlg,IDC_EDIT32,24,DLG_TEXTLENGTH)
-      retlog=DlgSet(dlg,IDC_EDIT33,24,DLG_TEXTLENGTH)
-      retlog=DlgSet(dlg,IDC_EDIT34,24,DLG_TEXTLENGTH)
-      retlog=DlgSetChar(dlg,IDC_EDIT32,'1')
-      retlog=DlgSetChar(dlg,IDC_EDIT33,'')
-      retlog=DlgSetChar(dlg,IDC_EDIT34,'1')
+    retlog=DlgSet(dlg,IDC_EDIT32,24,DLG_TEXTLENGTH)
+    retlog=DlgSet(dlg,IDC_EDIT33,24,DLG_TEXTLENGTH)
+    retlog=DlgSet(dlg,IDC_EDIT34,24,DLG_TEXTLENGTH)
+    retlog=DlgSetChar(dlg,IDC_EDIT32,'1')
+    retlog=DlgSetChar(dlg,IDC_EDIT33,'')
+    retlog=DlgSetChar(dlg,IDC_EDIT34,'1')
   
-      WRITE(GOUT,1001)NDO
+    WRITE(GOUT,1001)NDO
 1001  FORMAT('#BLOCKS(<=',I6,') >')
       retlog=DlgSet(dlg,IDC_STATIC81,GOUT,DLG_TITLE)
                         
 ! Show dialog box
-      retint = DlgModal( dlg )
+    retint = DlgModal( dlg )
 
 ! Read entered values
-      IMAG=0
-      retlog=DlgGetLog(dlg,IDC_CHECK1,Ltemp)
-      IF(Ltemp)IMAG=1
+    IMAG=0
+    retlog=DlgGetLog(dlg,IDC_CHECK1,Ltemp)
+    IF(Ltemp)IMAG=1
       
-      IPH=0
-      retlog=DlgGetLog(dlg,IDC_CHECK2,Ltemp)
-      IF(Ltemp)IPH=1
+    IPH=0
+    retlog=DlgGetLog(dlg,IDC_CHECK2,Ltemp)
+    IF(Ltemp)IPH=1
       
-      ITAP=0
-      retlog=DlgGetLog(dlg,IDC_CHECK3,Ltemp)
-      IF(Ltemp)ITAP=1
+    ITAP=0
+    retlog=DlgGetLog(dlg,IDC_CHECK3,Ltemp)
+    IF(Ltemp)ITAP=1
       
-      J1=0
-      retlog=DlgGetChar(dlg,IDC_EDIT32,LINE1)
-      read(line1,*,err=31,end=31)J1
+    J1=0
+    retlog=DlgGetChar(dlg,IDC_EDIT32,LINE1)
+    read(line1,*,err=31,end=31)J1
       
-  31  NDO2=0
-      retlog=DlgGetChar(dlg,IDC_EDIT33,LINE1)
-      read(line1,*,err=32,end=32)NDO2
+31  NDO2=0
+    retlog=DlgGetChar(dlg,IDC_EDIT33,LINE1)
+    read(line1,*,err=32,end=32)NDO2
       
-  32  NPB=0
-      retlog=DlgGetChar(dlg,IDC_EDIT34,LINE1)
-      read(line1,*,err=33,end=33)NPB
+32  NPB=0
+    retlog=DlgGetChar(dlg,IDC_EDIT34,LINE1)
+    read(line1,*,err=33,end=33)NPB
       
-  33  CONTINUE
+33  CONTINUE
       
 ! Dispose                  
-      CALL DlgUninit( dlg )
+    CALL DlgUninit( dlg )
       
-      RETURN
-      end
+    RETURN
+end
       
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
