@@ -6,7 +6,7 @@
 	CHARACTER*1024 FULLINFIL,FULLOUTFIL
 	COMMON /INDIR/ INDIR
 	CHARACTER*1024 INDIR
-	CHARACTER*4 EXT,EXT2
+	CHARACTER*6 EXT,EXT2
 
       EXT2='.txt'
       SELECT CASE (PROCNM)
@@ -26,7 +26,7 @@
         CASE('PRINT')
             EXT='.prn'
         CASE('XHIST')
-            EXT='.xhs'
+            EXT='.xhst'
             EXT2='.fmn'
         CASE('XTAB')
             EXT='.xtb'
@@ -34,19 +34,19 @@
             EXT='.psp'
             EXT2='.fmn'
         CASE('POWSP2')
-            EXT='.ps2'
+            EXT='.psp2'
             EXT2='.fmn'
         CASE('MODPOW')
             EXT='.mpw'
             EXT2='.fmn'
         CASE('MODPO2')
-            EXT='.mp2'
+            EXT='.mpw2'
             EXT2='.fmn'
         CASE('BURG')
             EXT='.brg'
             EXT2='.fmn'
         CASE('XFORM')
-            EXT='.xfm'
+            EXT='.xfmf'
             EXT2='.fmn'
         CASE('MAGPH')
             EXT='.mgp'
@@ -56,6 +56,9 @@
             EXT2='.fmn'
         CASE('XSPEC')
             EXT='.xsp'
+            EXT2='.fmn'
+        CASE('XFORMR')
+            EXT='.xfmr'
             EXT2='.fmn'
         CASE('FILTER')
             EXT='.flt'
@@ -93,9 +96,9 @@
       
       ipos=SCAN(INFIL,'.',back=.TRUE.)
       if(ipos.ne.0)then
-        OUTFNM=TRIM(INDIR)//'\'//INFIL(1:ipos-1)//TRIM(EXT)//EXT2
+        OUTFNM=TRIM(INDIR)//'\'//INFIL(1:ipos-1)//TRIM(EXT)//TRIM(EXT2)
       else
-        OUTFNM=TRIM(INDIR)//'\'//TRIM(INFIL)//TRIM(EXT)//EXT2
+        OUTFNM=TRIM(INDIR)//'\'//TRIM(INFIL)//TRIM(EXT)//TRIM(EXT2)
       endif
       
       RETURN

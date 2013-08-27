@@ -87,99 +87,22 @@ c---------------------------------------------------
 
 	SUBROUTINE GRPSEL(IREPLY)
 
-1       CONTINUE
-
-!C      CALL CLRSCR
-!
-!	WRITE (*,900)
-!
-!900     FORMAT (///5X,'Group processing routines'/,/,
-!
-!     1  5X,'1 = Omit processing of group variables',/,
-!
-!     1  5X,'2 = GPASS',/,
-!
-!     1  5X,'3 = GPAST',/,/,
-!
-!     1  $,5X,'Option:  '\)
-!
-!C 	READ (*,*)IREPLY
-!      IREPLY=IGETVALU('(I1)')
-!      WRITE(*,'(I1)')IREPLY
-      CALL DoGPASTDialog(IANS)
+1      CALL DoGPASTDialog(IANS)
       IREPLY=IANS
-
-	IF ((IREPLY.LT.1).OR.(IREPLY.GT.3))GOTO 1
-
-C       IF (IREPLY.EQ.1) RETURN
-
-C       IF (IREPLY.EQ.2) CALL GPASS
-
-C       IF (IREPLY.EQ.3) CALL GPAST
-
+	IF ((IREPLY.LT.1).OR.(IREPLY.GT.3)) GOTO 1
 	IREPLY=IREPLY+100
-
 	RETURN
-
 	END
 
 c----------------------------------------------------
 
 	SUBROUTINE PNTSEL(IREPLY)
 
-1       CONTINUE
-
-C      CALL CLRSCR
-
-!	WRITE (*,900)
-!
-!900     FORMAT (///5X,'Data point processing routines'///,
-!
-!     1  '  GENERAL/UTILITY    GROUP PROCESSORS    MODEL-BASED SPECTRA'/,
-!
-!     1  '   1 = AVRALL           16 = GDTSTR          31 = MODPOW',/,
-!
-!     1  '   2 = AVRGRP           17 = GRPNS           32 = MODPO2',/,
-!
-!     1  '   3 = BLPRO            18 = GRPRNT          33 = BURG',/,
-!
-!     1  '   4 = CHDIFF           19 = GSTRNG          34 = FAD',/,
-!
-!     1  '   5 = EXPORT           20 = XTAB            35 = FAD PLOT',/,
-!
-!     1  '   6 = FILTER           21 = XXXX            36 = MULTAR',/,
-!
-!     1  '   7 = HIST             22 = XXXX            37 = PEAKM',/,
-!
-!     1  '   8 = XHIST         FFT-BASED SPECTRA       38 = PEAKEX',/,
-!
-!     1  '   9 = PLOT             24 = POWSP           39 = XXXX',/,
-!
-!     1  '  10 = GRPLOT           25 = POWSP2          40 = XXXX',/,
-!
-!     1  '  11 = PRINT            26 = XFORM           41 = XXXX',/,
-!
-!     1  '  12 = PTPASS           27 = MAGPH           42 = XXXX',/,
-!
-!     1  '  13 = SUMMARY          28 = XSPEC           43 = XXXX',/,
-!
-!     1  '  14 = XXXX             29 = BANDS           44 = XXXX',/,
-!
-!     1  '  15 = XXXX             30 = XXXX            45 = XXXX',/,/,
-!
-!     1  $,5X,'Option:  '\)
-!
-!	READ (*,*)IREPLY
-	
-      Call DoDataProcRoutinesDialog(IREPLY)
-
-	IF ((IREPLY.LT.1).OR.(IREPLY.GT.45))GOTO 1
-
-	IREPLY=IREPLY + 1000
-
-	RETURN
-
-	END
+1      Call DoDataProcRoutinesDialog(IREPLY)
+        IF ((IREPLY.LT.1).OR.(IREPLY.GT.45)) GOTO 1
+        IREPLY=IREPLY + 1000
+        RETURN
+        END
 
 c------------------------------------------------
 
@@ -333,30 +256,26 @@ C POINT-PROCESSOR SECTION
 1023  GO TO 1     ! EMPTY SLOT
 
 1024  CALL POWSPnew
-
 	GO TO 1
 
 1025  CALL POWSP2new
-
 	GO TO 1
 
 1026  CALL XFORMnew
-
       GO TO 1
 
 1027  CALL MAGPH
-
       GO TO 1
 
 1028  CALL XSPECnew
-
       GO TO 1
 
 1029  CALL BANDS
 
 	GO TO 1
 
-1030  GO TO 1     !PLACEHOLDER
+1030  CALL XFORMR
+      GO TO 1     !PLACEHOLDER
 
 1031  CALL MODPOW
 

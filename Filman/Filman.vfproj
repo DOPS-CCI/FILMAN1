@@ -21,7 +21,8 @@
 				<Tool Name="VFCustomBuildTool"/>
 				<Tool Name="VFPreLinkEventTool"/>
 				<Tool Name="VFPreBuildEventTool"/>
-				<Tool Name="VFPostBuildEventTool"/></Configuration></Configurations>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Header Files" Filter="fi;fd">
 		<File RelativePath=".\Sources\KOHINF.INC"/>
@@ -102,7 +103,7 @@
 		<File RelativePath=".\Sources\KEYSKP.FOR"/>
 		<File RelativePath=".\Sources\LUINV.FOR"/>
 		<File RelativePath=".\Sources\MACHINE.FOR"/>
-		<File RelativePath=".\Sources\MAGPH.FOR"/>
+		<File RelativePath=".\Sources\MAGPH.f90"/>
 		<File RelativePath=".\Sources\MANSEL.FOR"/>
 		<File RelativePath=".\Xeffort\MFTPrint.f90"/>
 		<File RelativePath=".\Xeffort\mkl_dfti.f90"/>
@@ -146,6 +147,7 @@
 		<File RelativePath=".\Sources\Xdialogs.for"/>
 		<File RelativePath=".\Xeffort\XFLOGM.F90"/>
 		<File RelativePath=".\Sources\XFORMnew.f90"/>
+		<File RelativePath=".\Sources\XFORMR.f90"/>
 		<File RelativePath=".\Xeffort\XFTFile.f90"/>
 		<File RelativePath=".\Xeffort\XftGDI.f90"/>
 		<File RelativePath=".\Xeffort\XFTStrings.f90"/>

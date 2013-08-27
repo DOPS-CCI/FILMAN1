@@ -38,13 +38,17 @@ SUBROUTINE MAGPH
 
 ! GET START INDEX AND # OUTPUT POINTS
 
-13  CALL DoMAGPHDialog(IMAG,IPH,J1,NDO2,NPB,ITAP,NDO)
+13 CALL DoMAGPHDialog(IMAG,IPH,J1,NDO2,NPB,ITAP,NDO)
+   !J1 is first point (1-based) of the first block
+   !NDO2 is number of blocks
+   !NPB is number of points to be averaged in a block
+   !ITAP indicates input was tapered
 	IF(IMAG+IPH .EQ. 0) GOTO 13
 	IF(NDO2*NPB .GT. NDO) GOTO 13
 	NDO=(IMAG+IPH)*NDO2
 	NSO=NGO+NAO+1
 	AN=NPB
-	K1=NSO+NDO2
+	K1=NSO+IMAG*NDO2
 	ISZ=NDO
 	RETURN
 
@@ -55,7 +59,7 @@ SUBROUTINE MAGPH
 ! COMPUTE NEEDED QUANTITIES FOR THIS BLOCK
 	    TXY=0.0
 	    DO 50 J=1,NPB
-	        CALL XVAL(L,X,Y) !equivalent to CXY
+	        CALL XVAL(L,X,Y) !(X,Y) equivalent to CXY
 	        TXY=TXY+CXY
 50	        L=L+1
 

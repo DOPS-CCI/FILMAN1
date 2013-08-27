@@ -86,18 +86,6 @@ C      retlog=XGetOpenFile(Dlg%hWnd,sDir,nFiles,sFiles,
       
 1     CONTINUE
       sFiles=OUTFNM(CURPROCNAME)
-!      ipos=SCAN(FULLINFIL,'\',back=.TRUE.)
-!      if(ipos.ne.0)then
-!        sDir=FULLINFIL(1:ipos-1)
-!      else
-!        sDir='C:\\EEGDATA'C
-!      endif
-!      ipos=SCAN(INFIL,'.',back=.TRUE.)
-!      if(ipos.ne.0)then
-!        sFiles=INFIL(1:ipos-1)//".fmn"
-!      else
-!        sFiles=INFIL//".fmn"
-!      endif
       sExts(1)="*.fmn"
       sExts(2)="*.*"
       sTypes(1)="Filman files (*.fmn)"

@@ -323,6 +323,7 @@
       integer, parameter :: IDC_EDIT50 = 1065
       integer, parameter :: IDC_BUTTON34 = 1039
       integer, parameter :: IDC_EDIT22 = 1040
+      integer, parameter :: Reverse = 1133
       integer, parameter :: IDC_BUTTON15 = 1019
       integer, parameter :: IDC_EDIT41 = 1056
       integer, parameter :: IDC_EDIT13 = 1038

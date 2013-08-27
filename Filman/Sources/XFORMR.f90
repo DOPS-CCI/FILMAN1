@@ -1,7 +1,10 @@
-! XFORM.FOR CHANNEL-BY-CHANNEL FFT OF INPUT TIME SERIES AND 
-!  TRUNCATION OF OUTPUT SERIES OF COMPLEX COEFFICIENTS.
+! XFORMR.f90 CHANNEL-BY-CHANNEL REVERSE FFT ON COMPLEX INPUT SERIES
+! Performs reverse FFT on input dataset; input must be complex
+! (NF=4); it is assumed that the first and last points have only
+! real parts  (the form of output of XFORM) and data is in
+! complex-conjugate even format => has real-only backwards transform
 
-SUBROUTINE XFORMnew
+SUBROUTINE XFORMR
     Use MKL_DFTI
     INCLUDE 'MAX.INC'
     CHARACTER*1 ANS
@@ -10,20 +13,22 @@ SUBROUTINE XFORMnew
 	COMMON/FLDESO/ NGO,NAO,NCO,NDO,NFO,NLO,NRO,ISO,IBUFO(IOMAX)
 	COMMON/FLDES/ NG,NA,NC,ND,NF,NL,NR,IS,IBUF(IOMAX)
 	INTEGER*4, SAVE :: J0,NP,NP2,NID
+    REAL*4 :: Scale
     INTEGER*4 :: Status
 	EQUIVALENCE (WORK,IBUFO(121))
     type(DFTI_DESCRIPTOR), POINTER, SAVE :: FFTDescriptor_Handle
+    LOGICAL, SAVE :: Forward
     COMMON /CPN/ CURPROCNAME
     CHARACTER*10 CURPROCNAME
 
     IF(IFLAG1) 10,20,50
 
-10  CURPROCNAME='XFORM'
-    IF(NF .NE. 3 .OR. NF .NE. 5) THEN
-        CALL ShowInfoText('Error','XFORM must have real input only')
+10  CURPROCNAME='XFORMR'
+    IF(NF .NE. 4 .OR. NF .NE. 6) THEN
+        CALL ShowInfoText('Error','XFORMR must have complex input only')
         RETURN
     ENDIF
-    NFO = 4
+    NFO = 3
 
 ! MOVE CHANNEL LABELS
 
@@ -37,23 +42,26 @@ SUBROUTINE XFORMnew
 12  J=J+6
     
     NP = NDO
-	NP2 = NDO/2
-    CALL DoXFORMDialog(NP2) !NP2 comes back as number of output points
+    NP2 = 2 * (NDO - 1)
     ! Create FFT descriptor
-    Status = DftiCreateDescriptor(FFTDescriptor_Handle, DFTI_SINGLE, DFTI_REAL, 1, NP)
+    Status = DftiCreateDescriptor(FFTDescriptor_Handle, DFTI_SINGLE, DFTI_REAL, 1, NP2)
     Status = DftiSetValue(FFTDescriptor_Handle, DFTI_PACKED_FORMAT, DFTI_CCS_FORMAT)
+    Scale = 1./Float(NP2)
+    Status = DftiSetValue(FFTDescriptor_Handle, DFTI_BACKWARD_SCALE, Scale)
     Status = DftiCommitDescriptor(FFTDescriptor_Handle)
-	ISZ=NDO+2
-    NDO=NP2+1
+	ISZ=2 * NDO
+    NDO = NP2
 	NID=NGO+NAO
 	J0=121-NID
 	RETURN
 
 ! MOVE DATA POINTS INTO BUFFER FOR TRANSFORMATION
 
-20	DO 27 I=1,NP
-27      CALL XVAL(I,WORK(I),XI)
-    Status = DftiComputeForward(FFTDescriptor_Handle, WORK)
+20  J = 1
+    DO 27 I=1,NP
+        CALL XVAL(I,WORK(J),WORK(J+1))
+27      J = J + 2
+    Status = DftiComputeBackward(FFTDescriptor_Handle, WORK)
 	J2=J0
 	DO 35 K=1,NID
     	IBUFO(J2)=IBUFO(K)
@@ -65,4 +73,3 @@ SUBROUTINE XFORMnew
     RETURN
 	END
 
-                                                                                          
