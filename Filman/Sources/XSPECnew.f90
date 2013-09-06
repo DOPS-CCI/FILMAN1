@@ -39,7 +39,7 @@ SUBROUTINE XSPECnew
 	IF(IFLAG1)10,50,80
 
 10  CURPROCNAME='XSPEC'
-
+    WRITE(*,*) CURPROCNAME
 	NCO1=NCO
 	NCO2=NCO-1
 	NPC=NDO/2
@@ -68,7 +68,13 @@ SUBROUTINE XSPECnew
 	    DO 1611,I2=1,2
 1611	    LBLS(I2,ICHAN(I))=IBUF(J1+I2-1)
             
-30  CALL DoXSPECDialog(IJGO,NCO1,NPC1,JR,NBLK,NPB,ICOMP,LBLS)
+30          CALL DoXSPECDialog(IJGO,NCO1,NPC1,JR,NBLK,NPB,ICOMP,LBLS)
+            ! IJGO is channel pair indicator array
+            ! JR = first point for blocking
+            ! NBLK = number of blocks
+            ! NPB = number of points per block
+            ! ICOMP is array indicating what is to be computer (see above)
+            ! LBLS is array of shortened channel labels
 
 ! Count number of channels needed in output file
 
@@ -83,7 +89,7 @@ SUBROUTINE XSPECnew
     IMAG = ICOMP(1) + ICOMP(2) + ICOMP(3)
     IF(IMAG .GT. 0) THEN
         IF(ICOMP(4) .GT. 0) THEN
-            CALL ShowInfoText('Error','Must have only real or complex output')
+            CALL ShowInfoText('Error','Must have only real or only complex outputs')
             GOTO 30 !Must have only real or complex results
         ENDIF
         NFO = 3 !Real format
@@ -122,12 +128,12 @@ SUBROUTINE XSPECnew
 
 ! NOW GET COMPUTATION PARAMETERS
 
-	IF(IMAG .EQ. 0 .OR. (ICOMP(2)*NPB) .NE. 1) GO TO 35
+	IF(IMAG .EQ. 0 .AND. (ICOMP(2)*NPB) .NE. 1) GO TO 35
     IMAG = IMAG - 1
 	ICOMP(2)=0
 	IF(IMAG .EQ. 0) THEN
         CALL ShowInfotext('Error', &
-            'COHERENCES FOR RAW SPECTRA ARE 1.0; REQUEST SUPPRESSED')
+            'COHERENCES FOR RAW SPECTRA ARE 1.0; REQUEST SUPPRESSED; NO OUTPUTS REMAIN')
         GOTO 30
     ELSE
         CALL ShowInfotext('Warning', &
@@ -155,6 +161,16 @@ SUBROUTINE XSPECnew
 	NCO=NCO3
 	IC=0
 	K=NSO
+    IF(IMAG.GT.0) THEN
+        IF(ICOMP(1).EQ.1) WRITE(*,*) "Compute transfer magnitude"
+        IF(ICOMP(2).EQ.1) WRITE(*,*) "Compute coherence"
+        IF(ICOMP(3).EQ.1) WRITE(*,*) "Compute phase difference"
+    ELSE
+        WRITE(*,*) "Compute complex cross spectrum"
+    ENDIF
+    WRITE(*,'(A,I3,A,I3,A,I3)') " First point = ", JR, "; number blocks = ", NBLK, &
+        "; number points/block = " , NPB
+    IF(ITAP.GT.0) WRITE(*,*) "With correction for tapering"
 45  RETURN
 
 ! PROCESSING PHASE- FIRST MOVE RAW COMPLEX COEFFICIENTS INTO IBUFO

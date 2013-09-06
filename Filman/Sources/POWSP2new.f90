@@ -28,6 +28,7 @@ IF(IFLAG1)1,20,60
 
 1   NFO=3
     CURPROCNAME='POWSP2'
+    WRITE(*,*) CURPROCNAME
 	NID=NGO+NAO
 	IO1=121-NID  ! POINTS TO FIRST WORD OF OUTPUT RECORD
 ! MOVE CHANNEL LABELS
@@ -61,7 +62,9 @@ IF(IFLAG1)1,20,60
 	ISO=FMAX
 	NDO=FMAX/DF + 1
 	ANPO=NDO-1
-
+    WRITE(*,'(A,I4,A,I4,A,F6.2,A)') " First point = ", IFF, "; number points = ", IL, &
+        "; maximum frequency = " ,FMAX, "Hz"
+    IF(IT.EQ.2) WRITE(*,*) "With Hann filtering"
     ! Create FFT descriptor
     Status = DftiCreateDescriptor(FFTDescriptor_Handle, DFTI_SINGLE, DFTI_REAL, 1, NXFM)
 
@@ -113,7 +116,7 @@ IF(IFLAG1)1,20,60
 40  XTOT=0.0
 	DO 45 I=2,NDO
 	    GO TO (41,42) IOUT
-41      X=WK2(I)-WK1(I)
+41      X=WK2(I) - WK1(I)
 	    GO TO 43
 42      X = R(WK1(I)) - R(WK2(I))
 43      WK1(I)=X

@@ -12,13 +12,19 @@
 ! INITIAL DATA RECORDING
 
     USE IFQWIN
+    USE DFLIB
+    USE DFWIN
+    USE User32
     INCLUDE 'MAX.INC'
     DIMENSION IDO(8),ICHAR(144),IHDR1(116)
     INTEGER*4 COUNT,CNTFLG,COUNT2,CNT2FG
     INTEGER*4 DUMMY(IPREC),DUM2(IPREC)
     INTEGER*2 I2
+    INTEGER(HANDLE) :: hFrame, hInst, hMDI, hTop
+    INTEGER :: iSt
     CHARACTER*64 INPFIL,OUTFIL
     CHARACTER*1 IYES,IIYES,INO,IINO,IANS
+    TYPE (windowconfig) wc
     COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(ICHMAX)
     COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(IOMAX)
     COMMON/FLDESO/ NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
@@ -27,11 +33,13 @@
     COMMON/STDFIL/INPFIL,OUTFIL  
     COMMON/CNTR1/ COUNT,CNTFLG,DUMMY,JREC1,IRCSZ
     COMMON/CNTR2/ COUNT2,CNT2FG,DUM2,JREC2
-
+    CHARACTER*1024 :: FULLINFIL,FULLOUTFIL
+	COMMON /FULLFNM/ FULLINFIL,FULLOUTFIL
     EQUIVALENCE (IHDR1(1),NG),(IDO(1),NGO),(ICHAR(1),LIST(1,1))
     DATA IYES,IIYES,INO,IINO/'Y','y','N','n'/
     COMMON /MULTRD/ ITURN,NTRNS,NEWFIL,ISVNOW,ISVREC,ISVPOS
     COMMON /WINPOS/ IWX(IWINDMX),IWY(IWINDMX)
+    COMMON /WINHANDLES/ hFrame, hMDI, hTop, hInst
     integer WINVER
     COMMON /CPN/ CURPROCNAME
     CHARACTER*10 CURPROCNAME
@@ -42,11 +50,27 @@
     IOX=11
     I2=SETTEXTCURSOR(Z'0808')
     I2=DISPLAYCURSOR($GCURSORON)
-    IF(WINVER().GE.7)THEN
-        WRITE(*,*)'You may now resize the main window'
-        WRITE(*,*)'Press ENTER to start the program when ready'
-        READ(*,'(A)')KEY
-    ENDIF  
+    iSt = GETWINDOWCONFIG(wc)
+    wc%TITLE = "Information"C
+!    wc%NUMTEXTCOLS = 80
+!    wc%NUMTEXTROWS = 60
+    iSt = SETWINDOWCONFIG(wc)
+    iSt = SETEXITQQ(QWIN$EXITNOPERSIST);
+    hFrame=GETHWNDQQ(QWIN$FRAMEWINDOW)           !Handle of the frame window
+!    hInst=GetWindowLong(hFrame,GWL_HINSTANCE)    !Instance handle (needed to load resources)
+
+    iSt=SetWindowText(hFrame,"FILMAN") ! Set main window title to FILMAN
+    iSt=ShowWindow(hFrame,SW_SHOWMAXIMIZED)
+
+    hMDI = GetWindow(hFrame, GW_CHILD)          ! MDI parent window
+    hTop = GetWindow(hMDI, GW_CHILD)
+    iSt=ShowWindow(hTop,SW_SHOWMAXIMIZED)
+
+!    IF(WINVER().GE.7)THEN
+!        WRITE(*,*)'You may now resize the main window'
+!        WRITE(*,*)'Press ENTER to start the program when ready'
+!        READ(*,'(A)')KEY
+!    ENDIF  
 
 100 IFLAG1=-1
     IFLAG3=1
@@ -58,12 +82,14 @@
     CALL RNOPT(9)  ! Choose 64-bit Mersenne Twister RNG (IMSL)
 !  IDENTIFY INPUT FILE AND READ FIRST HEADER
 191 CALL GETOPN
-	CALL GETSTD(IHDR1)  
+	CALL GETSTD(IHDR1)
 	call DoInputFileInfoDialog(IANS,IYES,INO)
 	IF(IANS.NE.INO) GO TO 189  
 	CALL GETEND
 	GO TO 191
-189 ISO=IS
+189 WRITE(*,1001) TRIM(FULLINFIL)
+1001    FORMAT('Input file name = ', A);
+    ISO=IS
 	NRO=0
 ! COPY FIRST LINE OF TEXT TO OUTPUT BUFFER
 	DO 101 I=1,18
@@ -134,6 +160,8 @@
 138 CONTINUE
 ! set up output file and write first two headers
 	CALL PUTOPN
+    WRITE(*,1025) TRIM(FULLOUTFIL)
+1025    FORMAT("Output file name = ",A)
 	CALL PUTSTD(IDO)
 	CALL PUTSTD(IBUFO(109))
 	ISVNOW=1

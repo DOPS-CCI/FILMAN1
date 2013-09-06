@@ -74,7 +74,7 @@ C	DATA PREFIX/'C:\MATLAB\BIN\'/
 
 1     IFLAG3=0   !NO STANDARD OUTPUT FILE WILL BE GENERATED
       CURPROCNAME='EXPORT'
-
+      WRITE(*,*) CURPROCNAME
       Call ShowInfoText('Warning',
      +                  'This routine may not work as expected')
 

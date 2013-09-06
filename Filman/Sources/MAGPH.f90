@@ -24,7 +24,7 @@ SUBROUTINE MAGPH
 
 10	NFO=3
     CURPROCNAME='MAGPH'
-
+    WRITE(*,*) CURPROCNAME
 ! MOVE CHANNEL LABELS
 
     J=6*NGO+109
@@ -50,6 +50,18 @@ SUBROUTINE MAGPH
 	AN=NPB
 	K1=NSO+IMAG*NDO2
 	ISZ=NDO
+    IF(IMAG.GT.0) THEN
+        IF(IPH.GT.0) THEN
+            WRITE(*,*) "Compute magnitude and phase"
+        ELSE
+            WRITE(*,*) "Compute magnitude only"
+        ENDIF
+    ELSE
+        WRITE(*,*) "Compute phase only"
+    ENDIF
+    WRITE(*,'(A,I3,A,I3,A,I3)') " First point = ", J1, "; number blocks = ", NDO2, &
+        "; number points/block = " , NPB
+    IF(ITAP.GT.0) WRITE(*,*) "With correction for tapering"
 	RETURN
 
 20	K=NSO

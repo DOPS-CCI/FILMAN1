@@ -2,7 +2,7 @@
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     AVRALLDialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    Subroutine DoAVRALLDialog(IDTYP,IXFORM,IAVRG,ISMTH)
+Subroutine DoAVRALLDialog(IDTYP,IXFORM,IAVRG,ISMTH)
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -59,12 +59,12 @@
       
 ! Dispose                  
 200 CALL DlgUninit( dlg )
-    end
+end
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     AVRGRP Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    Subroutine DoAVRGRPDialog(IDGRP,NIN,NDP, &
+Subroutine DoAVRGRPDialog(IDGRP,NIN,NDP, &
         IGO,NDO1,NPB,IT, &
         LWSO,LTPF,LBLOCK,TITLE)
     USE IFLOGM
@@ -168,6 +168,7 @@
     retlog=DlgSetSub(dlg,NPtsPerBlock,CheckBlockValues)
                   
 ! Show dialog box
+
     retint = DlgModal( dlg )
 
 ! Read entered values
@@ -234,9 +235,9 @@
     CALL DlgUninit( dlg )
       
     RETURN
-    end
+end
 
-    SUBROUTINE ChkWantBlockAvrgrp(dlg,id,callbacktype)
+SUBROUTINE ChkWantBlockAvrgrp(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -252,9 +253,9 @@
     retlog=DlgSet(dlg,NBlocks,LogVal,DLG_ENABLE)
     retlog=DlgSet(dlg,NPtsPerBlock,LogVal,DLG_ENABLE)
     return
-    end
+end
 
-    SUBROUTINE CheckBlockValues(dlg,id,callbacktype)
+SUBROUTINE CheckBlockValues(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -276,9 +277,9 @@
 100 FORMAT(I5)
     retlog=DlgSetChar(dlg,TotalPoints,LINE)
     return
-    end
+end
     
-    SUBROUTINE CheckNumRegroupAvrgrp(dlg,id,callbacktype)
+SUBROUTINE CheckNumRegroupAvrgrp(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -303,9 +304,9 @@
 40      retlog=DlgSet(dlg,EQV_EDTN(I),.FALSE.,DLG_ENABLE)
    
     return
-    end
+end
 
-    SUBROUTINE ChckTruncAvrgrp(dlg,id,callbacktype)
+SUBROUTINE ChckTruncAvrgrp(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -318,13 +319,13 @@
     retlog=DlgSet(dlg,NPoints,LogVal,DLG_ENABLE)
     retlog=DlgSet(dlg,IDC_STATIC9,LogVal,DLG_ENABLE)
     return
-    end
+end
 
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     BLPRO Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    Subroutine DoBLPRODialog(NB,NP,IGO,NDO)
+Subroutine DoBLPRODialog(NB,NP,IGO,NDO)
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -384,13 +385,13 @@
     CALL DlgUninit( dlg )
       
     RETURN
-    end
+end
       
       
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     INFOTEXT Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    Subroutine ShowInfoText(TCLASS,TEXT)
+Subroutine ShowInfoText(TCLASS,TEXT)
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -418,12 +419,12 @@
     CALL DlgUninit( dlg )
       
     RETURN
-    end
+end
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     CHDIFF Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    Subroutine DoCHDIFFDialog(ICHAN,NUMDIFF,LIST,IT)
+Subroutine DoCHDIFFDialog(ICHAN,NUMDIFF,LIST,IT)
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -526,13 +527,13 @@
     retlog=DlgSetChar(dlg,IDC_EDIT10,'')
 
 31  RETURN
-    END
+END
       
       
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     EXPORT Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    Subroutine DoEXPORTDialog(ITYPE,IT,SELECT,OUTFIL,CTEXT,MATLABBIN)
+Subroutine DoEXPORTDialog(ITYPE,IT,SELECT,OUTFIL,CTEXT,MATLABBIN)
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -643,13 +644,27 @@
     CALL DlgUninit( dlg )
       
 !100   FORMAT(I3,'–',I3,' => ',8A4)
-      RETURN
-      end
+    RETURN
+end
            
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     FILTER Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    Subroutine DoFILTERDialog(IFILT,IBAND,CF,NS,DB,IDEC,ISO)
+Subroutine DoFILTERDialog(IFILT,IBAND,CF,NS,DB,IDEC,ISO)
+! IFILT
+!   = 1 Chebychev 1
+!   = 2 Chebychev 2
+!   = 3 Butterworth
+! IBAND
+!   = 1 Low pass
+!   = 2 High pass
+!   = 3 Band pass
+!   = 4 Band stop
+! CF(4) = critical frequencies
+! NS = number of Butterworth sections
+! DB = Chebychev criterium in dB
+! IDEC = 1 decimate output
+! ISO = new sampling frequency
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -658,7 +673,7 @@
     INTEGER retint
     LOGICAL retlog
     TYPE (dialog) dlg
-    CHARACTER*20 LINE1 !,LINE2,LINE3,LINE4,LINE5,LINE6,LINE7
+    CHARACTER*20 LINE1
     CHARACTER*20 FT,FC
     DIMENSION CF(4)
     LOGICAL Ltemp
@@ -716,10 +731,14 @@
         retlog=DlgSetSub(dlg,BTPS(I),CheckFilterEntered)
 11      CONTINUE      
    
+    retlog=DlgSet(dlg,IDC_EDIT22,5,DLG_TEXTLENGTH)
+    WRITE(LINE1,*) ISO
+    isp1=1
+    do 12, while(LINE1(isp1:isp1).eq.' ')
+12     isp1=isp1+1
+    LINE1=LINE1(isp1:len_trim(LINE1))  
+    retlog=DlgSetChar(dlg,IDC_EDIT22,LINE1)
     retlog=DlgSetLog(dlg,IDC_CHECK1,IDEC.NE.0)
-    IF(ISO.NE.0)THEN
-        retlog=DlgSetChar(dlg,IDC_EDIT22,'')
-        ENDIF
       
     retlog=DlgSet(dlg,IDC_EDIT1,20,DLG_TEXTLENGTH)
     retlog=DlgSet(dlg,IDC_EDIT9,20,DLG_TEXTLENGTH)
@@ -779,6 +798,7 @@
     CALL CheckFilterEntered(dlg,0,0)
                               
 ! Show dialog box
+
     retint = DlgModal( dlg )
 
 ! Read entered values
@@ -826,9 +846,9 @@
     CALL DlgUninit( dlg )
       
     RETURN
-    end
+end
 
-    SUBROUTINE CheckDecimation(dlg,id,callbacktype)
+SUBROUTINE CheckDecimation(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -845,9 +865,9 @@
         retlog=DlgSet(dlg,IDC_EDIT22,.FALSE.,DLG_ENABLE)
     ENDIF
     return
-    end
+end
 
-    SUBROUTINE CheckFilterEntered(dlg,id,callbacktype)
+SUBROUTINE CheckFilterEntered(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -899,9 +919,9 @@
 
 31  retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
     return
-    end
+end
 
-    SUBROUTINE CheckFilterLines(dlg,id,callbacktype)
+SUBROUTINE CheckFilterLines(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -951,13 +971,13 @@
 
 31  retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
     return
-    end
+end
 
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     HIST Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      Subroutine DoHISTDialog(NB,S1)
+Subroutine DoHISTDialog(NB,S1)
       USE IFLOGM
       use ifport
       INCLUDE 'RESOURCE.FD'
@@ -1006,33 +1026,33 @@
       CALL DlgUninit( dlg )
       
       RETURN
-      end
+end
 
-      SUBROUTINE CheckHistEntered(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-      character*80 LINE
-      logical LogVal
+SUBROUTINE CheckHistEntered(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    character*80 LINE
+    logical LogVal
       
-      retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
-      read(LINE,*,end=31,err=31)N
-      retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
-      read(LINE,*,end=31,err=31)V
-      retlog=DlgSet(dlg,IDOK,.TRUE.,DLG_ENABLE)
-      return
+    retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
+    read(LINE,*,end=31,err=31)N
+    retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
+    read(LINE,*,end=31,err=31)V
+    retlog=DlgSet(dlg,IDOK,.TRUE.,DLG_ENABLE)
+    return
 
-31    retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
-      return
-      end
+31  retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
+    return
+end
 
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     XHIST Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    Subroutine DoXHISTDialog(IDGRP,NIN,IRCOD,NLEVL,NBIN,NVAR,IT,LWSO, &
+Subroutine DoXHISTDialog(IDGRP,NIN,IRCOD,NLEVL,NBIN,NVAR,IT,LWSO, &
         INNS,NLIST)
     USE IFLOGM
     use ifport
@@ -1176,179 +1196,179 @@
     CALL DlgUninit( dlg )
       
     RETURN
-    end
+end
 
-      SUBROUTINE AddXHISTVARButtonPress(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-      character*255 LINE
-      logical retlog
+SUBROUTINE AddXHISTVARButtonPress(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    character*255 LINE
+    logical retlog
 
-      retlog=DlgGetChar(dlg,IDC_EDIT41,LINE)
-      read(LINE,*,end=31,err=31)K1
-      retlog=DlgGetChar(dlg,IDC_EDIT42,LINE)
-      read(LINE,*,end=31,err=31)K2
+    retlog=DlgGetChar(dlg,IDC_EDIT41,LINE)
+    read(LINE,*,end=31,err=31)K1
+    retlog=DlgGetChar(dlg,IDC_EDIT42,LINE)
+    read(LINE,*,end=31,err=31)K2
 
-      write(LINE,100)K1,K2
-100   FORMAT(I6,', ',I6)
+    write(LINE,100)K1,K2
+100 FORMAT(I6,', ',I6)
 
-      retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
+    retlog=DlgSetChar(dlg,IDC_LIST2,LINE,DLG_ADDSTRING)
 
-      retlog=DlgSetChar(dlg,IDC_EDIT41,'')
-      retlog=DlgSetChar(dlg,IDC_EDIT42,'')
+    retlog=DlgSetChar(dlg,IDC_EDIT41,'')
+    retlog=DlgSetChar(dlg,IDC_EDIT42,'')
 
-31    RETURN
-      END
+31  RETURN
+END
 
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     XHIST2 Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      Subroutine DoXHIST2Dialog(AMI,AMX,ICHK,II)
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-	INCLUDE 'MULTAR.INC'
-      INCLUDE 'MAX.INC'
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
-	CHARACTER*128 LINE
-	CHARACTER*128 GOUT
-	LOGICAL Ltemp
-	EXTERNAL ChechXHIST2ValidValues
+Subroutine DoXHIST2Dialog(AMI,AMX,ICHK,II)
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INCLUDE 'MULTAR.INC'
+    INCLUDE 'MAX.INC'
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
+    CHARACTER*128 LINE
+    CHARACTER*128 GOUT
+    LOGICAL Ltemp
+    EXTERNAL ChechXHIST2ValidValues
 
 ! Create dialog
-      IF ( .not. DlgInit( XHIST2_DIALOG, dlg ) ) THEN
-          WRITE (*,*) "Error: XHIST2_DIALOG not found"
-          return
-      ENDif
+    IF ( .not. DlgInit( XHIST2_DIALOG, dlg ) ) THEN
+        WRITE (*,*) "Error: XHIST2_DIALOG not found"
+        return
+    ENDif
 
 ! Set defaults
-      retlog=DlgSet(dlg,IDC_EDIT1,24,DLG_TEXTLENGTH)
-      retlog=DlgSet(dlg,IDC_EDIT9,24,DLG_TEXTLENGTH)
+    retlog=DlgSet(dlg,IDC_EDIT1,24,DLG_TEXTLENGTH)
+    retlog=DlgSet(dlg,IDC_EDIT9,24,DLG_TEXTLENGTH)
       
-      WRITE(LINE,2091)AMI
-      isp1=1
-      do 10, while(line(isp1:isp1).eq.' ')
-10    isp1=isp1+1
-      line=line(isp1:len_trim(line))  
-      retlog=DlgSetChar(dlg,IDC_EDIT1,LINE)
-      WRITE(LINE,2091)AMX
-      isp1=1
-      do 11, while(line(isp1:isp1).eq.' ')
-11    isp1=isp1+1
-      line=line(isp1:len_trim(line))  
-      retlog=DlgSetChar(dlg,IDC_EDIT9,LINE)
-      WRITE(LINE,2092)ICHK,II
-      retlog=DlgSet(dlg,IDC_STATIC1,LINE,DLG_TITLE)
+    WRITE(LINE,2091)AMI
+    isp1=1
+    do 10, while(line(isp1:isp1).eq.' ')
+10      isp1=isp1+1
+    line=line(isp1:len_trim(line))  
+    retlog=DlgSetChar(dlg,IDC_EDIT1,LINE)
+    WRITE(LINE,2091)AMX
+    isp1=1
+    do 11, while(line(isp1:isp1).eq.' ')
+11      isp1=isp1+1
+    line=line(isp1:len_trim(line))  
+    retlog=DlgSetChar(dlg,IDC_EDIT9,LINE)
+    WRITE(LINE,2092)ICHK,II
+    retlog=DlgSet(dlg,IDC_STATIC1,LINE,DLG_TITLE)
 2091  FORMAT(E12.4)
 2092  FORMAT('CHANNEL ',I2,' VAR ',I2,'- ENTER MIN/MAX VALUES')
 
-      retlog=DlgSetSub(dlg,IDC_EDIT1,ChechXHIST2ValidValues)
-      retlog=DlgSetSub(dlg,IDC_EDIT9,ChechXHIST2ValidValues)
+    retlog=DlgSetSub(dlg,IDC_EDIT1,ChechXHIST2ValidValues)
+    retlog=DlgSetSub(dlg,IDC_EDIT9,ChechXHIST2ValidValues)
                           
 ! Show dialog box
-      retint = DlgModal( dlg )
+    retint = DlgModal( dlg )
 
 ! Read entered values
-      retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
-      read(line,*,err=31,end=31)AMI
-  31  retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
-      read(line,*,err=32,end=32)AMX
+    retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
+    read(line,*,err=31,end=31)AMI
+31  retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
+    read(line,*,err=32,end=32)AMX
       
-  32  CONTINUE
+32  CONTINUE
       
 ! Dispose                  
-      CALL DlgUninit( dlg )
+    CALL DlgUninit( dlg )
       
-      RETURN
-      end
+    RETURN
+end
       
-      SUBROUTINE ChechXHIST2ValidValues(dlg,id,callbacktype)
-      use iflogm
-      include 'resource.fd'
-      type (dialog) dlg
-      integer id
-      integer callbacktype,retval
-      character*80 LINE
-      logical LogVal
+SUBROUTINE ChechXHIST2ValidValues(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    character*80 LINE
+    logical LogVal
       
-      retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
-      read(LINE,*,end=31,err=31)A
-      retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
-      read(LINE,*,end=31,err=31)A
-      retlog=DlgSet(dlg,IDOK,.TRUE.,DLG_ENABLE)
-      return
+    retlog=DlgGetChar(dlg,IDC_EDIT1,LINE)
+    read(LINE,*,end=31,err=31)A
+    retlog=DlgGetChar(dlg,IDC_EDIT9,LINE)
+    read(LINE,*,end=31,err=31)A
+    retlog=DlgSet(dlg,IDOK,.TRUE.,DLG_ENABLE)
+    return
 
-31    retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
-      return
-      end
+31  retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
+    return
+end
 
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     PRINT Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      Subroutine DoPRINTDialog(IT)
-      USE IFLOGM
-      use ifport
-      INCLUDE 'RESOURCE.FD'
-	INCLUDE 'MULTAR.INC'
-      INCLUDE 'MAX.INC'
-      INTEGER retint
-      LOGICAL retlog
-      TYPE (dialog) dlg
-	LOGICAL Ltemp
+Subroutine DoPRINTDialog(IT)
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INCLUDE 'MULTAR.INC'
+    INCLUDE 'MAX.INC'
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
+    LOGICAL Ltemp
 
 ! Create dialog
-      IF ( .not. DlgInit( PRINT_DIALOG, dlg ) ) THEN
-          WRITE (*,*) "Error: PRINT_DIALOG not found"
-          return
-      ENDif
+    IF ( .not. DlgInit( PRINT_DIALOG, dlg ) ) THEN
+        WRITE (*,*) "Error: PRINT_DIALOG not found"
+        return
+    ENDif
 
 ! Set defaults
-      retlog=DlgSetLog(dlg,IDC_RADIO3,.TRUE.)   
-      retlog=DlgSetLog(dlg,IDC_RADIO4,.FALSE.)  
-      retlog=DlgSetLog(dlg,IDC_RADIO5,.FALSE.)  
-      retlog=DlgSetLog(dlg,IDC_RADIO6,.FALSE.)  
-      retlog=DlgSetLog(dlg,IDC_RADIO7,.FALSE.)  
+    retlog=DlgSetLog(dlg,IDC_RADIO3,.TRUE.)   
+    retlog=DlgSetLog(dlg,IDC_RADIO4,.FALSE.)  
+    retlog=DlgSetLog(dlg,IDC_RADIO5,.FALSE.)  
+    retlog=DlgSetLog(dlg,IDC_RADIO6,.FALSE.)  
+    retlog=DlgSetLog(dlg,IDC_RADIO7,.FALSE.)  
                   
 ! Show dialog box
-      retint = DlgModal( dlg )
+    retint = DlgModal( dlg )
 
 ! Read entered values
-      IT=0
-      retlog=DlgGetLog(dlg,IDC_RADIO4,Ltemp)
-      if(Ltemp)then
-        IT=1
-      else
-        retlog=DlgGetLog(dlg,IDC_RADIO5,Ltemp)
+    IT=0
+    retlog=DlgGetLog(dlg,IDC_RADIO4,Ltemp)
+    if(Ltemp)then
+    IT=1
+    else
+    retlog=DlgGetLog(dlg,IDC_RADIO5,Ltemp)
+    if(Ltemp)then
+        IT=2
+    else
+        retlog=DlgGetLog(dlg,IDC_RADIO6,Ltemp)
         if(Ltemp)then
-            IT=2
+            IT=3
         else
-            retlog=DlgGetLog(dlg,IDC_RADIO6,Ltemp)
-            if(Ltemp)then
-                IT=3
-            else
-                retlog=DlgGetLog(dlg,IDC_RADIO7,Ltemp)
-                if(Ltemp)IT=4
-            endif
+            retlog=DlgGetLog(dlg,IDC_RADIO7,Ltemp)
+            if(Ltemp)IT=4
         endif
-      endif
+    endif
+    endif
 
 ! Dispose                  
-      CALL DlgUninit( dlg )
+    CALL DlgUninit( dlg )
       
-      RETURN
-      end
+    RETURN
+end
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     PTPASS Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    Subroutine DoPTPASSDialog(ITF,IGRP,IGN,NS)
+Subroutine DoPTPASSDialog(ITF,IGRP,IGN,NS)
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -1458,9 +1478,9 @@
     CALL DlgUninit( dlg )
       
     RETURN
-    end
+end
 
-    SUBROUTINE CheckPassAllPTPASS(dlg,id,callbacktype)
+SUBROUTINE CheckPassAllPTPASS(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -1482,9 +1502,9 @@
         retlog=DlgSet(dlg,IDC_EDIT33,.TRUE.,DLG_ENABLE)
     ENDIF
     return
-    end
+end
 
-    SUBROUTINE CheckGrpMovPTPASS(dlg,id,callbacktype)
+SUBROUTINE CheckGrpMovPTPASS(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -1508,4 +1528,4 @@
 11          retlog=DlgSet(dlg,EQV_EDTN(I),.FALSE.,DLG_ENABLE)
     ENDIF
     return
-    end
+end

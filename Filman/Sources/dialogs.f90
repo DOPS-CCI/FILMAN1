@@ -1,14 +1,16 @@
-!DEC$ FREEFORM 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !  InputFileInfo
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-    subroutine DoInputFileInfoDialog(IANS,IYES,INO)
+subroutine DoInputFileInfoDialog(IANS,IYES,INO)
     USE IFLOGM
     use ifport
+    USE User32
     include 'flib.fd'
     INCLUDE 'RESOURCE.FD'
     INCLUDE 'MAX.INC'
     DIMENSION IHDR1(116)
+    INTEGER(HANDLE) :: hFrame, hInst, hMDI, hTop, hand
+    COMMON /WINHANDLES/ hFrame, hMDI, hTop, hInst
     COMMON/FLDES/ NG,NA,NC,ND,NF,NP,NR,IS,IBUF(IOMAX)
     COMMON/FLDESO/ NGO,NAO,NCO,NDO,NFO,NLO,NRO,ISO,IBUFO(IOMAX)
     CHARACTER*(6*72) CIBUFO
@@ -17,6 +19,7 @@
 	character*1024 writbuf
     INTEGER retint
     LOGICAL retlog
+    
     TYPE (dialog) dlg
     character*(6) dtyp(5)
     character*1 IANS,IYES,INO
@@ -30,7 +33,8 @@
         WRITE (*,*) "Error: INPUT_FILE_INFO_DIALOG not found"
         return
     ENDif
-      
+    
+    hand = dlg%hWnd
     do 11,iline=1,6
         WRITE(writbuf(((iline-1)*73+1):(iline*73-1)),920) &
             (IBUF(I),I=(iline-1)*18+1,iline*18)
@@ -74,9 +78,9 @@
     
     CALL DlgUninit( dlg )
     
-    end subroutine DoInputFileInfoDialog
+end subroutine DoInputFileInfoDialog
       
-    SUBROUTINE LngthControl(dlg,id,callbacktype)
+SUBROUTINE LngthControl(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -88,9 +92,9 @@
     retlog=DlgSet(dlg,IDC_EDIT11,72,DLG_TEXTLENGTH)
     retlog=DlgSet(dlg,IDC_EDIT13,72,DLG_TEXTLENGTH)
     return
-    end
+end
 
-    SUBROUTINE CpyInputLine(dlg,id,callbacktype)
+SUBROUTINE CpyInputLine(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg
@@ -112,7 +116,7 @@
 920 FORMAT(18A4)
 921 FORMAT(A1)
     return
-    end
+end
       
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !  RangeSelect
@@ -1644,4 +1648,71 @@ endif
     CALL DlgUninit( dlg )
       
     end
-    
+
+!****************************************************************************
+!
+!  FUNCTION: CenterWindow (HWND, HWND)
+!
+!  PURPOSE:  Center one window over another
+!
+!  COMMENTS: Dialog boxes take on the screen position that they were designed
+!            at, which is not always appropriate. Centering the dialog over a
+!            particular window usually results in a better position.
+!
+!****************************************************************************
+
+subroutine CenterWindow (hwndChild, hwndParent)
+
+    use user32
+    use gdi32 
+
+    implicit none
+
+    integer(HANDLE)         hwndChild, hwndParent
+
+    include 'resource.fd'
+
+    ! Variables
+    type (T_RECT)   rChild, rParent
+    integer         wChild, hChild, wParent, hParent
+    integer         wScreen, hScreen, xNew, yNew
+    integer(HANDLE)         hdc
+    integer*4       retval
+
+    ! Get the Height and Width of the child window
+       retval = GetWindowRect (hwndChild, rChild)
+       wChild = rChild.right - rChild.left
+       hChild = rChild.bottom - rChild.top
+
+    ! Get the Height and Width of the parent window
+       retval = GetWindowRect (hwndParent, rParent)
+       wParent = rParent.right - rParent.left
+       hParent = rParent.bottom - rParent.top
+
+    ! Get the display limits
+       hdc = GetDC (null)
+       wScreen = GetDeviceCaps (hdc, HORZRES)
+       hScreen = GetDeviceCaps (hdc, VERTRES)
+       retval = ReleaseDC (hwndChild, hdc)
+
+    ! Calculate new X position, then adjust for screen
+       xNew = rParent.left + ((wParent - wChild) /2)
+       if (xNew .LT. 0) then
+          xNew = 0
+       else if ((xNew+wChild) .GT. wScreen) then
+          xNew = wScreen - wChild
+       end if
+
+    ! Calculate new Y position, then adjust for screen
+       yNew = rParent.top  + ((hParent - hChild) /2)
+       if (yNew .LT. 0) then
+          yNew = 0
+       else if ((yNew+hChild) .GT. hScreen) then
+          yNew = hScreen - hChild
+       end if
+
+    ! Set it, and return
+       retval = SetWindowPos (hwndChild, NULL, xNew, yNew, 0, 0,      &
+                      IOR(SWP_NOSIZE , SWP_NOZORDER))
+end  
+

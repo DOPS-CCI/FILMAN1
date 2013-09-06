@@ -181,8 +181,8 @@ C      retlog=XGetOpenFile(Dlg%hWnd,sDir,nFiles,sFiles,
       USE MWINPOS
       INCLUDE 'MAX.INC'
 
-      TYPE(Dialog):: Dlg
-      INTEGER::      ID, iEvent
+      TYPE(Dialog) :: Dlg
+      INTEGER :: ID, iEvent
       TYPE(X_WINDOW) xWnd
       INTEGER iX,iY
       LOGICAL retlog

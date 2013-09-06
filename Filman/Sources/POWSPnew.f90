@@ -24,6 +24,7 @@ SUBROUTINE POWSPnew
 
 10  NFO=3
     CURPROCNAME='POWSP'
+    WRITE(*,*) CURPROCNAME
     J=6*NGO+109
     DO 12 I=1,NCO !COPY CHANNEL LABELS TO OUTPUT BUFFER
         L=J+5
@@ -45,6 +46,8 @@ SUBROUTINE POWSPnew
     DF=FLOAT(IS)/FLOAT(NXFM)
     IF(FMAX.EQ.0.0 .OR. FMAX.GT.FNYQ) FMAX=FNYQ
     NDO=FMAX/DF + 1
+    IF(FMAX.NE.FNYQ) WRITE(*,'(A,F6.2,A)') " Frequency limit = ", FMAX, "Hz"
+    IF(IT.EQ.2) WRITE(*,*) "With Hann filtering"
     ISO=FMAX  ! NEEDED FOR NEW PLOT ROUTINE
     SC = 2.0/FLOAT(NXFM) ! Scaling factors
     SC2 = SC/2.0
@@ -70,7 +73,11 @@ SUBROUTINE POWSPnew
 30      J=J+2
 !now fix DC and Nyquist f
     WORK(1)=(WORK(1)*SC2)**2 !DC is real only
-    WORK(NDO)=(WORK(2*NDO-1)*SC2)**2 !Nyquist, real only
+    IF(MOD(NXFM,2).EQ.0) THEN
+        WORK(NDO)=(WORK(2*NDO-1)*SC2)**2 !Even # of bins, @ Nyquist f, real only
+    ELSE
+        WORK(NDO)=(WORK(2*NDO-1)*SC)**2 + (WORK(2*NDO)*SC)**2 !Odd # bins, complex number 1/2 bin short of Nyq f
+    ENDIF
     GOTO (40,31),IT
 31  TMP=WORK(1) ! Do Hann taper in frequency domain
     DO 35 I=2,NDO-1

@@ -19,10 +19,12 @@ SUBROUTINE XFORMnew
     IF(IFLAG1) 10,20,50
 
 10  CURPROCNAME='XFORM'
-    IF(NF .NE. 3 .OR. NF .NE. 5) THEN
+    IF(NF .NE. 3 .AND. NF .NE. 5) THEN
         CALL ShowInfoText('Error','XFORM must have real input only')
+        KNT = -1
         RETURN
     ENDIF
+    WRITE(*,*) CURPROCNAME
     NFO = 4
 
 ! MOVE CHANNEL LABELS

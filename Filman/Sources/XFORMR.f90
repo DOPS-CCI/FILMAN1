@@ -2,7 +2,9 @@
 ! Performs reverse FFT on input dataset; input must be complex
 ! (NF=4); it is assumed that the first and last points have only
 ! real parts  (the form of output of XFORM) and data is in
-! complex-conjugate even format => has real-only backwards transform
+! complex-conjugate even format => has real-only backwards transform;
+! note that this only results in the original signal when the number
+! of points is even
 
 SUBROUTINE XFORMR
     Use MKL_DFTI
@@ -24,10 +26,12 @@ SUBROUTINE XFORMR
     IF(IFLAG1) 10,20,50
 
 10  CURPROCNAME='XFORMR'
-    IF(NF .NE. 4 .OR. NF .NE. 6) THEN
+    IF(NF .NE. 4 .AND. NF .NE. 6) THEN
         CALL ShowInfoText('Error','XFORMR must have complex input only')
+        KNT = -1
         RETURN
     ENDIF
+    WRITE(*,*) CURPROCNAME
     NFO = 3
 
 ! MOVE CHANNEL LABELS
@@ -42,7 +46,7 @@ SUBROUTINE XFORMR
 12  J=J+6
     
     NP = NDO
-    NP2 = 2 * (NDO - 1)
+    NP2 = 2 * (NDO - 1) !This only works if original number of points is even
     ! Create FFT descriptor
     Status = DftiCreateDescriptor(FFTDescriptor_Handle, DFTI_SINGLE, DFTI_REAL, 1, NP2)
     Status = DftiSetValue(FFTDescriptor_Handle, DFTI_PACKED_FORMAT, DFTI_CCS_FORMAT)
