@@ -49,9 +49,9 @@
 		<File RelativePath=".\Sources\ADVSAVF.FOR"/>
 		<File RelativePath=".\Sources\ARPLOT.FOR"/>
 		<File RelativePath=".\Sources\ARSPECTT.FOR"/>
-		<File RelativePath=".\Sources\AVRALL.FOR"/>
-		<File RelativePath=".\Sources\AVRGRP.FOR"/>
-		<File RelativePath=".\Sources\BANDS.FOR"/>
+		<File RelativePath=".\Sources\AVRALL.f90"/>
+		<File RelativePath=".\Sources\AVRGRP.f90"/>
+		<File RelativePath=".\Sources\BANDS.f90"/>
 		<File RelativePath=".\Sources\BLPRO.FOR"/>
 		<File RelativePath=".\Sources\BOTFILE.FOR"/>
 		<File RelativePath=".\Sources\BURG.FOR"/>
@@ -85,7 +85,7 @@
 		<File RelativePath=".\Sources\FFTPS2.FOR"/>
 		<File RelativePath=".\Sources\FFTPSP.FOR"/>
 		<File RelativePath=".\Sources\FILMAN.f90"/>
-		<File RelativePath=".\Sources\FILMEN.FOR"/>
+		<File RelativePath=".\Sources\FILMEN.f90"/>
 		<File RelativePath=".\Sources\FILTER.f90"/>
 		<File RelativePath=".\Sources\FILTSUBS.FOR"/>
 		<File RelativePath=".\Sources\FNDCONJGS.FOR"/>

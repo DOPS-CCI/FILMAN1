@@ -1340,6 +1340,12 @@ END
 !     BANDS/PEAKEX Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 Subroutine DoBANDSDialog(ITYPE,IT,NB,WPPSF)
+! ITYPE = 1 for time series, = 2 for frequency series
+! IT = 0 for no transform, =1 SQRT, = 2 LN, = 3 ASIN, = 4 ABS
+! NB = number of bands
+! WPPSF = .true. for creation of SYSTAT file; this is only output currently
+! Also, SELGVS common SELGRPS contains the band information: SELGRPS(I) = first
+!  point in band I,  SELGRPS(I+10) = last point in band I
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -1373,7 +1379,8 @@ Subroutine DoBANDSDialog(ITYPE,IT,NB,WPPSF)
         return
     ENDif
     GOTO 1
-    ENTRY DoPEAKEXDialog(ITYPE,IT,NB,WPPSF)
+
+ENTRY DoPEAKEXDialog(ITYPE,IT,NB,WPPSF)
     IF ( .not. DlgInit( PEAKEX_DIALOG, dlg ) ) THEN
         WRITE (*,*) "Error: PEAKEX_DIALOG not found"
         return
@@ -1385,10 +1392,10 @@ Subroutine DoBANDSDialog(ITYPE,IT,NB,WPPSF)
     retlog=DlgSetLog(dlg,IDC_RADIO8,.FALSE.)  
     retlog=DlgSetLog(dlg,IDC_RADIO6,.FALSE.)  
     retlog=DlgSetLog(dlg,IDC_RADIO7,.FALSE.)
-    IF(IT.GE.0.AND.IT.LE.4)retlog=DlgSetLog(dlg,ITRB(IT),.TRUE.)
+    IF(IT.GE.0.AND.IT.LE.4) retlog=DlgSetLog(dlg,ITRB(IT),.TRUE.)
 
-    retlog=DlgSetLog(dlg,IDC_RADIO21,.TRUE.)
-    IF(ITYPE.EQ.2)retlog=DlgSetLog(dlg,IDC_RADIO21,.TRUE.)
+    retlog=DlgSetLog(dlg,IDC_RADIO18,ITYPE.EQ.1)
+    retlog=DlgSetLog(dlg,IDC_RADIO21,ITYPE.EQ.2)
 
     DO 10,I=1,NB
         retlog=DlgSet(dlg,EFB_EDTN(I),24,DLG_TEXTLENGTH)
@@ -1410,7 +1417,7 @@ Subroutine DoBANDSDialog(ITYPE,IT,NB,WPPSF)
 
     IF(NB.EQ.0)retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
       
-    retlog=DlgSetLog(dlg,IDC_CHECK1,.TRUE.)  
+    retlog=DlgSetLog(dlg,IDC_CHECK1,.TRUE.)
                   
 ! Show dialog box
     retint = DlgModal( dlg )
@@ -1424,7 +1431,7 @@ Subroutine DoBANDSDialog(ITYPE,IT,NB,WPPSF)
         NB=NB+1
 50      CONTINUE      
 
-51  retlog=DlgGetLog(dlg,IDC_RADIO5,Ltemp)
+51  retlog=DlgGetLog(dlg,IDC_RADIO5,Ltemp) ! decode Xform buttons
     if(Ltemp)then
     IT=1
     else
@@ -1442,8 +1449,9 @@ Subroutine DoBANDSDialog(ITYPE,IT,NB,WPPSF)
         endif
     endif
 
+    ITYPE = 1
     retlog=DlgGetLog(dlg,IDC_RADIO21,Ltemp)
-    if(Ltemp)ITYPE=2
+    if(Ltemp) ITYPE = 2
 
     retlog=DlgGetLog(dlg,IDC_CHECK1,WPPSF)
       

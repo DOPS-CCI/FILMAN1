@@ -2,7 +2,15 @@
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     AVRALLDialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-Subroutine DoAVRALLDialog(IDTYP,IXFORM,IAVRG,ISMTH)
+Subroutine DoAVRALLDialog(IDTRND,IXFORM,IAVRG,ISMTH)
+! IDTRND = 1 => detrend raw data
+! IXFORM = 1 => SQRT transform
+! IXFORM = 2 => LN transform
+! IXFORM = 3 => ASIN transform
+! IXFORM = 4 => ABS transform
+! IAVRG = 1 => +/- averaging
+! IAVRG = 2 => ABBA averaging
+! ISMTH = 1 => 9-point smoothing
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -19,8 +27,6 @@ Subroutine DoAVRALLDialog(IDTYP,IXFORM,IAVRG,ISMTH)
     ENDif
 
 ! Set defaults
-    retlog=DlgSetLog(dlg,IDC_RADIO1,.TRUE.)   
-    retlog=DlgSetLog(dlg,IDC_RADIO2,.FALSE.)  
     retlog=DlgSetLog(dlg,IDC_RADIO3,.TRUE.)
     retlog=DlgSetLog(dlg,IDC_RADIO4,.FALSE.)  
     retlog=DlgSetLog(dlg,IDC_RADIO5,.FALSE.)  
@@ -36,9 +42,9 @@ Subroutine DoAVRALLDialog(IDTYP,IXFORM,IAVRG,ISMTH)
     retint = DlgModal( dlg )
 
 ! Read entered values
-    IDTYP=1
-    retlog=DlgGetLog(dlg,IDC_RADIO2,Ltemp)
-    if(Ltemp)IDTYP=2
+    IDTRND=0
+    retlog=DlgGetLog(dlg,Detrend,Ltemp)
+    if(Ltemp)IDTRND=1
     IXFORM=0
     retlog=DlgGetLog(dlg,IDC_RADIO4,Ltemp)
     if(Ltemp)IXFORM=1
@@ -58,15 +64,28 @@ Subroutine DoAVRALLDialog(IDTYP,IXFORM,IAVRG,ISMTH)
     if(Ltemp)ISMTH=1
       
 ! Dispose                  
-200 CALL DlgUninit( dlg )
+    CALL DlgUninit( dlg )
 end
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     AVRGRP Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-Subroutine DoAVRGRPDialog(IDGRP,NIN,NDP, &
-        IGO,NDO1,NPB,IT, &
+Subroutine DoAVRGRPDialog(IDGRP,NIN,NDP,IGO,NDO1,NPB,IT, &
         LWSO,LTPF,LBLOCK,TITLE)
+! IDGRP = GV number on which to base averaging
+! NIN = maximum value of GV IDGRP
+! NDP (see LTPF)
+! IGO = 1 for time series, = 2 for power spectrum, = 3 for other
+! LBLOCK = .TRUE. if blocking is to be implemented
+! NDO1 - number of blocks
+! NPB = number of points in each block
+! IT = 0 for no transform, = 1 for SQRT, = 2 for LN, = 3 for ASIN, = 4 for ABS
+! LWSO = .TRUE. for standard output file of results (print file)
+! LTPF = .TRUE. to truncate output to NDP points
+! TITLE = title of print out
+! Also on exit, LINESEL() contains the "remapping" vector for GV values; entry
+!   LINSEL(I) contains the new GV value that I is to be mapped into; if LINSEL(I) 
+!   is empty/blank then the GV value I will be skipped in the analysis
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -111,7 +130,7 @@ Subroutine DoAVRGRPDialog(IDGRP,NIN,NDP, &
     retlog=DlgSetLog(dlg,IDC_RADIO6,.FALSE.)  
     retlog=DlgSetLog(dlg,IDC_RADIO7,.FALSE.)  
 
-    DO 10,I=1,20
+    DO 10 I=1,20
         LINESEL(I)=''
         retlog=DlgSet(dlg,EQV_EDTN(I),24,DLG_TEXTLENGTH)
         retlog=DlgSetChar(dlg,EQV_EDTN(I),LINESEL(I))
@@ -176,10 +195,10 @@ Subroutine DoAVRGRPDialog(IDGRP,NIN,NDP, &
     NIN=0
     retlog=DlgGetChar(dlg,IDC_EDIT1,LINE1)
     read(line1,*,err=31,end=31)IDGRP
-31  retlog=DlgGetChar(dlg,IDC_EDIT34,LINE1)
+31  retlog=DlgGetChar(dlg,NLevels,LINE1)
     read(line1,*,err=32,end=32)NIN
       
-32  DO 30,I=1,20
+32  DO 30 I=1,20
 30      retlog=DlgGetChar(dlg,EQV_EDTN(I),LINESEL(I))
       
     IGO=1
@@ -188,7 +207,7 @@ Subroutine DoAVRGRPDialog(IDGRP,NIN,NDP, &
     retlog=DlgGetLog(dlg,block,LBLOCK)
     if(LBLOCK)THEN
         retlog=DlgGetChar(dlg,NBlocks,LINE1)
-        read(line1,*,err=34,end=34)NDO1
+        read(line1,*,err=34,end=34) NDO1
 34      retlog=DlgGetChar(dlg,NPtsPerBlock,LINE1)
         read(line1,*,err=35,end=35)NPB
 35      IGO=3
@@ -286,6 +305,7 @@ SUBROUTINE CheckNumRegroupAvrgrp(dlg,id,callbacktype)
     integer id
     integer callbacktype,retval
     character*255 LINE
+    CHARACTER*8 V
     logical LogVal
     INTEGER EQV_EDTN(20)
     DATA EQV_EDTN /IDC_EDIT2,IDC_EDIT3,IDC_EDIT4,IDC_EDIT5, &
@@ -296,11 +316,18 @@ SUBROUTINE CheckNumRegroupAvrgrp(dlg,id,callbacktype)
       
     retlog=DlgGetChar(dlg,NLevels,LINE)
     IN=0
-    read(LINE,*,end=31,err=31)IN
+    read(LINE,*,end=31,err=31) IN
     IN=MAX0(MIN0(IN,20),0)
-31  do 30,I=1,IN
+31  DO 30 I=1,IN
+        WRITE(V,'(I5)') I
+        isp1=1
+        DO 20, while(V(isp1:isp1).eq.' ')
+20          isp1=isp1+1
+        V=V(isp1:len_trim(V))  
+        retlog=DlgSetChar(dlg,EQV_EDTN(I),V)
 30      retlog=DlgSet(dlg,EQV_EDTN(I),.TRUE.,DLG_ENABLE)
-    do 40,I=IN+1,20
+    DO 40 I=IN+1,20
+        retlog=DlgSetChar(dlg,EQV_EDTN(I),'')
 40      retlog=DlgSet(dlg,EQV_EDTN(I),.FALSE.,DLG_ENABLE)
    
     return
@@ -320,7 +347,6 @@ SUBROUTINE ChckTruncAvrgrp(dlg,id,callbacktype)
     retlog=DlgSet(dlg,IDC_STATIC9,LogVal,DLG_ENABLE)
     return
 end
-
 
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     BLPRO Dialog

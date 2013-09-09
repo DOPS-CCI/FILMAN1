@@ -436,6 +436,7 @@
       integer, parameter :: MANSEL_DIALOG = 160
       integer, parameter :: IDC_CHECK3 = 1002
       integer, parameter :: IDC_CHECK4 = 1003
+      integer, parameter :: Detrend = 1134
       integer, parameter :: RANGE_SELECT_DIALOG = 106
       integer, parameter :: IDC_CHECK5 = 1004
       integer, parameter :: BLPRO_DIALOG = 127

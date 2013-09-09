@@ -423,6 +423,7 @@
 #define IDC_EDIT98                      1133
 #define Reverse                         1133
 #define IDC_EDIT99                      1134
+#define Detrend                         1134
 #define IDC_EDIT100                     1135
 #define IDC_EDIT101                     1136
 #define IDC_EDIT102                     1137
@@ -450,7 +451,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        167
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1134
+#define _APS_NEXT_CONTROL_VALUE         1135
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

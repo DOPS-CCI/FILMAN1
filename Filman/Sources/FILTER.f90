@@ -30,10 +30,17 @@ SUBROUTINE FILTER
 	EQUIVALENCE (WORK,IBUFO(121)),(WORK,WORK0)
 	EQUIVALENCE (CF1,CF(1)),(CF2,CF(2)),(CF3,CF(3)),(CF4,CF(4))
 	CHARACTER*255 ALINE
+    CHARACTER*10 BLINE
 	COMMON /CPN/ CURPROCNAME
 	CHARACTER*10 CURPROCNAME
 	LOGICAL AcceptFilterDialog
 	COMMON/DEV/ITI,ILP,IGRAPH
+! Filter dialog descriptors
+    INTEGER FTPS(3)
+    INTEGER BTPS(4)
+    LOGICAL EV(3,4,5)
+    INTEGER EDTLNS(5)
+    COMMON /FLTEDV/ EDTLNS,EV,FTPS,BTPS
 
 	IF(IFLAG1) 10,30,325
 
@@ -105,31 +112,46 @@ SUBROUTINE FILTER
 	NDO=NDO/IOFF
     SELECT CASE(IFILT)
         CASE(1)
-            ALINE(1:17) = "Chebychev type 1 "
-            K=18
+            ALINE(1:18) = " Chebychev type 1 "
+            K=19
         CASE(2)
-            ALINE(1:17) = "Chebychev type 2 "
-            K=18
+            ALINE(1:18) = " Chebychev type 2 "
+            K=19
         CASE(3)
-            ALINE(1:12) = "Butterworth "
-            K=13
+            ALINE(1:13) = " Butterworth "
+            K=14
     END SELECT
     SELECT CASE(IBAND)
         CASE(1)
             ALINE(K:K+7) = "low pass"
-            K = K+7
+            K = K + 7
         CASE(2)
             ALINE(K:K+8) = "high pass"
-            K = K+8
+            K = K + 8
         CASE(3)
             ALINE(K:K+8) = "band pass"
-            K = K+8
+            K = K + 8
         CASE(4)
             ALINE(K:K+8) = "band stop"
-            K = K+8
+            K = K + 8
     END SELECT
     WRITE(*,'(A,A)') ALINE(1:K), " filter"
-    IF(IOFF.GT.1) WRITE(*,'(A,I2)') "Decimate by ", IOFF
+    ALINE = "Parameters:"
+    K=12
+    DO I=1,4
+        IF(EV(IFILT,IBAND,I)) THEN
+            WRITE(BLINE,'(1X,F9.3)') CF(I) * ISO
+            ALINE(K:K+10) = BLINE
+            K=K+10
+        ENDIF
+    END DO
+    IF(IFILT.LT.3) THEN !Chebychev
+        WRITE(*,'(I2,A,F5.1 )') NS, " sections with ", DB, "dB"
+    ELSE !Butterworth
+        WRITE(*,'(I2,A)') NS, " sections"
+    ENDIF
+    WRITE(*,*) ALINE(1:K-1)
+    IF(IOFF.GT.1) WRITE(*,'(1X,A,I2)') "Decimate by ", IOFF
 	RETURN
 
 ! RUNNING SECTION - FIRST COPY INPUT TO WORK AREA AND PREPEND INITIAL DATA
