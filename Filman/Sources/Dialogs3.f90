@@ -352,6 +352,10 @@ end
 !     BLPRO Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 Subroutine DoBLPRODialog(NB,NP,IGO,NDO)
+! NB = number of blocks
+! NP = number of points per block
+! IGO = 1 for time series, = 2 for spectrum, = 3 for other
+! NDO = number of input data points
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -380,7 +384,7 @@ Subroutine DoBLPRODialog(NB,NP,IGO,NDO)
     retlog=DlgSetChar(dlg,IDC_EDIT32,LINE1)
     retlog=DlgSetChar(dlg,IDC_EDIT33,LINE2)
   
-    WRITE(GOUT,1001)NDO
+    WRITE(GOUT,1001) NDO
 1001    FORMAT('Number of input points selected=',I5,' enter:')
     retlog=DlgSet(dlg,IDC_STATIC51,GOUT,DLG_TITLE)
                         

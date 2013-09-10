@@ -12,12 +12,16 @@
 SUBROUTINE BANDS
 	INCLUDE 'MAX.INC'
 	DIMENSION Q(6)
+! Q(1) = peak amplitude
+! Q(2) = mean amplitude
+! Q(3) = SD of amplitude
+! Q(4) = 
 	COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(ICHMAX)
 	COMMON/DEV/ITI,IXO
 	COMMON/FLDES/NG,NA,NC,ND,NF,NP,NR,IS,IBUF(IOMAX)
 	COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
 	INTEGER*4, SAVE :: NB,NSTART(10),IT,NTOT(10)
-	REAL*4, SAVE :: VNS(10)
+	REAL*4, SAVE :: VNS(10),BND(20)
 	EQUIVALENCE (X,IX)
 	SAVE nso,dx,ic
 	INTEGER SELGRPS(20)
@@ -29,13 +33,14 @@ SUBROUTINE BANDS
 	SAVE WPPSF
 	CHARACTER*1024 OUTNAME
 	CHARACTER*1024 OUTFNM
+    CHARACTER*256 ALINE
+    CHARACTER*32 BLINE
     
 	IF(IFLAG1)10,20,30
     
 10	NFO=3
 	CURPROCNAME='BANDS'
 	WRITE(*,*) CURPROCNAME
-	IFLAG3=0 ! DO NOT PRODUCE FILMAN OUTPUT FILE (WE NEED ONLY SYSTAT FILE)
 ! MOVE CHANNEL LABELS
 	J=6*NGO+109
 	DO 15 I=1,NCO
@@ -49,7 +54,7 @@ SUBROUTINE BANDS
 	IT=0
 	ITYPE=1
 	NB=0
-	WPPSF=.FALSE.
+	WPPSF=.TRUE.
 	CALL DoBANDSDialog(ITYPE,IT,NB,WPPSF)
 	GOTO (1,2) ITYPE
 !     DETERMINE SPACING OF DATA POINTS
@@ -57,19 +62,43 @@ SUBROUTINE BANDS
 1	DX=1.0/FLOAT(IS)
 	GO TO 3
 2	DX=FLOAT(IS)/FLOAT(ND-1)  ! spectra have dc term as first point
-3	CONTINUE
-	DO 5 I=1,NB
-	    P1=SELGRPS(I)
-	    PN=SELGRPS(I+10)
+3   K=1
+    WRITE(*,'(1X,I2,A)') NB, " bands:"
+    DO 5 I=1,NB
+        READ(LINESEL(I),*) P1
+        READ(LINESEL(I+10),*) PN
+        WRITE(BLINE,'(I2,A1,F6.2,A1,F6.2,A1)') I,":",P1,"-",PN,";"
+        LEN = LEN_TRIM(BLINE)
+        ALINE(K:K+LEN-1) = BLINE(1:LEN)
+        K=K+LEN
 	    NSTART(I)=P1/DX + 1
-	    NTOT(I) = (PN - P1) / DX + 0.5 ! number of point in band
+	    NTOT(I) = (PN - P1) / DX + 0.5 ! number of points in band
 	    VNS(I)=P1
 5	    CONTINUE
+    WRITE(*,*) ALINE(1:K-2)
 	IT=IT+1
 	NDO=6*NB
 	NSO=NGO+NAO+1
 	ISZ=12*NB
+    IF(ITYPE.EQ.1)THEN
+        WRITE(*,*) "Time series"
+    ELSE
+        WRITE(*,*) "Frequency spectrum"
+    END IF
+    IF(IT.NE.1) THEN
+        SELECT CASE(IT)
+        CASE(2)
+            WRITE(*,*) "Transform: SQRT"
+        CASE(3)
+            WRITE(*,*) "Transform: LN"
+        CASE(4)
+            WRITE(*,*) "Transform: ASIN"
+        CASE(5)
+            WRITE(*,*) "Transform: ABS"
+        END SELECT
+    ENDIF
 	IF(WPPSF)THEN
+        WRITE(*,*) "Write SYSTAT file"
 	    OUTNAME=OUTFNM(CURPROCNAME)
 	    LTRO=LEN_TRIM(OUTNAME)
 	    OUTNAME(LTRO-2:LTRO)='syd'
@@ -79,21 +108,21 @@ SUBROUTINE BANDS
 	IC=0 ! current channel number
 	RETURN
     
-	! EXECUTION PHASE
+! EXECUTION PHASE
     
 20  N=NSO
 	IC=IC+1
-	IF(IC.GT.NCO)IC=1
-	IF(IC.EQ.1.AND.WPPSF)CALL SYD1BANDSSAVE(NB,NCO,NGO) ! Header for all channels
-	DO 50 L=1,NB
+	IF(IC.GT.NCO) IC=1
+	IF(IC.EQ.1.AND.WPPSF) CALL SYD1BANDSSAVE(NB,NCO,NGO) ! Header for all channels
+	DO 50 L=1,NB ! for each band
 ! INITIALIZE OUTPUT VARS; FIND FLOOR AND CEILING
 	    DO 25 I=1,6
 25          Q(I)=0.0
-	    J=NSTART(L)
+	    J=NSTART(L) ! starting point for this band
 	    CALL XVAL(J,XV,XI)
-	    CEIL=RECODE(XV,IT)
-	    BASE1=CEIL
-	    NTB=NTOT(L)
+	    CEIL=RECODE(XV,IT) ! CEIL is maximum value in band
+	    BASE1=CEIL ! BASE1 is minimum value in band
+	    NTB=NTOT(L) ! number of points in this band
 	    NMAX=1
 	    NMIN=1
 	    DO 60 I=2,NTB
@@ -109,13 +138,13 @@ SUBROUTINE BANDS
 	        NMIN=I
 60	        CONTINUE
 	    Q(1)=CEIL
-	    BASE=AMIN1(BASE1,0.0)  ! MAY CHANGE THIS,
+	    BASE=AMIN1(BASE1,0.0)  ! MAY CHANGE THIS, ************ make dependent on ITYPE
 ! CHECK FOR DEGENERACY
 	    IF(BASE1.EQ.CEIL)GO TO 62
 ! REVERSE FOR NEGATIVE-GOING PEAKS(DIFFERENCE SPECTRA, TIME DATA)
-	    IF(ABS(CEIL)-ABS(BASE1))61,63,63
+	    IF(ABS(CEIL)-ABS(BASE1))61,63,63 ! ************ make dependent on ITYPE
 61	    Q(1)=BASE1
-	    BASE=AMAX1(CEIL,0.0)   ! AND THIS, TO ADJUST FOR BASELINE
+	    BASE=AMAX1(CEIL,0.0)   ! AND THIS, TO ADJUST FOR BASELINE !  ************ make dependent on ITYPE
 	    NMAX=NMIN
 	    GO TO 63
 ! DEGENERATE CASE; MAX=MIN, ALL VALUES EQUAL
@@ -130,7 +159,7 @@ SUBROUTINE BANDS
 	    DO 35 I=1,NTB
 	        CALL XVAL(J,XV,XI)
 	        PT1=RECODE(XV,IT) - BASE
-	        TX=ABS(PT1)
+	        TX=ABS(PT1) !  ************ make dependent on ITYPE
 	        Q(2)=Q(2)+PT1
 	        Q(3)=Q(3)+PT1*PT1
 	        Q(4)=Q(4)+TX*V1
@@ -152,11 +181,12 @@ SUBROUTINE BANDS
 ! MOVE TO OUTPUT BUFFER
 	    DO 45 I=1,6
 	        X=Q(I)
-	        IBUFO(N)=IX
-45          N=N+1
+45          IBUFO((I-1)*NB+N)=IX
+        N=N+1
 	    IF(WPPSF)CALL SYD2BANDSSAVE(Q,NCO)          ! Data for every channel
-50	    CONTINUE
-	IF(IC.EQ.NCO.AND.WPPSF)CALL ENDSYDREC               ! End record
+50  CONTINUE
+    CALL PUTSTD(IBUFO(NSO))
+    IF(IC.EQ.NCO.AND.WPPSF)CALL ENDSYDREC               ! End record
     RETURN
     
 30  IF(WPPSF)CALL ADVMCLSE

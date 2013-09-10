@@ -1423,11 +1423,11 @@ ENTRY DoPEAKEXDialog(ITYPE,IT,NB,WPPSF)
     retint = DlgModal( dlg )
 
 ! Read entered values
-    do 50,i=1,10
-        retlog=DlgGetChar(dlg,EFB_EDTN(I),LINE)
-        read(LINE,*,end=51,err=51)SELGRPS(I)
-        retlog=DlgGetChar(dlg,ELB_EDTN(I),LINE)
-        read(LINE,*,end=51,err=51)SELGRPS(I+10)
+    do 50,I=1,10
+        retlog=DlgGetChar(dlg,EFB_EDTN(I),LINESEL(I)) ! these are floats, convert elsewhere
+        READ(LINESEL(I),*,end=51,err=51)X ! done if empty
+        retlog=DlgGetChar(dlg,ELB_EDTN(I),LINESEL(I+10))
+        READ(LINESEL(I+10),*,end=51,err=51)X ! done if empty
         NB=NB+1
 50      CONTINUE      
 

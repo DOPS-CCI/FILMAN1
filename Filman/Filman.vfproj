@@ -52,10 +52,10 @@
 		<File RelativePath=".\Sources\AVRALL.f90"/>
 		<File RelativePath=".\Sources\AVRGRP.f90"/>
 		<File RelativePath=".\Sources\BANDS.f90"/>
-		<File RelativePath=".\Sources\BLPRO.FOR"/>
+		<File RelativePath=".\Sources\BLPRO.f90"/>
 		<File RelativePath=".\Sources\BOTFILE.FOR"/>
 		<File RelativePath=".\Sources\BURG.FOR"/>
-		<File RelativePath=".\Sources\CHDIFF.FOR"/>
+		<File RelativePath=".\Sources\CHDIFF.f90"/>
 		<File RelativePath=".\Sources\CLEAR.FOR"/>
 		<File RelativePath=".\Sources\CMLIN.FOR"/>
 		<File RelativePath=".\Sources\CMMPLOT.FOR"/>
