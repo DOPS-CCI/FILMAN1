@@ -1,5 +1,7 @@
 !DEC$ FREEFORM 
-! BLPRO.FOR- DIVIDES INPUT PTS INTO BLOCKS & OUTPUTS BLOCK AVERAGES
+! BLPRO.f90 - DIVIDES INPUT PTS INTO BLOCKS & OUTPUTS BLOCK AVERAGES
+! Note: for spectra, DC point is always handled as a separate point and
+! must be included in the selected point list
 
 SUBROUTINE BLPRO
 	INCLUDE 'MAX.INC'

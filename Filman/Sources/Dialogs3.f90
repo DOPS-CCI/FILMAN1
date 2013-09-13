@@ -455,6 +455,12 @@ end
 !     CHDIFF Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 Subroutine DoCHDIFFDialog(ICHAN,NUMDIFF,LIST,IT)
+! ICHAN = input list of channels selected
+! NUMDIFF = number of difference channels to be created
+! LIST = array dimensioned 2*NUMDIFF containing difference channel
+!  pairs in consecutive entries
+! IT = point transformation to be applied before differences created
+! IBUFO will contain the names of the difference channels created
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -477,7 +483,7 @@ Subroutine DoCHDIFFDialog(ICHAN,NUMDIFF,LIST,IT)
     ENDif
 
 ! Set defaults
-    do 10,i=1,NCO
+    do 10,i=1,NCO ! create descritptive list of channels available for subtracting
         J1=6*(NG+ICHAN(I))-5
 	    J2=J1+3
         WRITE(GOUT,101)ICHAN(I),(IBUF(J),J=J1,J2)
@@ -496,14 +502,13 @@ Subroutine DoCHDIFFDialog(ICHAN,NUMDIFF,LIST,IT)
     retint = DlgModal( dlg )
 
 ! Read entered values
-    retlog=DlgGet(dlg,IDC_LIST2,numdiff,DLG_NUMITEMS)
+    retlog=DlgGet(dlg,IDC_LIST2,NUMDIFF,DLG_NUMITEMS)
     J1=6*NGO+109
-    do 20,i=1,numdiff
-        J2=J1+2
+    do 20 I=1,NUMDIFF
+        J2=J1+5
         retlog=DlgGet(dlg,IDC_LIST2,GOUT,I)
-        read(GOUT,100)LIST((I-1)*2+1),LIST(I*2),(IBUFO(J),J=J1,J2)
-        J1=J1+6
-20      continue
+        read(GOUT,100)LIST(I*2-1),LIST(I*2),(IBUFO(J),J=J1,J2)
+20      J1=J1+6
  
     IT=0
     retlog=DlgGetLog(dlg,IDC_RADIO4,Ltemp)
@@ -527,11 +532,11 @@ Subroutine DoCHDIFFDialog(ICHAN,NUMDIFF,LIST,IT)
 ! Dispose                  
     CALL DlgUninit( dlg )
       
-100 FORMAT(I3,'–',I3,' => ',8A4)
+100 FORMAT(I3,'–',I3,' => ',6A4)
     RETURN
-    end
+end
       
-    SUBROUTINE AddDifferenceButtonPress(dlg,id,callbacktype)
+SUBROUTINE AddDifferenceButtonPress(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     type (dialog) dlg

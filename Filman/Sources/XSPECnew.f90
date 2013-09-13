@@ -46,7 +46,7 @@ SUBROUTINE XSPECnew
 	NPC1=NPC-1
 ! DISPLAY SELECTED CHANNELS, GET SHORT LABELS, AND IDENTIFY NEEDED PAIRS
 
-! Set defaults
+! Set defaults: assume "upper right" triangle
     Do 1610,I=1,NCO1
     Do 1610,J=1,NCO1
         IF(J.GT.I)THEN
@@ -55,10 +55,10 @@ SUBROUTINE XSPECnew
             IJGO(I,J)=0
         ENDIF
 1610    CONTINUE
-    ICOMP(1)=1 !Magnitude of transform
-    ICOMP(2)=1 !Coherence
-    ICOMP(3)=0 !Phase of the transform
-    ICOMP(4)=0 !Complex transform
+    ICOMP(1)=1 !Magnitude of transform: on
+    ICOMP(2)=1 !Coherence: on
+    ICOMP(3)=0 !Phase of the transform: off
+    ICOMP(4)=0 !Complex transform: off
     JR=2
     NBLK=NPC1
     NPB=1
@@ -73,18 +73,8 @@ SUBROUTINE XSPECnew
             ! JR = first point for blocking
             ! NBLK = number of blocks
             ! NPB = number of points per block
-            ! ICOMP is array indicating what is to be computer (see above)
-            ! LBLS is array of shortened channel labels
-
-! Count number of channels needed in output file
-
-	NCO3=0
-	DO 17 I=1,NCO2
-	    J1=I+1
-	    DO 17 J=J1,NCO1
-17  NCO3=NCO3+IJGO(I,J)
-
-    IF(NCO3 .EQ. 0) GOTO 30 !Must have at least one channel pair
+            ! ICOMP is array indicating what is to be computed (see above)
+            ! LBLS is array of shortened channel labels, to be used in creating new labels
     
     IMAG = ICOMP(1) + ICOMP(2) + ICOMP(3)
     IF(IMAG .GT. 0) THEN
@@ -100,6 +90,30 @@ SUBROUTINE XSPECnew
         ENDIF
         NFO = 4 !Complex only format
     ENDIF
+
+! GET and check COMPUTATION PARAMETERS
+
+	IF(IMAG .EQ. 0 .AND. (ICOMP(2)*NPB) .NE. 1) GO TO 35
+    IMAG = IMAG - 1
+	ICOMP(2)=0
+	IF(IMAG .EQ. 0) THEN
+        CALL ShowInfotext('Error', &
+            'COHERENCES FOR RAW SPECTRA ARE 1.0; REQUEST SUPPRESSED; NO OUTPUTS REMAIN')
+        GOTO 30
+    ELSE
+        CALL ShowInfotext('Warning', &
+            'COHERENCES FOR RAW SPECTRA ARE 1.0; REQUEST SUPPRESSED')
+    ENDIF
+    
+! Count number of channels needed in output file
+
+35	NCO3=0
+	DO 17 I=1,NCO2
+	    J1=I+1
+	    DO 17 J=J1,NCO1
+17  NCO3=NCO3+IJGO(I,J)
+
+    IF(NCO3 .EQ. 0) GOTO 30 !Must have at least one channel pair
     
 ! NOW RUN THROUGH IJGO & CONSTRUCT OUTPUT CHANNEL LABELS: "Chan1<->Chan2"
 
@@ -126,22 +140,8 @@ SUBROUTINE XSPECnew
 23              L=L+1
 20          CONTINUE
 
-! NOW GET COMPUTATION PARAMETERS
-
-	IF(IMAG .EQ. 0 .AND. (ICOMP(2)*NPB) .NE. 1) GO TO 35
-    IMAG = IMAG - 1
-	ICOMP(2)=0
-	IF(IMAG .EQ. 0) THEN
-        CALL ShowInfotext('Error', &
-            'COHERENCES FOR RAW SPECTRA ARE 1.0; REQUEST SUPPRESSED; NO OUTPUTS REMAIN')
-        GOTO 30
-    ELSE
-        CALL ShowInfotext('Warning', &
-            'COHERENCES FOR RAW SPECTRA ARE 1.0; REQUEST SUPPRESSED')
-    ENDIF
-    
 ! ALL SPECS IN; SET UP STORAGE & OUTPUT SCHEMES
-35	IF(NFO .EQ. 3) THEN
+	IF(NFO .EQ. 3) THEN
         NDO = IMAG * NBLK
     ELSE
         NDO = 2 * NBLK
@@ -166,16 +166,16 @@ SUBROUTINE XSPECnew
         IF(ICOMP(2).EQ.1) WRITE(*,*) "Compute coherence"
         IF(ICOMP(3).EQ.1) WRITE(*,*) "Compute phase difference"
     ELSE
-        WRITE(*,*) "Compute complex cross spectrum"
+        WRITE(*,*) "Compute complex cross spectra"
     ENDIF
     WRITE(*,'(A,I3,A,I3,A,I3)') " First point = ", JR, "; number blocks = ", NBLK, &
         "; number points/block = " , NPB
-    IF(ITAP.GT.0) WRITE(*,*) "With correction for tapering"
-45  RETURN
+    RETURN
 
 ! PROCESSING PHASE- FIRST MOVE RAW COMPLEX COEFFICIENTS INTO IBUFO
 ! CHANNELS SELECTED IN FILMAN BUT NOT USED IN XSPEC ARE CURRENTLY STORED
 ! ANYWAY; ELIMINATE IN FINAL VERSION
+
 50	L=JR
 	DO 55 J=1,NBLK
 	    DO 55 I=1,NPB
@@ -192,6 +192,7 @@ SUBROUTINE XSPECnew
 
 	IC=IC+1
 	IF(IC.LT.NCO1) GO TO 80
+    
 56	IC=0
 	K=NSO
 ! COPY GROUP VAR STUFF INTO IBUF; ASSUMES ALL BUT CHAN # CONSTANT

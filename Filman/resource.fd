@@ -337,6 +337,7 @@
       integer, parameter :: IDC_EDIT42 = 1057
       integer, parameter :: ENTER_VALUE_DIALOG = 117
       integer, parameter :: IDC_EDIT14 = 1027
+      integer, parameter :: IDC_BUTTON54 = 1126
       integer, parameter :: IDC_EDIT61 = 1076
       integer, parameter :: IDC_EDIT33 = 1048
       integer, parameter :: IDC_BUTTON35 = 1040
@@ -358,6 +359,7 @@
       integer, parameter :: IDC_EDIT53 = 1068
       integer, parameter :: IDC_EDIT25 = 1042
       integer, parameter :: IDC_EDIT72 = 1087
+      integer, parameter :: IDC_BUTTON55 = 1127
       integer, parameter :: IDC_EDIT44 = 1059
       integer, parameter :: IDC_EDIT16 = 1031
       integer, parameter :: IDC_EDIT91 = 1126

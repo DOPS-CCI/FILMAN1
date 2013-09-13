@@ -56,14 +56,11 @@
 		<File RelativePath=".\Sources\BOTFILE.FOR"/>
 		<File RelativePath=".\Sources\BURG.FOR"/>
 		<File RelativePath=".\Sources\CHDIFF.f90"/>
-		<File RelativePath=".\Sources\CLEAR.FOR"/>
-		<File RelativePath=".\Sources\CMLIN.FOR"/>
 		<File RelativePath=".\Sources\CMMPLOT.FOR"/>
 		<File RelativePath=".\Sources\countCorr.f"/>
 		<File RelativePath=".\Sources\countCov.f"/>
 		<File RelativePath=".\Sources\COVFILE.FOR"/>
-		<File RelativePath=".\Sources\DATACOND.FOR"/>
-		<File RelativePath=".\Sources\DATE.FOR"/>
+		<File RelativePath=".\Sources\DATACOND.f90"/>
 		<File RelativePath=".\Sources\DAXPYMat.f"/>
 		<File RelativePath=".\Sources\DCOPYMat.f"/>
 		<File RelativePath=".\Sources\dialogs.f90"/>
@@ -87,7 +84,7 @@
 		<File RelativePath=".\Sources\FILMAN.f90"/>
 		<File RelativePath=".\Sources\FILMEN.f90"/>
 		<File RelativePath=".\Sources\FILTER.f90"/>
-		<File RelativePath=".\Sources\FILTSUBS.FOR"/>
+		<File RelativePath=".\Sources\FILTSUBS.f90"/>
 		<File RelativePath=".\Sources\FNDCONJGS.FOR"/>
 		<File RelativePath=".\Sources\GDTSTR.FOR"/>
 		<File RelativePath=".\Sources\GETVALU.FOR"/>
@@ -102,7 +99,6 @@
 		<File RelativePath=".\Sources\KEYSEL.FOR"/>
 		<File RelativePath=".\Sources\KEYSKP.FOR"/>
 		<File RelativePath=".\Sources\LUINV.FOR"/>
-		<File RelativePath=".\Sources\MACHINE.FOR"/>
 		<File RelativePath=".\Sources\MAGPH.f90"/>
 		<File RelativePath=".\Sources\MANSEL.FOR"/>
 		<File RelativePath=".\Xeffort\MFTPrint.f90"/>
@@ -136,10 +132,9 @@
 		<File RelativePath=".\Sources\solveArYwCov.f"/>
 		<File RelativePath=".\Sources\SPECPLOT.FOR"/>
 		<File RelativePath=".\Sources\SPLTHF.FOR"/>
-		<File RelativePath=".\Sources\STDIO.FOR"/>
+		<File RelativePath=".\Sources\STDIO.f90"/>
 		<File RelativePath=".\Sources\SVASFMN.FOR"/>
 		<File RelativePath=".\Sources\TESTDATA.FOR"/>
-		<File RelativePath=".\Sources\TIMER.FOR"/>
 		<File RelativePath=".\Sources\UNI.FOR"/>
 		<File RelativePath=".\Sources\vectorFad.f"/>
 		<File RelativePath=".\Sources\VFAD.FOR"/>

@@ -43,6 +43,7 @@ SUBROUTINE MAGPH
    !NDO2 is number of blocks
    !NPB is number of points to be averaged in a block
    !ITAP indicates input was tapered
+   
 	IF(IMAG+IPH .EQ. 0) GOTO 13
 	IF(NDO2*NPB .GT. NDO) GOTO 13
 	NDO=(IMAG+IPH)*NDO2

@@ -969,7 +969,7 @@ Subroutine DoXSPEC2Dialog()
     common /cmixp/ ixpsiz,ixpairs
     common /IUJL/ IU,JL
     EXTERNAL XSPEC2GoRight,XSPEC2GoLeft,XSPEC2GoUp,XSPEC2GoDown
-    EXTERNAL XSPEC2ClearAll,XSPEC2SetAll
+    EXTERNAL XSPEC2ClearAll,XSPEC2SetAll,XSPEC2ClearPage,XSPEC2SetPage
 
 ! Create dialog
     IF ( .not. DlgInit( XSPEC2_DIALOG, dlg ) ) THEN
@@ -989,7 +989,8 @@ Subroutine DoXSPEC2Dialog()
     retlog=DlgSetSub(dlg,IDC_BUTTON49,XSPEC2GoDown)
     retlog=DlgSetSub(dlg,IDC_BUTTON50,XSPEC2ClearAll)
     retlog=DlgSetSub(dlg,IDC_BUTTON51,XSPEC2SetAll)
-
+    retlog=DlgSetSub(dlg,IDC_BUTTON54,XSPEC2ClearPage)
+    retlog=DlgSetSub(dlg,IDC_BUTTON55,XSPEC2SetPage)
 ! Show dialog box
     retint = DlgModal( dlg )
 
@@ -1063,30 +1064,30 @@ SUBROUTINE UpdateXSPEC2Dialog(dlg)
     common /IUJL/ IU,JL
       
     NCO1=ixpsiz
-    DO 1,I=IU,IU+10-1
-    IF(I.LE.NCO1)THEN
-    WRITE(GOUT,'(I3)')ICHAN(I)
-    ELSE
-    GOUT=' '
-    ENDIF
-    retlog=DlgSet(dlg,LfCap(I-IU+1),GOUT,DLG_TITLE)
-    DO 1,J=JL,JL+10-1
-    IF(I.EQ.IU)THEN
-    IF(J.LE.NCO1)THEN
-        WRITE(GOUT,'(I3)')ICHAN(J)
-    ELSE
-        GOUT=' '
-    ENDIF
-    retlog=DlgSet(dlg,UpCap(J-JL+1),GOUT,DLG_TITLE)
-    ENDIF
-    IF(I.GT.NCO1.OR.J.GT.NCO1)GOTO 10
-    IF(J.LE.I)GOTO 10
-    retlog=DlgSet(dlg,CheckMatrix(I-IU+1,J-JL+1),.TRUE.,DLG_ENABLE)
-    retlog=DlgSetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),ixpairs(I,J).NE.0)
-    GOTO 1
-10  retlog=DlgSet(dlg,CheckMatrix(I-IU+1,J-JL+1),.FALSE.,DLG_ENABLE)
-    retlog=DlgSetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),.FALSE.)
-1   continue
+    DO 1,I=IU,IU+9
+        IF(I.LE.NCO1)THEN
+            WRITE(GOUT,'(I3)')ICHAN(I)
+        ELSE
+            GOUT=' '
+        ENDIF
+        retlog=DlgSet(dlg,LfCap(I-IU+1),GOUT,DLG_TITLE)
+        DO 1,J=JL,JL+9
+            IF(I.EQ.IU)THEN
+                IF(J.LE.NCO1)THEN
+                    WRITE(GOUT,'(I3)')ICHAN(J)
+                ELSE
+                    GOUT=' '
+                ENDIF
+                retlog=DlgSet(dlg,UpCap(J-JL+1),GOUT,DLG_TITLE)
+            ENDIF
+            IF(J.LE.I.OR.I.GT.NCO1.OR.J.GT.NCO1) THEN
+                retlog=DlgSet(dlg,CheckMatrix(I-IU+1,J-JL+1),.FALSE.,DLG_ENABLE)
+                retlog=DlgSetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),.FALSE.)
+                ELSE
+                    retlog=DlgSet(dlg,CheckMatrix(I-IU+1,J-JL+1),.TRUE.,DLG_ENABLE)
+                    retlog=DlgSetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),ixpairs(I,J).NE.0)
+                END IF
+1           continue
 
     return
 END      
@@ -1177,7 +1178,30 @@ SUBROUTINE XSPEC2SetAll(dlg,id,callbacktype)
     return
 END      
       
-SUBROUTINE XSPEC2ClearAll(dlg,id,callbacktype)
+SUBROUTINE XSPEC2SetPage(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    INCLUDE 'MAX.INC'
+    type (dialog) dlg
+    integer id
+    integer callbacktype,retval
+    integer ixpairs(ichmax,ichmax)
+    common /cmixp/ ixpsiz,ixpairs
+    common /IUJL/ IU,JL
+
+    Do 1 i=IU,IU+9
+        Do 1 j=JL,JL+9
+            IF(J.GT.I)THEN
+                ixpairs(i,j)=1
+            ELSE
+                ixpairs(i,j)=0
+            ENDIF
+1           CONTINUE      
+    CALL UpdateXSPEC2Dialog(dlg)
+    return
+    END      
+
+    SUBROUTINE XSPEC2ClearAll(dlg,id,callbacktype)
     use iflogm
     include 'resource.fd'
     INCLUDE 'MAX.INC'
@@ -1191,6 +1215,25 @@ SUBROUTINE XSPEC2ClearAll(dlg,id,callbacktype)
     CALL UpdateXSPEC2Dialog(dlg)
     return
 END      
+      
+SUBROUTINE XSPEC2ClearPage(dlg,id,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    INCLUDE 'MAX.INC'
+    type (dialog) dlg
+    integer id
+    integer callbacktype
+    integer ixpairs(ichmax,ichmax)
+    common /cmixp/ ixpsiz,ixpairs
+    common /IUJL/ IU,JL
+
+    Do 1 i=IU,IU+9
+        Do 1 j=JL,JL+9
+            ixpairs(i,j)=0
+1           CONTINUE      
+    CALL UpdateXSPEC2Dialog(dlg)
+    return
+    END      
       
 SUBROUTINE XSPEC2GetVals(dlg)
     use iflogm
@@ -1207,8 +1250,8 @@ SUBROUTINE XSPEC2GetVals(dlg)
     LOGICAL Lvalue
       
     NCO1=ixpsiz
-    DO 1,I=IU,IU+10-1
-        DO 1,J=JL,JL+10-1
+    DO 1,I=IU,IU+9
+        DO 1,J=JL,JL+9
             retlog=DlgGetLog(dlg,CheckMatrix(I-IU+1,J-JL+1),LValue)
             ixpairs(I,J)=0
             IF(Lvalue)ixpairs(I,J)=1

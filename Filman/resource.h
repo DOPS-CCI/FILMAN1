@@ -407,9 +407,11 @@
 #define IDC_EDIT91                      1126
 #define IDC_STATIC8                     1126
 #define NLevels                         1126
+#define IDC_BUTTON54                    1126
 #define IDC_EDIT92                      1127
 #define IDC_STATIC10                    1127
 #define block                           1127
+#define IDC_BUTTON55                    1127
 #define IDC_EDIT93                      1128
 #define IDC_STATIC20                    1128
 #define NBlocks                         1128
@@ -451,7 +453,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        167
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1135
+#define _APS_NEXT_CONTROL_VALUE         1136
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
