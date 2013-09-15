@@ -79,8 +79,6 @@
 		<File RelativePath=".\Sources\FADPLOT.FOR"/>
 		<File RelativePath=".\Sources\FADPROCS.FOR"/>
 		<File RelativePath=".\Sources\FAST.FOR"/>
-		<File RelativePath=".\Sources\FFTPS2.FOR"/>
-		<File RelativePath=".\Sources\FFTPSP.FOR"/>
 		<File RelativePath=".\Sources\FILMAN.f90"/>
 		<File RelativePath=".\Sources\FILMEN.f90"/>
 		<File RelativePath=".\Sources\FILTER.f90"/>
@@ -116,7 +114,7 @@
 		<File RelativePath=".\Sources\OUTFNM.FOR"/>
 		<File RelativePath=".\Sources\PEAKEX.FOR"/>
 		<File RelativePath=".\Sources\PEAKM.FOR"/>
-		<File RelativePath=".\Sources\PLOT.FOR"/>
+		<File RelativePath=".\Sources\PLOT.f90"/>
 		<File RelativePath=".\Sources\POWSP2new.f90"/>
 		<File RelativePath=".\Sources\POWSPnew.f90"/>
 		<File RelativePath=".\Sources\PRINT.FOR"/>
@@ -127,15 +125,13 @@
 			<FileConfiguration Name="Debug|Win32">
 				<Tool Name="VFCustomBuildTool" CommandLine="deftofd resource.h resource.fd" Description="Generating Fortran include file" Outputs="resource.fd"/></FileConfiguration></File>
 		<File RelativePath=".\Sources\RYSAIC.FOR"/>
-		<File RelativePath=".\Sources\SETUP.FOR"/>
+		<File RelativePath=".\Sources\SETUP.f90"/>
 		<File RelativePath=".\Sources\SKPLST.FOR"/>
 		<File RelativePath=".\Sources\solveArYwCov.f"/>
 		<File RelativePath=".\Sources\SPECPLOT.FOR"/>
 		<File RelativePath=".\Sources\SPLTHF.FOR"/>
 		<File RelativePath=".\Sources\STDIO.f90"/>
 		<File RelativePath=".\Sources\SVASFMN.FOR"/>
-		<File RelativePath=".\Sources\TESTDATA.FOR"/>
-		<File RelativePath=".\Sources\UNI.FOR"/>
 		<File RelativePath=".\Sources\vectorFad.f"/>
 		<File RelativePath=".\Sources\VFAD.FOR"/>
 		<File RelativePath=".\Sources\WinPrint_Direct.f90"/>
