@@ -86,6 +86,7 @@
 		<File RelativePath=".\Sources\FNDCONJGS.FOR"/>
 		<File RelativePath=".\Sources\GDTSTR.FOR"/>
 		<File RelativePath=".\Sources\GETVALU.FOR"/>
+		<File RelativePath=".\Sources\GLOBAL.f90"/>
 		<File RelativePath=".\Sources\GPASS.FOR"/>
 		<File RelativePath=".\Sources\GPAST.FOR"/>
 		<File RelativePath=".\Sources\grmode.for"/>
@@ -111,7 +112,7 @@
 		<File RelativePath=".\Sources\MULTAR2.FOR"/>
 		<File RelativePath=".\Xeffort\MWINPOS.F90"/>
 		<File RelativePath=".\Sources\ODDEVE.FOR"/>
-		<File RelativePath=".\Sources\OUTFNM.FOR"/>
+		<File RelativePath=".\Sources\OUTFNM.f90"/>
 		<File RelativePath=".\Sources\PEAKEX.FOR"/>
 		<File RelativePath=".\Sources\PEAKM.FOR"/>
 		<File RelativePath=".\Sources\PLOT.f90"/>
