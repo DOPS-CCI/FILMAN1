@@ -39,6 +39,7 @@
       integer, parameter :: IDC_STATIC61 = 1062
       integer, parameter :: IDC_STATIC42 = 1115
       integer, parameter :: IDC_STATIC8 = 1126
+      integer, parameter :: IDD_DIALOG3 = 167
       integer, parameter :: IDC_STATIC23 = 1048
       integer, parameter :: IDC_STATIC71 = 1060
       integer, parameter :: GPAST_DIALOG = 120
@@ -233,6 +234,7 @@
       integer, parameter :: IDC_CHECK99 = 1097
       integer, parameter :: BURG_DIALOG = 153
       integer, parameter :: GRPVAL_SEL_DIALOG = 9
+      integer, parameter :: GLOBAL_DIALOG = 167
       integer, parameter :: RECORDSET_SELECTION_DIALOG = 118
       integer, parameter :: MAGPH_DIALOG = 145
       integer, parameter :: XSPEC2_DIALOG = 148

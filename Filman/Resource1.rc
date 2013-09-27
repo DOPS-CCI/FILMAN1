@@ -1868,6 +1868,19 @@ BEGIN
     LTEXT           "Enter selected order",IDC_STATIC,27,21,82,8
 END
 
+GLOBAL_DIALOG DIALOGEX 0, 0, 187, 98
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "GLOBAL"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,60,61,50,14
+    EDITTEXT        NBlocks,51,31,32,13,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        NPoints,130,31,33,13,ES_AUTOHSCROLL | ES_NUMBER
+    GROUPBOX        "Blocking factors",IDC_STATIC51,15,20,157,31
+    LTEXT           "# blocks",IDC_STATIC71,22,33,28,12
+    LTEXT           "# pts/block",IDC_STATIC81,91,33,38,12
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2379,6 +2392,14 @@ BEGIN
         RIGHTMARGIN, 153
         TOPMARGIN, 7
         BOTTOMMARGIN, 101
+    END
+
+    GLOBAL_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 90
     END
 END
 #endif    // APSTUDIO_INVOKED

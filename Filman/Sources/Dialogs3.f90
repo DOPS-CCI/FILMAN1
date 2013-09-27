@@ -416,7 +416,94 @@ Subroutine DoBLPRODialog(NB,NP,IGO,NDO)
       
     RETURN
 end
+
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+!     GLOBAL Dialog
+!CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+Subroutine DoGLOBALDialog(NB)
+! NB = number of blocks; must be integer divider of the number of points in record (NDO)
+    USE IFLOGM
+    use ifport
+    INCLUDE 'RESOURCE.FD'
+    INCLUDE 'MULTAR.INC'
+    INCLUDE 'MAX.INC'
+    COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO
+    INTEGER retint
+    LOGICAL retlog
+    TYPE (dialog) dlg
+    CHARACTER*24 LINE
+    CHARACTER*128 GOUT
+    LOGICAL Ltemp
+    EXTERNAL GBLCheckBlockValues
+
+! Create dialog
+    IF ( .not. DlgInit( GLOBAL_DIALOG, dlg ) ) THEN
+        WRITE (*,*) "Error: GLOBAL_DIALOG not found"
+        RETURN
+    ENDIF
+
+    WRITE(GOUT,1001) NDO
+1001    FORMAT('Number of input points selected=',I5,' enter:')
+    retlog=DlgSet(dlg,IDC_STATIC51,GOUT,DLG_TITLE)
+                        
+    WRITE(LINE,'(I5)') NDO
+    retlog=DlgSetChar(dlg,NBlocks,'1')
+    retlog=DlgSetChar(dlg,NPoints,LINE)
+    retlog=DlgSetSub(dlg,NBlocks,GBLCheckBlockValues)
+    retlog=DlgSetSub(dlg,NPoints,GBLCheckBlockValues)
+    retlog=DlgSet(dlg,IDOK,.TRUE.,DLG_ENABLE)
+  
+! Show dialog box
+    retint = DlgModal( dlg )
+
+! Read entered values
+    NB=1
+    retlog=DlgGetChar(dlg,NBlocks,LINE)
+    read(LINE,*,err=32,end=32) NB
+32  CONTINUE
       
+! Dispose                  
+    CALL DlgUninit( dlg )
+      
+    RETURN
+end
+
+SUBROUTINE GBLCheckBlockValues(dlg,ID,callbacktype)
+    use iflogm
+    include 'resource.fd'
+    type (dialog) dlg
+    COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO
+    integer ID
+    logical retlog
+    integer callbacktype,NB,NP,T
+    character*24 LINE
+    
+    IF(ID.EQ.NBlocks) THEN
+        retlog=DlgGetChar(dlg,NBlocks,LINE)
+        read(LINE,*,err=1,end=1) NB
+        NP = NDO / NB
+        goto 2
+1       NB=0
+        NP = NDO
+2       WRITE(LINE,'(I5)') NP
+        retlog=DlgSetChar(dlg,NPoints,LINE)
+    ELSE
+        retlog=DlgGetChar(dlg,NPoints,LINE)
+        read(LINE,*,err=3,end=3) NP
+        NB = NDO / NP
+        goto 4
+3       NP=0
+        NB=1
+4       WRITE(LINE,'(I4)') NB
+        retlog=DlgSetChar(dlg,NBlocks,LINE)
+    ENDIF
+    IF(NB*NP.NE.NDO) THEN
+        retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
+    ELSE
+        retlog=DlgSet(dlg,IDOK,.TRUE.,DLG_ENABLE)
+    ENDIF
+    return
+end
       
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     INFOTEXT Dialog

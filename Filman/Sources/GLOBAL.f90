@@ -21,9 +21,9 @@ SUBROUTINE GLOBAL
 	EQUIVALENCE (XR,IXR),(XI,IXI),(YR,IYR),(YI,IYI)
 	EQUIVALENCE (CXY,XY),(XYR,XY(1)),(XYI,XY(2))
     DIMENSION ISIG(6),IPHI(6),IOMEGA(6)
-    DATA ISIG /'SIGM','A   ','    ','    ','    ','    '/
-    DATA IPHI /'PHI ','    ','    ','    ','    ','    '/
-    DATA IOMEGA /'OMEG','A   ','    ','    ','    ','    '/
+    DATA ISIG /'RMS ','VOLT','AGE ','    ','    ','    '/
+    DATA IPHI /'GENE','RALI','ZED ','FREQ','UENC','Y   '/
+    DATA IOMEGA /'COMP','LEXI','TY  ','    ','    ','    '/
 	CHARACTER*128 ALINE
     COMMON /CPN/ CURPROCNAME
     CHARACTER*10 CURPROCNAME
@@ -33,6 +33,7 @@ SUBROUTINE GLOBAL
 10  CURPROCNAME='GLOBAL'
     WRITE(*,*) CURPROCNAME
     NFO=3
+    CALL DoGLOBALDialog(M)
     ALLOCATE(CROSS(NCO*(NCO+1))) ! store covariance estimates in packed array
     ALLOCATE(RAW(NCO,NDO))
     ALLOCATE(D(NCO))
@@ -48,7 +49,6 @@ SUBROUTINE GLOBAL
     DO 13 I=1,6
         IBUFO(L)=IOMEGA(I)
 13      L=L+1
-    M = 16 ! temporary; = number of blocks in each record
     NDO1 = NDO
     NPB=NDO/M ! Number of points per block
     NDO=M ! Number of blocks created per input record
@@ -62,6 +62,7 @@ SUBROUTINE GLOBAL
     ISO = ISO/NPB
     ISZ = 3*NDO
     IC = 0 ! counts number of channels in each recordset
+    WRITE(*,'(A,I4,A,I5,A)') ' Calculated in ', M,' blocks of ', NPB, ' points each'
     RETURN
 
 ! Processing section: first, collect a full record set for processing
@@ -85,9 +86,6 @@ SUBROUTINE GLOBAL
 	IF(IC.LT.NCO1) RETURN
 	IC=0
 	K=NSO
-! COPY GROUP VAR STUFF INTO IBUF; ASSUMES ALL BUT CHAN # CONSTANT
-	DO 57 I=2,NSO
-57  IBUF(I)=IBUFO(I)
     
 ! Now correct RAW for CAR across channels (necessary since we may not
 ! have a full channel set, so any previous referencing not correct)
@@ -118,8 +116,10 @@ SUBROUTINE GLOBAL
                 DO 60 I=1,J
                     Y = RAW(I,L1)
 60                  CROSS(I+J1) = CROSS(I+J1) + X * Y ! =  C[i,j]
-        XR=SNGL(SQRT(M0/(AK*AN))) ! Calculate Sigma
+        M0 = M0 / AN
+        XR=SNGL(SQRT(M0/AK)) ! Calculate Sigma
         IBUFO(M+NSO) = IXR
+        M1 = M1 / AN1
         XR=SNGL(AS*SQRT(M1/M0)/6.1831953) ! Calculate Phi
         IBUFO(M+NSO+NDO) = IXR
         DO 61 I=1,NCO1*(NCO1+1)/2
@@ -139,9 +139,9 @@ SUBROUTINE GLOBAL
 ! Then create log omega using Shannon formula
         LAMBDA=0.
         DO 71 I=1,NCO1
-            X = D(I) / SUM
-            ! ignore negative values (should only be trivially small)
-            IF(X.GT.0.) LAMBDA = LAMBDA + X * DLOG10(X)
+            X = D(I) / SUM ! normalize
+            ! ignore negative values (should only be trivially small; should we test?)
+            IF(X.GT.0.) LAMBDA = LAMBDA - X * DLOG10(X)
 71          CONTINUE
 ! Finally convert to omega and store (range is 0 to number of channels)
         XR = SNGL(10. ** LAMBDA)
@@ -149,7 +149,7 @@ SUBROUTINE GLOBAL
 62      CONTINUE
     IBUFO(1) = 1 ! Channel 1 is sigma ~ power
     CALL PUTSTD(IBUFO)
-    IBUFO(1) = 2 ! Channel 2 is phi ~ frequency
+    IBUFO(1) = 2 ! Channel 2 is phi ~ generalized frequency
     DO 63 I=1,NDO
 63      IBUFO(NSO+I) = IBUFO(NSO+NDO+I)
     CALL PUTSTD(IBUFO)
