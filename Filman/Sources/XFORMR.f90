@@ -7,7 +7,7 @@
 ! of points is even
 
 SUBROUTINE XFORMR
-    Use MKL_DFTI
+    USE MKL_DFTI
     INCLUDE 'MAX.INC'
     CHARACTER*1 ANS
 	REAL*4 WORK(65538)

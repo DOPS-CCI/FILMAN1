@@ -1,7 +1,7 @@
 !=== JD's revision ===========
 !Uncomment the following line to have ContextID passed to DlgHelpCallback
 !instead of CommandID.
-!DEC$DEFINE CONTEXTID
+!!DEC$DEFINE CONTEXTID
 !=== end JD's revision =======
 !/*
 !**
@@ -2826,7 +2826,7 @@ recursive function DlgCommonProc ( dlg, modal, hwnd, msg, wparam, lparam ) resul
   integer temp
 !=== JD's revision ===========
   integer hparent,ix,iy,i
-  TYPE T_HELPINFO1 !**************** Changed JEL ********************
+  TYPE T_HELPINFO1 !***************** Changed to avoid conflict? *********************
     INTEGER cbSize  
     INTEGER iContextType  
     INTEGER iCtrlID  
@@ -2837,7 +2837,7 @@ recursive function DlgCommonProc ( dlg, modal, hwnd, msg, wparam, lparam ) resul
 
   integer(4), parameter::     WM_HELP_= #0053
   type (T_DRAWITEMSTRUCT)::   DIS; pointer(pDIS, DIS)
-  type (T_HELPINFO1)::         HI; pointer(pHI, HI) !**************** Changed JEL ********************
+  type (T_HELPINFO1)::         HI; pointer(pHI, HI) !***************** Changed to avoid conflict? *********************
   type (T_LOGBRUSH)::         LB
   type (T_RECT)::             Rect
   type (T_SCROLLINFO)::       si

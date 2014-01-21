@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <VisualStudioProject ProjectCreator="Intel Fortran" Keyword="QuickWin" Version="11.0" ProjectIdGuid="{B0BCC962-B5B7-44ED-BC9A-58E42B400F6E}">
 	<Platforms>
-		<Platform Name="Win32"/></Platforms>
+		<Platform Name="Win32"/>
+		<Platform Name="x64"/></Platforms>
 	<Configurations>
 		<Configuration Name="Debug|Win32">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Traceback="true" NullPointerCheck="true" UninitializedVariablesCheck="true" ArgTempCreatedCheck="true" RuntimeLibrary="rtQuickWinDebug" UseWindowsLibs="true" UseMkl="mklSequential" Interfaces="true"/>
-				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemWindows"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" PreprocessorDefinitions="XLITE;_DF_VERSION_=700" Traceback="true" NullPointerCheck="true" UninitializedVariablesCheck="true" ArgTempCreatedCheck="true" RuntimeLibrary="rtQuickWinDebug" UseWindowsLibs="true" UseMkl="mklSequential" Interfaces="true"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemWindows" AdditionalDependencies="libguide40.lib"/>
 				<Tool Name="VFResourceCompilerTool" AdditionalIncludeDirectories="C:\Program Files (x86)\Intel\Composer XE 2013\mkl\include"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
 				<Tool Name="VFCustomBuildTool"/>
@@ -22,13 +23,53 @@
 				<Tool Name="VFPreLinkEventTool"/>
 				<Tool Name="VFPreBuildEventTool"/>
 				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Debug|x64">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLinkerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|x64">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLinkerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="New configuration|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLinkerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="New configuration|x64">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLinkerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Header Files" Filter="fi;fd">
 		<File RelativePath=".\Sources\KOHINF.INC"/>
 		<File RelativePath=".\Sources\MAX.INC"/>
 		<File RelativePath=".\Sources\MULTAR.INC"/></Filter>
-		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;lib">
 		<File RelativePath="..\VNI\imsl.lib"/>
 		<File RelativePath="..\VNI\imslblas.lib"/>
 		<File RelativePath="..\VNI\imslhpc_l.lib"/>
@@ -40,7 +81,7 @@
 		<File RelativePath="..\VNI\imslsuperlu.lib"/>
 		<File RelativePath="..\VNI\libguide40.lib"/>
 		<File RelativePath="..\VNI\mkl_blacs_mpich2.lib"/>
-		<File RelativePath=".\Includes\mkl_dfti.f90"/>
+		<File RelativePath="..\..\..\..\..\..\Program Files (x86)\Intel\Composer XE 2013\mkl\include\mkl_dfti.f90"/>
 		<File RelativePath="..\VNI\mkl_scalapack.lib"/>
 		<File RelativePath=".\resource.fd"/>
 		<File RelativePath=".\Resource1.rc"/></Filter>

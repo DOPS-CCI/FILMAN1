@@ -1,0 +1,9 @@
+!MS$FREEFORM
+! Microsoft Developer Studio generated include file.
+! Used by XFTLite.rc
+!
+      integer, parameter :: IDD_DIALOG1                     = 101
+      integer, parameter :: IDC_BUTTON_PRINT                = 1000
+      integer, parameter :: IDC_BUTTON_EMF                  = 1001
+      integer, parameter :: IDC_OWNERDRAW                   = 1002
+      integer, parameter :: IDC_BUTTON_BMP                  = 1003

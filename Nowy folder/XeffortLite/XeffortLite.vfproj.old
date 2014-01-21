@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Win32 Application - Converted from CVF" Version="8.10" ProjectIdGuid="{64DA5373-820F-4001-BB4A-930FAC11AE4A}" SccProjectName="&quot;$/Xeffort/Samples/XeffortLite&quot;, QGDAAAAA" SccLocalPath="." SccProvider="MSSCCI:Microsoft Visual SourceSafe">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Release|Win32" DeleteExtensionsOnClean="*.obj;*.mod;*.pdb;*.asm;*.map;*.dyn;*.dpi;*.tmp;*.log;*.ilk;*.exe;$(TargetPath)" MustRebuild="true" Command="$(OUTDIR)\XeffortLite.exe">
+				<Tool Name="VFMidlTool" SwitchesHaveChanged="true" AdditionalOptions="&quot;NUL&quot;  /o" PreprocessorDefinitions="NDEBUG" MkTypLibCompatible="true" SuppressStartupBanner="true" TargetEnvironment="midlTargetWin32" TypeLibraryName="$(OUTDIR)/XeffortLite.tlb"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFFortranCompilerTool" SwitchesHaveChanged="true" SuppressStartupBanner="true" AdditionalIncludeDirectories="Release/" PreprocessorDefinitions="XLITE" ExternalNameInterpretation="uppercase" CallingConvention="callConventionCVF" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" AssemblerListingLocation="$(INTDIR)/" UseWindowsLibs="true" CompileOnly="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFLinkerTool" SwitchesHaveChanged="true" MustRebuild="true" AdditionalOptions="/MACHINE:I386" OutputFile="$(OUTDIR)/XeffortLite.exe" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" ProgramDatabaseFile="$(OUTDIR)/XeffortLite.pdb" SubSystem="subSystemWindows" AdditionalDependencies="iflogm.lib"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFResourceCompilerTool" SwitchesHaveChanged="true" PreprocessorDefinitions="NDEBUG" Culture="rcEnglishUS" ResourceOutputFileName="$(INTDIR)/$(InputName).res"/></Configuration>
+		<Configuration Name="Debug|Win32" DeleteExtensionsOnClean="*.obj;*.mod;*.pdb;*.asm;*.map;*.dyn;*.dpi;*.tmp;*.log;*.ilk;*.exe;$(TargetPath)" Command="$(OUTDIR)\XeffortLite.exe">
+				<Tool Name="VFMidlTool" AdditionalOptions="&quot;NUL&quot;  /o" PreprocessorDefinitions="_DEBUG" MkTypLibCompatible="true" SuppressStartupBanner="true" TargetEnvironment="midlTargetWin32" TypeLibraryName="$(OUTDIR)/XeffortLite.tlb"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" AdditionalIncludeDirectories="Debug/" PreprocessorDefinitions="XLITE" ExternalNameInterpretation="uppercase" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" AssemblerListingLocation="$(INTDIR)/" RuntimeLibrary="rtSingleThreadedDLL" UseWindowsLibs="true" CompileOnly="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFLinkerTool" AdditionalOptions="/MACHINE:I386" OutputFile="$(OUTDIR)/XeffortLite.exe" LinkIncremental="linkIncrementalYes" SuppressStartupBanner="true" GenerateDebugInformation="true" ProgramDatabaseFile="$(OUTDIR)/XeffortLite.pdb" SubSystem="subSystemWindows" AdditionalDependencies="iflogm.lib"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFResourceCompilerTool" PreprocessorDefinitions="_DEBUG" Culture="rcEnglishUS" ResourceOutputFileName="$(INTDIR)/$(InputName).res"/></Configuration></Configurations>
+	<Files>
+		<File RelativePath="Main.f90">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration>
+			<FileConfiguration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="XFLOGM.F90">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration>
+			<FileConfiguration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="XFTFile.f90">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration>
+			<FileConfiguration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="XftGDI.f90">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration>
+			<FileConfiguration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="XeffortLite.rc">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFResourceCompilerTool"/></FileConfiguration>
+			<FileConfiguration Name="Release|Win32">
+				<Tool Name="VFResourceCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="XFTStrings.f90">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration>
+			<FileConfiguration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File></Files>
+	<Globals/></VisualStudioProject>

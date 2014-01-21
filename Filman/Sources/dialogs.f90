@@ -953,9 +953,9 @@ IF(NCS)102,102,14231
             retlog=DlgSet(dlg,IDC_BUTTON4,ACTVALS.BUTTON4,DLG_ENABLE)
     end select
     return
-    END
+END
 
-    SUBROUTINE LastFileCheck(dlg,control_name,callbacktype)
+SUBROUTINE LastFileCheck(dlg,control_name,callbacktype)
     USE IFLOGM
     TYPE (dialog) dlg
     INTEGER control_name
@@ -974,20 +974,24 @@ IF(NCS)102,102,14231
             retlog=DlgSetChar(dlg,IDC_STATIC15,'WARNING: File exists')
             IOVRW=.FALSE.
             CALL DoOverwriteFileDialog(IOVRW,outname)
-            IF(IOVRW) GOTO 1
+!Below changes made to avoid jumping into middle of block; I think the logic is what is intended JEL
+!However, IDC_CHECK7 is not a control in MULTAR_PARAMS_DIALOG, so I don't think this does anything
+!            IF(IOVRW) GOTO 1
+            IF(.NOT.IOVRW) RETURN
         else
             retlog=DlgSetChar(dlg,IDC_STATIC15,' ')
-            GOTO 1
-      	endif
-    else
-1       call DlgSetReturn(dlg,IDC_BUTTON23)
-        call DlgExit(dlg)
+!            GOTO 1
+        endif
     endif
-    RETURN
-	
-	END
+!    else
+!1       call DlgSetReturn(dlg,IDC_BUTTON23)
+    call DlgSetReturn(dlg,IDC_BUTTON23)
+    call DlgExit(dlg)
+!    endif
+!    RETURN
+END
 
-    SUBROUTINE CheckSDTFWindows(dlg,control_name,callbacktype)
+SUBROUTINE CheckSDTFWindows(dlg,control_name,callbacktype)
     USE IFLOGM
     TYPE (dialog) dlg
     INTEGER control_name
@@ -1010,15 +1014,15 @@ IF(NCS)102,102,14231
     retlog=DlgGet(dlg,IDC_RADIO2,UseOrder)
     IF(UseOrder)THEN
         retlog=DlgGetChar(dlg,IDC_EDIT7,LINE)
-	  READ(LINE,*)IORD
-	  C=FLOAT(IWNSIZ*NTRLS)/FLOAT(NCHANS*IORD)
-	  IF(IWNMAX.EQ.1)THEN
+        READ(LINE,*)IORD
+        C=FLOAT(IWNSIZ*NTRLS)/FLOAT(NCHANS*IORD)
+        IF(IWNMAX.EQ.1)THEN
             WRITE(LINE,102)IWNMAX,C
         ELSE
             WRITE(LINE,103)IWNMAX,C
         ENDIF
     ELSE        
-	  IF(IWNMAX.EQ.1)THEN
+        IF(IWNMAX.EQ.1)THEN
             WRITE(LINE,100)IWNMAX
         ELSE
             WRITE(LINE,101)IWNMAX

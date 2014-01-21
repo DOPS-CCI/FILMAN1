@@ -11,19 +11,20 @@ SUBROUTINE GLOBAL
 	COMMON/FLDES/NG,NA,NC,ND,NF,NP,NR,IS,IBUF(IOMAX)
 	COMMON/FLDESO/NGO,NAO,NCO,NDO,NFO,NPO,NRO,ISO,IBUFO(IOMAX)
 	DIMENSION XY(2),LBLS(2,ICHMAX),XC(2),YC(2)
-    REAL*8 LAMBDA,X,M0,M1
+    REAL*8 LAMBDA,X,M0,M1,M2,deltau2
 	INTEGER*4, SAVE :: IC,NSO,NBLK,NPB,NCO1,NDO1
 	INTEGER*4, SAVE :: ICHOFF,IMAG,ICPX
 	INTEGER*1, SAVE :: IJGO(ICHMAX,ICHMAX), ICOMP(4)
     REAL*8, ALLOCATABLE, SAVE :: CROSS(:),D(:),E(:),TAU(:)
     REAL*4, ALLOCATABLE, SAVE :: RAW(:,:)
-    REAL*4, SAVE :: AN, AN1, AK, AS
+    REAL*4, SAVE :: AN, AN1, AK, AS, T
 	EQUIVALENCE (XR,IXR),(XI,IXI),(YR,IYR),(YI,IYI)
 	EQUIVALENCE (CXY,XY),(XYR,XY(1)),(XYI,XY(2))
-    DIMENSION ISIG(6),IPHI(6),IOMEGA(6)
+    DIMENSION ISIG(6),IPHI(6),IOMEGA(6),NPL(6)
     DATA ISIG /'RMS ','VOLT','AGE ','    ','    ','    '/
     DATA IPHI /'GENE','RALI','ZED ','FREQ','UENC','Y   '/
     DATA IOMEGA /'COMP','LEXI','TY  ','    ','    ','    '/
+    DATA NPL /'NORM','ALIZ','ED P','ATH ','LENG','TH  '/
 	CHARACTER*128 ALINE
     COMMON /CPN/ CURPROCNAME
     CHARACTER*10 CURPROCNAME
@@ -34,7 +35,7 @@ SUBROUTINE GLOBAL
     WRITE(*,*) CURPROCNAME
     NFO=3
     CALL DoGLOBALDialog(M)
-    ALLOCATE(CROSS(NCO*(NCO+1))) ! store covariance estimates in packed array
+    ALLOCATE(CROSS((NCO*(NCO+1))/2)) ! store covariance estimates in packed array
     ALLOCATE(RAW(NCO,NDO))
     ALLOCATE(D(NCO))
     ALLOCATE(E(NCO-1))
@@ -49,6 +50,9 @@ SUBROUTINE GLOBAL
     DO 13 I=1,6
         IBUFO(L)=IOMEGA(I)
 13      L=L+1
+    DO 14 I=1,6
+        IBUFO(L)=NPL(I)
+14      L=L+1
     NDO1 = NDO
     NPB=NDO/M ! Number of points per block
     NDO=M ! Number of blocks created per input record
@@ -57,10 +61,11 @@ SUBROUTINE GLOBAL
     AN1 = FLOAT(NPB-1)
     AK = FLOAT(NCO)
     AS = FLOAT(ISO)
+    T = AN/AS
     NCO1 = NCO
-    NCO=3
+    NCO=4
     ISO = ISO/NPB
-    ISZ = 3*NDO
+    ISZ = 4*NDO
     IC = 0 ! counts number of channels in each recordset
     WRITE(*,'(A,I4,A,I5,A)') ' Calculated in ', M,' blocks of ', NPB, ' points each'
     RETURN
@@ -87,8 +92,8 @@ SUBROUTINE GLOBAL
 	IC=0
 	K=NSO
     
-! Now correct RAW for CAR across channels (necessary since we may not
-! have a full channel set, so any previous referencing not correct)
+! Now correct RAW for CAR across channels (necessary since if we do not
+! have a full channel set, any previous referencing not correct)
     DO 52 I = 1, NDO1
         SUM = 0.
         DO 51 J = 1, NCO1
@@ -98,35 +103,47 @@ SUBROUTINE GLOBAL
 52          RAW(J, I) = RAW(J, I) - SUM
 
     DO 62 M = 1, NDO ! For each block in output record
-        IBLOCK = (M - 1) * NPB
-        DO 58 I=1,NCO1*(NCO1+1) ! Initialize covariance matrix
-58      CROSS(I) = 0.
+        IBLOCK = (M - 1) * NPB ! offset to this block in RAW
+        DO 58 I=1,(NCO1*(NCO1+1))/2 ! Initialize covariance matrix
+58          CROSS(I) = 0.
+        
         M0=0.
         M1=0.
-        DO 60 L=1,NPB ! For each point in block
-            L1 = IBLOCK + L
+        M2=0.
+        DO 59 L=1,NPB ! For each point in block
+            L1 = IBLOCK + L ! start of block in RAW
+            deltau2=0.
             DO 60 J=1,NCO1
                 X = RAW(J,L1)
                 M0 = M0 + X * X
-                IF(J.NE.1) THEN
-                    M1 = M1 + (X - ULAST) ** 2
+                IF(L1.NE.1) THEN !***** Should we use point in previous block? *****
+                    deltau2 = deltau2 + (X - RAW(J,L1-1)) ** 2
                 ENDIF
-                ULAST = X
-                J1 = (J-1)*J/2
+                J1 = ((J-1)*J)/2
                 DO 60 I=1,J
-                    Y = RAW(I,L1)
-60                  CROSS(I+J1) = CROSS(I+J1) + X * Y ! =  C[i,j]
-        M0 = M0 / AN
-        XR=SNGL(SQRT(M0/AK)) ! Calculate Sigma
-        IBUFO(M+NSO) = IXR
-        M1 = M1 / AN1
-        XR=SNGL(AS*SQRT(M1/M0)/6.1831953) ! Calculate Phi
+60                  CROSS(I+J1) = CROSS(I+J1) + X * RAW(I,L1) ! =  C[I,J] for I <= J, summed through Lth point in block
+            M1 = M1 + deltau2
+59          M2 = M2 + SQRT(deltau2)
+        M0 = M0 / AN ! average squared length of u, the vector in phase space
+        M1 = M1 / AN
+        SIGMA = SQRT(M0/AK) ! Calculate Sigma, RMS of u
+        XR=SNGL(SIGMA)
+        IBUFO(M+NSO) = IXR ! Save global RMS value for this block
+        XR=SNGL(AS*SQRT(M1/M0)/6.1831953) ! Phi
         IBUFO(M+NSO+NDO) = IXR
-        DO 61 I=1,NCO1*(NCO1+1)/2
+! NPL is a path-length measure: estimate the actual path length in K-dimension space for this block
+! of points (M2); normalize this by dividing it by the average size of the singal vector (similar to
+! the rough overall size of the signal in K-space). Consider a ball (wad) of string analogy: the path
+! is the string itself; sigma is the "average" radius of the ball; and the path-length is the
+! length of the string corrected for the radius of the ball; this is roughly equivalent to
+! how tightly it's wound.
+        XR = SNGL(M2/(SQRT(M0) * T * 6.1831953)) ! Normalized path length
+        IBUFO(M+NSO+3*NDO) = IXR
+        DO 61 I=1, (NCO1*(NCO1+1))/2
 61          CROSS(I) = CROSS(I)/AN1
         
 ! CROSS now contains the (unbiased) estimate of the covariance matrix for
-! this block in packed storage (see Intel MLK Reference Manual p3213)
+! this block in packed storage (see Intel MKL Reference Manual p3213)
 ! Here we calculate Lambda
 
 ! First calculate the eigenvalues
@@ -150,12 +167,16 @@ SUBROUTINE GLOBAL
     IBUFO(1) = 1 ! Channel 1 is sigma ~ power
     CALL PUTSTD(IBUFO)
     IBUFO(1) = 2 ! Channel 2 is phi ~ generalized frequency
-    DO 63 I=1,NDO
+    DO 63 I=1,NDO ! move buffered points up to output region to include GVs
 63      IBUFO(NSO+I) = IBUFO(NSO+NDO+I)
     CALL PUTSTD(IBUFO)
     IBUFO(1) = 3 ! Channel 3 is lambda ~ complexity
-    Do 64 I = 1, NDO
+    Do 64 I = 1, NDO ! move buffered points up to output region to include GVs
 64      IBUFO(NSO+I) = IBUFO(NSO+NDO*2+I)
+    CALL PUTSTD(IBUFO)
+    IBUFO(1) = 4 ! Channel 4 is NPL ~ Normalized Path Length
+    Do 65 I = 1, NDO ! move buffered points up to output region to include GVs
+65      IBUFO(NSO+I) = IBUFO(NSO+NDO*3+I)
     CALL PUTSTD(IBUFO)
     RETURN
     
