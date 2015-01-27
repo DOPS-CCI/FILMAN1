@@ -1460,7 +1460,7 @@ ENTRY DoPEAKEXDialog(ITYPE,IT,NB,WPPSF)
 
     IF(NB.EQ.0)retlog=DlgSet(dlg,IDOK,.FALSE.,DLG_ENABLE)
       
-    retlog=DlgSetLog(dlg,IDC_CHECK1,.TRUE.)
+    retlog=DlgSetLog(dlg,IDC_CHECK1,.FALSE.)
                   
 ! Show dialog box
     retint = DlgModal( dlg )

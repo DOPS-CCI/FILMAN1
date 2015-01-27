@@ -15,7 +15,9 @@ SUBROUTINE BANDS
 ! Q(1) = peak amplitude
 ! Q(2) = mean amplitude
 ! Q(3) = SD of amplitude
-! Q(4) = 
+! Q(4) = abscissa-weighted mean over the band (estimate of peak time)
+! Q(5) = SD of estimate of peak time
+! Q(6) = actual time of peak value in band
 	COMMON IFLAG1,IFLAG2,IFLAG3,KNT,ISZ,ICHAN(ICHMAX)
 	COMMON/DEV/ITI,IXO
 	COMMON/FLDES/NG,NA,NC,ND,NF,NP,NR,IS,IBUF(IOMAX)

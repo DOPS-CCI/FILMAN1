@@ -129,7 +129,7 @@ SUBROUTINE GLOBAL
         SIGMA = SQRT(M0/AK) ! Calculate Sigma, RMS of u
         XR=SNGL(SIGMA)
         IBUFO(M+NSO) = IXR ! Save global RMS value for this block
-        XR=SNGL(AS*SQRT(M1/M0)/6.1831953) ! Phi
+        XR=SNGL(AS*SQRT(M1/M0)/6.2831853) ! Phi
         IBUFO(M+NSO+NDO) = IXR
 ! NPL is a path-length measure: estimate the actual path length in K-dimension space for this block
 ! of points (M2); normalize this by dividing it by the average size of the singal vector (similar to
@@ -137,7 +137,7 @@ SUBROUTINE GLOBAL
 ! is the string itself; sigma is the "average" radius of the ball; and the path-length is the
 ! length of the string corrected for the radius of the ball; this is roughly equivalent to
 ! how tightly it's wound.
-        XR = SNGL(M2/(SQRT(M0) * T * 6.1831953)) ! Normalized path length
+        XR = SNGL(M2/(SQRT(M0) * T * 6.2831853)) ! Normalized path length
         IBUFO(M+NSO+3*NDO) = IXR
         DO 61 I=1, (NCO1*(NCO1+1))/2
 61          CROSS(I) = CROSS(I)/AN1

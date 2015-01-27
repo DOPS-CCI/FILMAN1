@@ -67,7 +67,6 @@
 #define GRPLOT_ADJUST_DIALOG            164
 #define GRPLOT_ADVANCE_DIALOG           165
 #define OPTORD_DIALOG                   166
-#define IDD_DIALOG3                     167
 #define GLOBAL_DIALOG                   167
 #define IDC_CHECK1                      1000
 #define IDC_STATIC1                     1001
@@ -121,8 +120,10 @@
 #define IDC_RADIO7                      1019
 #define IDC_BUTTON15                    1019
 #define IDC_CHECK23                     1019
+#define QuadLinAve                      1019
 #define IDC_CHECK13                     1020
 #define IDC_RADIO21                     1020
+#define CubeQuadLinAve                  1020
 #define IDC_EDIT2                       1021
 #define IDC_BUTTON16                    1021
 #define IDC_CHECK24                     1021
@@ -141,13 +142,17 @@
 #define IDC_EDIT6                       1025
 #define IDC_BUTTON20                    1025
 #define IDC_CHECK28                     1025
+#define X01                             1025
 #define IDC_EDIT7                       1026
 #define IDC_BUTTON21                    1026
 #define IDC_CHECK29                     1026
+#define Origin0                         1026
 #define IDC_SPIN2                       1027
 #define IDC_BUTTON22                    1027
 #define IDC_EDIT14                      1027
 #define IDC_CHECK30                     1027
+#define IDC_RADIO42                     1027
+#define OriginCenter                    1027
 #define IDC_STATIC15                    1028
 #define IDC_EDIT24                      1028
 #define IDC_CHECK31                     1028
@@ -430,12 +435,20 @@
 #define Detrend                         1134
 #define IDC_EDIT100                     1135
 #define IDC_EDIT101                     1136
+#define Ave                             1136
 #define IDC_EDIT102                     1137
+#define LinAve                          1137
 #define IDC_EDIT103                     1138
+#define Point0                          1138
 #define IDC_EDIT104                     1139
+#define Point12                         1139
+#define PointHalf                       1139
 #define IDC_EDIT105                     1140
+#define Point1                          1140
 #define IDC_EDIT106                     1141
+#define XSecs                           1141
 #define IDC_EDIT107                     1142
+#define XIndex                          1142
 #define IDC_EDIT108                     1143
 #define IDC_EDIT109                     1144
 #define IDC_EDIT110                     1145
@@ -455,7 +468,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        168
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1136
+#define _APS_NEXT_CONTROL_VALUE         1143
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

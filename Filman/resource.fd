@@ -5,6 +5,7 @@
       integer, parameter :: NBlocks = 1128
       integer, parameter :: IDC_CHECK8 = 1008
       integer, parameter :: IDC_CHECK9 = 1009
+      integer, parameter :: XSecs = 1141
       integer, parameter :: AVRALL_DIALOG = 125
       integer, parameter :: DONE_BUTTON_DIALOG = 115
       integer, parameter :: GRPLOT_DIALOG = 163
@@ -14,6 +15,7 @@
       integer, parameter :: IDC_STATIC10 = 1127
       integer, parameter :: IDC_STATIC1 = 1001
       integer, parameter :: IDC_STATIC20 = 1128
+      integer, parameter :: OriginCenter = 1027
       integer, parameter :: IDC_STATIC2 = 1002
       integer, parameter :: IDC_STATIC30 = 1110
       integer, parameter :: IDC_STATIC11 = 1030
@@ -38,12 +40,13 @@
       integer, parameter :: IDC_STATIC13 = 1032
       integer, parameter :: IDC_STATIC61 = 1062
       integer, parameter :: IDC_STATIC42 = 1115
+      integer, parameter :: QuadLinAve = 1019
       integer, parameter :: IDC_STATIC8 = 1126
-      integer, parameter :: IDD_DIALOG3 = 167
       integer, parameter :: IDC_STATIC23 = 1048
       integer, parameter :: IDC_STATIC71 = 1060
       integer, parameter :: GPAST_DIALOG = 120
       integer, parameter :: IDC_STATIC9 = 1058
+      integer, parameter :: Origin0 = 1026
       integer, parameter :: IDC_STATIC33 = 1113
       integer, parameter :: block = 1127
       integer, parameter :: IDCANCEL2 = 3
@@ -64,6 +67,7 @@
       integer, parameter :: IDC_EDIT100 = 1135
       integer, parameter :: IDC_STATIC16 = 1036
       integer, parameter :: IDC_STATIC64 = 1065
+      integer, parameter :: CubeQuadLinAve = 1020
       integer, parameter :: IDC_STATIC45 = 1118
       integer, parameter :: PRINT_DIALOG = 135
       integer, parameter :: IDC_EDIT101 = 1136
@@ -131,6 +135,7 @@
       integer, parameter :: IDC_CHECK12 = 1017
       integer, parameter :: IDC_CHECK21 = 1016
       integer, parameter :: MULTAR_OUTPUT_DIALOG = 114
+      integer, parameter :: LinAve = 1137
       integer, parameter :: NLevels = 1126
       integer, parameter :: IDC_CHECK30 = 1027
       integer, parameter :: IDC_RADIO9 = 1042
@@ -237,10 +242,13 @@
       integer, parameter :: GLOBAL_DIALOG = 167
       integer, parameter :: RECORDSET_SELECTION_DIALOG = 118
       integer, parameter :: MAGPH_DIALOG = 145
+      integer, parameter :: Point12 = 1139
+      integer, parameter :: X01 = 1025
       integer, parameter :: XSPEC2_DIALOG = 148
       integer, parameter :: PEAKM_DIALOG = 154
       integer, parameter :: PLOT_TYPE_DIALOG = 121
       integer, parameter :: FAD_PLOT_ADVANCE_DIALOG = 159
+      integer, parameter :: Ave = 1136
       integer, parameter :: IDC_RADIO10 = 1043
       integer, parameter :: PLOT_DTF_CMAX_DIALOG = 116
       integer, parameter :: HIST_DIALOG = 132
@@ -249,6 +257,7 @@
       integer, parameter :: IDC_RADIO20 = 1023
       integer, parameter :: IDC_BUTTON10 = 1014
       integer, parameter :: IDC_RADIO12 = 1046
+      integer, parameter :: Point0 = 1138
       integer, parameter :: IDC_RADIO21 = 1020
       integer, parameter :: IDC_RADIO30 = 1048
       integer, parameter :: IDC_BUTTON1 = 1005
@@ -274,6 +283,7 @@
       integer, parameter :: IDC_RADIO33 = 1051
       integer, parameter :: IDC_BUTTON4 = 1029
       integer, parameter :: IDC_BUTTON50 = 1124
+      integer, parameter :: IDC_RADIO42 = 1027
       integer, parameter :: IDC_RADIO16 = 1056
       integer, parameter :: IDC_BUTTON31 = 1036
       integer, parameter :: IDC_RADIO25 = 1033
@@ -303,6 +313,7 @@
       integer, parameter :: IDC_BUTTON42 = 1047
       integer, parameter :: PLOT_DTF_DIALOG = 108
       integer, parameter :: IDC_BUTTON8 = 1012
+      integer, parameter :: XIndex = 1142
       integer, parameter :: IDC_BUTTON23 = 1052
       integer, parameter :: IDC_EDIT10 = 1036
       integer, parameter :: IDC_RADIO29 = 1047
@@ -316,6 +327,7 @@
       integer, parameter :: IDC_RADIO39 = 1057
       integer, parameter :: IDC_EDIT30 = 1045
       integer, parameter :: IDC_BUTTON43 = 1048
+      integer, parameter :: Point1 = 1140
       integer, parameter :: IDC_EDIT21 = 1039
       integer, parameter :: IDC_BUTTON24 = 1059
       integer, parameter :: IDC_EDIT40 = 1055
@@ -391,6 +403,7 @@
       integer, parameter :: IDC_EDIT65 = 1080
       integer, parameter :: IDC_EDIT37 = 1052
       integer, parameter :: IDC_BUTTON18 = 1023
+      integer, parameter :: PointHalf = 1139
       integer, parameter :: IDC_EDIT84 = 1119
       integer, parameter :: IDC_EDIT56 = 1071
       integer, parameter :: IDC_EDIT28 = 1030

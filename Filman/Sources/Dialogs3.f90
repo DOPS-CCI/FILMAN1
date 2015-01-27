@@ -351,11 +351,15 @@ end
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     BLPRO Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-Subroutine DoBLPRODialog(NB,NP,IGO,NDO)
-! NB = number of blocks
-! NP = number of points per block
-! IGO = 1 for time series, = 2 for spectrum, = 3 for other
-! NDO = number of input data points
+Subroutine DoBLPRODialog(NB,NP,IGO,ICalc,IPoint,IXScale,IXOrigin,NDO)
+! NB = number of blocks - output
+! NP = number of points per block - output
+! IGO = 1 for time series, = 2 for spectrum, = 3 for other - output
+! ICalc = 1 for average, = 2 for ave + linear, = 3 for ave + linear + quadratic
+! IPoint = 1 for points at beginning of time slice, = 2 at middle, = 3 at end
+! IXScale = 1 for output function in seconds/Hz, = 2 for output based on index, = 3 for output 0 to 1
+! IXOrigin = 1 for output origin at 0, = 2 for output origin at middle of block
+! NDO = number of input data points - input
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -376,16 +380,18 @@ Subroutine DoBLPRODialog(NB,NP,IGO,NDO)
 
 ! Set defaults
     retlog=DlgSetLog(dlg,IDC_RADIO1,.TRUE.)   
-    retlog=DlgSetLog(dlg,IDC_RADIO2,.FALSE.)  
-    retlog=DlgSetLog(dlg,IDC_RADIO3,.FALSE.)  
-
+    retlog=DlgSetLog(dlg,QuadLinAve,.TRUE.)
+    retlog=DlgSetLog(dlg,PointHalf,.TRUE.)
+    retlog=DlgSetLog(dlg,XIndex,.TRUE.)
+    retlog=DlgSetLog(dlg,OriginCenter,.TRUE.)
+    
     LINE1=''
     LINE2=''
     retlog=DlgSetChar(dlg,IDC_EDIT32,LINE1)
     retlog=DlgSetChar(dlg,IDC_EDIT33,LINE2)
   
     WRITE(GOUT,1001) NDO
-1001    FORMAT('Number of input points selected=',I5,' enter:')
+1001    FORMAT('Number of input points available=',I5,' enter:')
     retlog=DlgSet(dlg,IDC_STATIC51,GOUT,DLG_TITLE)
                         
 ! Show dialog box
@@ -400,7 +406,47 @@ Subroutine DoBLPRODialog(NB,NP,IGO,NDO)
 31  retlog=DlgGetChar(dlg,IDC_EDIT33,LINE1)
     read(line1,*,err=32,end=32) NP
       
-32  CONTINUE
+32  ICalc=1
+    retlog=DlgGetLog(dlg,QuadLinAve,Ltemp)
+    if(Ltemp) THEN
+        ICalc=6
+    else
+        retlog=DlgGetLog(dlg,CubeQuadLinAve,Ltemp)
+        if(Ltemp) THEN
+            ICalc=10
+        else
+            retlog=DlgGetLog(dlg,LinAve,Ltemp)
+            if(Ltemp) ICalc=3
+        endif
+    endif
+      
+    IPoint=3
+    retlog=DlgGetLog(dlg,PointHalf,Ltemp)
+    if(Ltemp) THEN
+        IPoint=2
+    else
+        retlog=DlgGetLog(dlg,Point0,Ltemp)
+        if(Ltemp) THEN
+            IPoint=1
+        endif
+    endif
+      
+    IXScale=3
+    retlog=DlgGetLog(dlg,XSecs,Ltemp)
+    if(Ltemp) THEN
+        IXScale=1
+    else
+        retlog=DlgGetLog(dlg,XIndex,Ltemp)
+        if(Ltemp) THEN
+            IXScale=2
+        endif
+    endif
+      
+    IXOrigin=2
+    retlog=DlgGetLog(dlg,Origin0,Ltemp)
+    if(Ltemp) THEN
+        IXOrigin=1
+    endif
       
     IGO=1
     retlog=DlgGetLog(dlg,IDC_RADIO2,Ltemp)
