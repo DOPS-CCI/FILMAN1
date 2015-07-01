@@ -187,7 +187,7 @@ SUBROUTINE BANDS
         N=N+1
 	    IF(WPPSF)CALL SYD2BANDSSAVE(Q,NCO)          ! Data for every channel
 50  CONTINUE
-    CALL PUTSTD(IBUFO(NSO))
+    CALL PUTSTD(IBUFO)
     IF(IC.EQ.NCO.AND.WPPSF)CALL ENDSYDREC               ! End record
     RETURN
     
