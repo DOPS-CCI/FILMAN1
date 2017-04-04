@@ -131,7 +131,7 @@
 		<File RelativePath=".\Sources\GPASS.FOR"/>
 		<File RelativePath=".\Sources\GPAST.FOR"/>
 		<File RelativePath=".\Sources\grmode.for"/>
-		<File RelativePath=".\Sources\GRPLOT.FOR"/>
+		<File RelativePath=".\Sources\GRPLOT.f90"/>
 		<File RelativePath=".\Sources\GRPNS.FOR"/>
 		<File RelativePath=".\Sources\GRPRNT.FOR"/>
 		<File RelativePath=".\Sources\GSTRNG.FOR"/>
