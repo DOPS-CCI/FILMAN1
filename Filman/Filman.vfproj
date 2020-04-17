@@ -25,7 +25,7 @@
 				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
 		<Configuration Name="Debug|x64">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" Preprocess="preprocessYes" AdditionalIncludeDirectories="../XEffort" PreprocessorDefinitions="_DF_VERSION_=600" FixedFormLineLength="fixedLength132"/>
 				<Tool Name="VFLinkerTool" SuppressStartupBanner="true"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
@@ -141,7 +141,6 @@
 		<File RelativePath=".\Sources\LUINV.FOR"/>
 		<File RelativePath=".\Sources\MAGPH.f90"/>
 		<File RelativePath=".\Sources\MANSEL.FOR"/>
-		<File RelativePath=".\Xeffort\MFTPrint.f90"/>
 		<File RelativePath=".\Xeffort\mkl_dfti.f90"/>
 		<File RelativePath=".\Sources\MODCOV.FOR"/>
 		<File RelativePath=".\Sources\MODPO2.FOR"/>

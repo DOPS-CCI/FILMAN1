@@ -450,7 +450,9 @@
 #define IDC_EDIT107                     1142
 #define XIndex                          1142
 #define IDC_EDIT108                     1143
+#define IDC_CAR                         1143
 #define IDC_EDIT109                     1144
+#define IDC_CSV                         1144
 #define IDC_EDIT110                     1145
 #define IDC_EDIT111                     1146
 #define IDC_EDIT112                     1147
@@ -468,7 +470,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        168
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1143
+#define _APS_NEXT_CONTROL_VALUE         1145
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

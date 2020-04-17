@@ -142,6 +142,7 @@
       integer, parameter :: IDC_CHECK13 = 1020
       integer, parameter :: IDC_CHECK22 = 1018
       integer, parameter :: IDC_CHECK31 = 1028
+      integer, parameter :: IDC_CSV = 1144
       integer, parameter :: IDC_CHECK40 = 1037
       integer, parameter :: IDC_CHECK14 = 1040
       integer, parameter :: IDC_CHECK23 = 1019
@@ -243,6 +244,7 @@
       integer, parameter :: RECORDSET_SELECTION_DIALOG = 118
       integer, parameter :: MAGPH_DIALOG = 145
       integer, parameter :: Point12 = 1139
+      integer, parameter :: IDC_CAR = 1143
       integer, parameter :: X01 = 1025
       integer, parameter :: XSPEC2_DIALOG = 148
       integer, parameter :: PEAKM_DIALOG = 154

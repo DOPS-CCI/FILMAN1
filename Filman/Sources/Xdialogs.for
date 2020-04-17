@@ -200,7 +200,7 @@ C      retlog=XGetOpenFile(Dlg%hWnd,sDir,nFiles,sFiles,
       INTEGER ID, iEvent
       INCLUDE 'resource.fd'
       LOGICAL FIRST_POS
-      SAVE FIRST_POS,IWX,IWY
+      SAVE FIRST_POS
       DATA FIRST_POS /.TRUE./
       INTEGER IWX,IWY
       COMMON /PADXY/ IWX,IWY

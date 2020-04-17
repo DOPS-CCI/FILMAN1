@@ -466,8 +466,9 @@ end
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 !     GLOBAL Dialog
 !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-Subroutine DoGLOBALDialog(NB)
+Subroutine DoGLOBALDialog(NB,CAR,CSV)
 ! NB = number of blocks; must be integer divider of the number of points in record (NDO)
+! CAR = true if CAR to be performed, false if not
     USE IFLOGM
     use ifport
     INCLUDE 'RESOURCE.FD'
@@ -481,6 +482,7 @@ Subroutine DoGLOBALDialog(NB)
     CHARACTER*128 GOUT
     LOGICAL Ltemp
     EXTERNAL GBLCheckBlockValues
+    LOGICAL CAR,CSV
 
 ! Create dialog
     IF ( .not. DlgInit( GLOBAL_DIALOG, dlg ) ) THEN
@@ -497,6 +499,8 @@ Subroutine DoGLOBALDialog(NB)
     retlog=DlgSetChar(dlg,NPoints,LINE)
     retlog=DlgSetSub(dlg,NBlocks,GBLCheckBlockValues)
     retlog=DlgSetSub(dlg,NPoints,GBLCheckBlockValues)
+    retlog=DlgSetLog(dlg,IDC_CAR,.FALSE.) !do not perform CAR by default
+    retlog=DlgSetLog(dlg,IDC_CSV,.TRUE.) !CSV output by default
     retlog=DlgSet(dlg,IDOK,.TRUE.,DLG_ENABLE)
   
 ! Show dialog box
@@ -507,6 +511,9 @@ Subroutine DoGLOBALDialog(NB)
     retlog=DlgGetChar(dlg,NBlocks,LINE)
     read(LINE,*,err=32,end=32) NB
 32  CONTINUE
+    
+    retlog=DlgGetLog(dlg,IDC_CAR,CAR)
+    retlog=DlgGetLog(dlg,IDC_CSV,CSV)
       
 ! Dispose                  
     CALL DlgUninit( dlg )
